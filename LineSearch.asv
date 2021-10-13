@@ -1,0 +1,11 @@
+function alpha = LineSearchNM(Q, q, d, alphaStart, eps)
+dPhi = @(alpha) (2 * Q * (x + alpha * d) + q)' * d;
+ddPhi = 2 * d' * Q * d;
+
+if(norm(dPhi(alphaStart)) > eps)
+    alpha = alphaStart - dPhi(alphaStart)/ddPhi;
+    while(norm(dPhi(alpha)) > eps)
+        alpha = alpha - dPhi(alpha)/ddPhi;
+    end
+end
+        
