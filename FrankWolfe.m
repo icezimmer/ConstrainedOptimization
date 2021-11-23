@@ -1,4 +1,4 @@
-function [x_min, f_min]= FrankWolfe(Q, q, P, xStart, eps, eps_ls, options1, options2)
+function [x_min, f_min]= FrankWolfe(Q, q, P, xStart, eps, eps_ls, options1, beta)
 %{
 Funzione che calcola il minimo
 INPUT:
@@ -19,7 +19,7 @@ else
     disp('LineSearch Trivial Method')
 end
 
-if isequal(options2,'yes')
+if (beta > 0)
     disp('Using MOMENTUM')
 end
 
@@ -92,11 +92,8 @@ x = x + alpha * d;
 fx(2) = f(x);
 
 %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
-if isequal(options2, 'yes')
-    alpha_old = alpha;
-    d_old = y - x;
-    %d_old = d;
-end
+%alpha_old = alpha;
+d_old = y - x;
 %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
 
 i = i + 1;
@@ -149,24 +146,20 @@ while (obj < - eps)
     else
         alpha = 2/(i + 2);
     end
-    if isequal(options2, 'no')
-        plotLS(Q, q, x, d, alpha, alphaStart)
-        x = x + alpha * d;
-        fx(i+1) = f(x);
-    end
     %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
-    if isequal(options2, 'yes')
-        %Si impone che il nuovo punto sia all'interno del triangolo avente
-        %vertici x, d_old, d_new
-        par_momentum = min([alpha_old, 1 - alpha_old, alpha, 1 - alpha]);
+    %Si impone che il nuovo punto sia all'interno del triangolo avente
+    %vertici x, d_old, d_new
+    par_momentum = min([0, beta, 1 - alpha]);
+    if(beta > 0)
         plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
-        momentum = par_momentum * d_old;
-        x = x + alpha * d + momentum;
-        fx(i+1) = f(x);
-        alpha_old = alpha;
-        d_old = y - x;
-        %d_old = d;
+    else
+        plotLS(Q, q, x, d, alpha, alphaStart)
     end
+    momentum = par_momentum * d_old;
+    x = x + alpha * d + momentum;
+    fx(i+1) = f(x);
+    %alpha_old = alpha;
+    d_old = y - x;
     %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
     i = i + 1;
     disp('Gradiente Df(x):')
@@ -175,7 +168,7 @@ while (obj < - eps)
     disp(y)
     disp(['<grad, d> = ', num2str(obj)])
     disp(['it. ', num2str(i), ', alpha = ', num2str(alpha), ', f(x) = ', num2str(fx(i))])
-    if isequal(options2, 'yes')
+    if (beta > 0)
         disp(['par_momentum = ', num2str(par_momentum)])
     end
     w = waitforbuttonpress;

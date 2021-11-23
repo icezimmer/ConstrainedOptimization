@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsedTime, numSteps]= FrankWolfeEVAL(Q, q, P, xStart, eps, eps_ls, options1, options2)
+function [x_min, f_min, elapsedTime, numSteps]= FrankWolfeEVAL(Q, q, P, xStart, eps, eps_ls, options1, beta)
 %{
 Funzione che calcola il minimo
 INPUT:
@@ -19,7 +19,7 @@ else
     disp('LineSearch Trivial Method')
 end
 
-if isequal(options2,'yes')
+if (beta > 0)
     disp('Using MOMENTUM')
 end
 
@@ -86,11 +86,7 @@ x = x + alpha * d;
 fx(2) = f(x);
 
 %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
-if isequal(options2, 'yes')
-    alpha_old = alpha;
-    d_old = y - x;
-    %d_old = d;
-end
+d_old = y - x;
 %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
 
 i = i + 1;
@@ -132,22 +128,16 @@ while (obj < - eps)
     else
         alpha = 2/(i + 2);
     end
-    if isequal(options2, 'no')
-        x = x + alpha * d;
-        fx(i+1) = f(x);
-    end
     %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
-    if isequal(options2, 'yes')
-        %Si impone che il nuovo punto sia all'interno del triangolo avente
-        %vertici x, d_old, d_new
-        par_momentum = min([alpha_old, 1 - alpha_old, alpha, 1 - alpha]);
-        momentum = par_momentum * d_old;
-        x = x + alpha * d + momentum;
-        fx(i+1) = f(x);
-        alpha_old = alpha;
-        d_old = y - x;
-        %d_old = d;
-    end
+    %Si impone che il nuovo punto sia all'interno del triangolo avente
+    %vertici x, d_old, d_new
+    %provare con par_momentum = min(beta)
+    par_momentum = min(beta), 1 - alpha);
+    par_momentum = max(0, par_momentum);
+    momentum = par_momentum * d_old;
+    x = x + alpha * d + momentum;
+    fx(i+1) = f(x);
+    d_old = y - x;
     %%%%%%%%%%%%%%%%%MOMENTUM%%%%%%%%%%%%%%%%%%%%
     i = i + 1;
 end
