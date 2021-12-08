@@ -27,7 +27,7 @@ else
 end
 
 if (beta > 0)
-    disp('Using MOMENTUM')
+    disp('Using momentum')
 end
 
 % Force q and x to be column vectors
