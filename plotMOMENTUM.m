@@ -1,5 +1,17 @@
 function plotMOMENTUM(Q, q, x, d_old, par_momentum, d_new, alpha_new)
-d = (par_momentum * d_old) + (alpha_new * d_new); 
+%{
+Plot the tomography (momentum version)
+Input:
+    Q            : (matrix) nxn positive semi-definite
+    q            : (vector) of length n
+    x            : (vector) start point
+    d_old        : (vector) old direction
+    par_momentum : (float) momentum coefficient
+    d_new        : (vector) new direction
+    alpha_new    : (float) coefficient for the new direction
+%}
+
+d = (alpha_new * d_new) + (par_momentum * d_old); 
 
 f = @(t) (x+t*d)'*Q*(x+t*d) + q'*(x+t*d);
 
@@ -13,7 +25,7 @@ while(t < 1)
     y(i)=f(t);
 end
 
-figure('Name','Tomography');
+figure('Name','Tomography with momentum');
 plot(linspace(0,1,i),y, 'k')
 hold on
 

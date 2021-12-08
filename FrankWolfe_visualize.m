@@ -1,20 +1,19 @@
-function [x_min, f_min, elapsed_time, num_steps]= FrankWolfe(Q, q, P, x_start, eps, eps_ls, line_search, beta)
+function [x_min, f_min]= FrankWolfe_visualize(Q, q, P, x_start, eps, eps_ls, line_search, beta)
 %{
-FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
+FrankWolfe computes the minimum of a quadratic function in a constrained convex domain,
+    showing a plot for each iteration. 
 Input:
     Q           : (matrix) nxn positive semi-definite
     q           : (vector) of length n
     P           : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    xStart      : (vector) start point
+    x_start     : (vector) start point
     eps         : (float) stop criterion for Frank Wolfe
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
     beta        : (float) momentum coefficient
 Output:
-    x_min        : (vector) argmin of the function
-    f_min        : (vector) min of the function
-    elapsed_time : (float) time elapsed for the computation
-    num_steps    : (integer) number of steps for the convergence
+    x_min       : (vector) argmin of the function
+    f_min       : (vector) min of the function
 %}
 
 if isequal(line_search,'NM')
@@ -42,15 +41,18 @@ Df = @(x) 2*Q*x + q;
 
 [K, n] = size(P);
 
-tic
 % Start the algorithm
 i = 0;
 D = Df(x);
 y = zeros(n, 1);
 fx(1) = f(x);
+disp(['it. ', num2str(i), ', f(x) = ', num2str(fx(1))])
+
+figure('Name','Main');
+w = waitforbuttonpress;
 
 for k = 1 : K
-    % Take the non-zero indices (indeces in I_k)
+    % Take the indeces not equal to zero (indeces in I_k)
     Ik = find(P(k,:) == 1);
     % Extract the gradient components
     Dk = D(Ik);
@@ -94,6 +96,9 @@ else
     alpha = 2/(i + 2);
 end
 
+% Plot the line search
+plotLS(Q, q, x, d, alpha, alphaStart)
+
 % Upgrade the vector x
 x = x + alpha * d;
 
@@ -103,8 +108,18 @@ fx(2) = f(x);
 % Save the momentum direction
 d_old = y - x;
 
+% Print the results of the first iteration
+disp('Gradiente Df(x):')
+disp(D)
+disp('argmin <y,Df(x)>:')
+disp(y)
+disp(['<grad, d> = ', num2str(obj)])
+disp(['it. ', num2str(i + 1), ' alpha = ', num2str(alpha), ' f(x) = ', num2str(fx(2))])
+
 % New iteration
 i = i + 1;
+
+w = waitforbuttonpress;
 
 % Iterate until convergence
 while (obj < - eps)
@@ -145,21 +160,31 @@ while (obj < - eps)
         alpha = 2/(i + 2);
     end
     % Compute the momentum:
-    %   the new point must be inside the triangular with vertices x, d_old 
-    %   and d_new
+    %   the new point must be inside the triangular with vertices x, d_old,
+    %   d_new
     par_momentum = min(beta, 1 - alpha);
     par_momentum = max(0, par_momentum);
+    if(beta > 0)
+        plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
+    else
+        plotLS(Q, q, x, d, alpha, alphaStart)
+    end
     momentum = par_momentum * d_old;
     x = x + alpha * d + momentum;
     fx(i+1) = f(x);
     d_old = y - x;
     i = i + 1;
+    disp('Gradiente Df(x):')
+    disp(D)
+    disp('argmin <y,Df(x)>:')
+    disp(y)
+    disp(['<grad, d> = ', num2str(obj)])
+    disp(['it. ', num2str(i), ', alpha = ', num2str(alpha), ', f(x) = ', num2str(fx(i))])
+    if (beta > 0)
+        disp(['par_momentum = ', num2str(par_momentum)])
+    end
+    w = waitforbuttonpress;
 end
-
-elapsed_time = toc;
-x_min = x;
-f_min = f(x);
-num_steps = i;
 
 figure('Name','Objective Function');
 plot(O, 'ro-')
@@ -167,4 +192,5 @@ hold on
 plot(fx, 'bo-')
 hold off
 
-
+x_min = x;
+f_min = f(x);
