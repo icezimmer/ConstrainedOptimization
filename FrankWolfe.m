@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, converging, error] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, line_search, beta)
+function [x_min, f_min, elapsed_time, num_steps, converging, error] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, line_search, beta, tomography, curve)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -11,6 +11,8 @@ Input:
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
     beta        : (float) momentum coefficient
+    tomography  : (logical) plot or not the tomography for each step
+    curve       : (logical) plot or not the optimization curve
 Output:
     x_min        : (vector) argmin of the function
     f_min        : (vector) min of the function
@@ -47,11 +49,12 @@ Df = @(x) 2*Q*x + q;
 [K, n] = size(P);
 
 tic
-% Start the algorithm
-i = 0;
+% First iteration
+i = 1;
+fx(i) = f(x);
+
 D = Df(x);
 y = zeros(n, 1);
-fx(1) = f(x);
 
 for k = 1 : K
     % Take the non-zero indices (indeces in I_k)
@@ -70,7 +73,15 @@ d = y - x;
 
 % Scalar product between the gradient in x and the descent direction
 object = D' * d;
-E(1) = object;
+E(i) = object;
+
+if tomography
+	% Print the first iteration
+	disp(['it. ', num2str(i), ', f(x) = ', num2str(fx(i))])
+	disp(['<grad, d> = ', num2str(object)])
+	figure('Name','Main');
+	w = waitforbuttonpress;
+end
 
 % Line search
 if isequal(line_search,'LBM')
@@ -98,11 +109,13 @@ else
     alpha = 2/(i + 2);
 end
 
+if tomography
+	% Plot the line search
+	plotLS(Q, q, x, d, alpha, alphaStart)
+end
+
 % Upgrade the vector x
 x = x + alpha * d;
-
-% Evaluate the function at the new point
-fx(2) = f(x);
 
 % Save the momentum direction
 d_old = y - x;
@@ -111,7 +124,8 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (object < - eps && i < max_steps)
+while (object < - eps && i <= max_steps)
+	fx(i) = f(x);
     D = Df(x);
     y = zeros(n, 1);
     for k = 1 : K
@@ -124,6 +138,14 @@ while (object < - eps && i < max_steps)
     d = y - x;
     object = D'*d;
     E(i) = object;
+	if tomography
+        disp(['it. ', num2str(i), ', alpha = ', num2str(alpha), ', f(x) = ', num2str(fx(i))])
+    	disp(['<grad, d> = ', num2str(object)])
+    	if (beta > 0)
+        	disp(['par_momentum = ', num2str(par_momentum)])
+    	end
+    	w = waitforbuttonpress;
+	end
     if isequal(line_search,'LBM')
         alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
         if (alphaStart <= 1)
@@ -153,31 +175,44 @@ while (object < - eps && i < max_steps)
     %   and d_new
     par_momentum = min(beta, 1 - alpha);
     par_momentum = max(0, par_momentum);
+	if tomography
+		if(beta > 0)
+            plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
+    	else
+        	plotLS(Q, q, x, d, alpha, alphaStart)
+    	end
+	end
     momentum = par_momentum * d_old;
     x = x + alpha * d + momentum;
-    fx(i+1) = f(x);
     d_old = y - x;
     i = i + 1;
 end
 
+% Elapsed time for computation
 elapsed_time = toc;
+% Minimum belonging to the domain
 x_min = x;
+% Minimum value of the function
 f_min = f(x);
-num_steps = i;
+% Number of steps
+num_steps = i - 1;
 
+% Control the convergence of the algorithm
 if(num_steps >= max_steps && object < - eps)
     converging = "No";
 else
     converging = "Yes";
 end
 
+% Final error 
 error = abs(E(end));
-        
 
-figure('Name', strcat(line_search, " with momentum = ", num2str(beta)));
-plot(E, 'ro-')
-hold on
-plot(fx, 'bo-')
-hold off
-
-
+% Plot the optimizaion curve
+if curve
+    figure('Name', strcat(line_search, " with momentum = ", num2str(beta)));
+    plot(E, 'ro-')
+    hold on
+    fx(i) = f_min;
+    plot(fx, 'bo-')
+    hold off
+end

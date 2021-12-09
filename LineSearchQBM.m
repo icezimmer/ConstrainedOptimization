@@ -20,10 +20,17 @@ alphaPlus = alpha_start;
 
 % Until the gradient value and the range are too small
 while(norm(dPhi(alpha)) > eps && norm(alphaPlus - alphaMinus) > eps)
-    alpha = (alphaMinus*dPhi(alphaPlus) - alphaPlus*dPhi(alphaMinus)) / (dPhi(alphaPlus) - dPhi(alphaMinus));
+    alpha = (alphaMinus * dPhi(alphaPlus) - alphaPlus * dPhi(alphaMinus)) / (dPhi(alphaPlus) - dPhi(alphaMinus));
     if(dPhi(alpha) < 0)
         alphaMinus = alpha;
     else
         alphaPlus = alpha;
-    end
+    end  
+end
+
+if(alpha > 1)
+    alpha = 1;
+end
+if(alpha < 0)
+    alpha = 0;
 end

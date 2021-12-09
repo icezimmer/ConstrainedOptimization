@@ -22,8 +22,6 @@ if(norm(ddPhi) > eps)
     while(norm(dPhi(alpha)) > eps && alpha <= 1 + eps)
         alpha = alpha - dPhi(alpha)/ddPhi;
     end
-else
-    alpha = LineSearchLBM(Q, q, x, d, alpha, eps);
 end
 
 if(alpha > 1)
