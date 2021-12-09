@@ -1,11 +1,11 @@
-function [x_min, f_min, elapsed_time, num_steps]= FrankWolfe(Q, q, P, x_start, eps, eps_ls, line_search, beta)
+function [x_min, f_min, elapsed_time, num_steps] = FrankWolfe(Q, q, P, x_start, eps, eps_ls, line_search, beta)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
     Q           : (matrix) nxn positive semi-definite
     q           : (vector) of length n
     P           : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    xStart      : (vector) start point
+    x_start      : (vector) start point
     eps         : (float) stop criterion for Frank Wolfe
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
