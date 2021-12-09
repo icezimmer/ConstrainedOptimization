@@ -1,12 +1,13 @@
-function [x_min, f_min, elapsed_time, num_steps] = FrankWolfe(Q, q, P, x_start, eps, eps_ls, line_search, beta)
+function [x_min, f_min, elapsed_time, num_steps, converging, error] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, line_search, beta)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
     Q           : (matrix) nxn positive semi-definite
     q           : (vector) of length n
     P           : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    x_start      : (vector) start point
-    eps         : (float) stop criterion for Frank Wolfe
+    x_start     : (vector) start point
+    eps         : (float) stop criterion (max error for Frank Wolfe)
+    max_steps   : (integer) stop criterion (max number of steps for Frank Wolfe)
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
     beta        : (float) momentum coefficient
@@ -15,6 +16,9 @@ Output:
     f_min        : (vector) min of the function
     elapsed_time : (float) time elapsed for the computation
     num_steps    : (integer) number of steps for the convergence
+    converging   : (string) method converge or not
+    error        : (float) absolute value given by the scalar product between
+        the gradient and the direction 
 %}
 
 if isequal(line_search,'NM')
@@ -28,7 +32,7 @@ else
 end
 
 if (beta > 0)
-    disp('Using momentum')
+    disp(strcat("Using momentum = ", num2str(beta)))
 end
 
 % Force q and x to be column vectors
@@ -65,8 +69,8 @@ end
 d = y - x;
 
 % Scalar product between the gradient in x and the descent direction
-obj = D' * d;
-O(1) = obj;
+object = D' * d;
+E(1) = object;
 
 % Line search
 if isequal(line_search,'LBM')
@@ -107,7 +111,7 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (obj < - eps)
+while (object < - eps && i < max_steps)
     D = Df(x);
     y = zeros(n, 1);
     for k = 1 : K
@@ -118,8 +122,8 @@ while (obj < - eps)
         y(jk) = 1;
     end
     d = y - x;
-    obj = D'*d;
-    O(i) = obj;
+    object = D'*d;
+    E(i) = object;
     if isequal(line_search,'LBM')
         alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
         if (alphaStart <= 1)
@@ -161,8 +165,17 @@ x_min = x;
 f_min = f(x);
 num_steps = i;
 
-figure('Name','Objective Function');
-plot(O, 'ro-')
+if(num_steps >= max_steps && object < - eps)
+    converging = "No";
+else
+    converging = "Yes";
+end
+
+error = abs(E(end));
+        
+
+figure('Name', strcat(line_search, " with momentum = ", num2str(beta)));
+plot(E, 'ro-')
 hold on
 plot(fx, 'bo-')
 hold off

@@ -42,7 +42,6 @@ q = q(randperm(n));
 
 
 % Ceck if the vector q belong to the image of the matrix Q
-rank([Q, q])
 minima = (rank(Q) == rank([Q, q]));
 
 % Construct the matrix P representing the partion of indices {I_k}

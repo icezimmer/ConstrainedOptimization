@@ -7,7 +7,7 @@ Input:
     q           : (vector) of length n
     P           : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     x_start     : (vector) start point
-    eps         : (float) stop criterion for Frank Wolfe
+    eps         : (float) stop criterion for Frank Wolfe (max error for Frank Wolfe)
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
     beta        : (float) momentum coefficient
@@ -67,8 +67,8 @@ end
 d = y - x;
 
 % Scalar product between the gradient in x and the descent direction
-obj = D' * d;
-O(1) = obj;
+object = D' * d;
+E(1) = object;
 
 % Line search
 if isequal(line_search,'LBM')
@@ -113,7 +113,7 @@ disp('Gradiente Df(x):')
 disp(D)
 disp('argmin <y,Df(x)>:')
 disp(y)
-disp(['<grad, d> = ', num2str(obj)])
+disp(['<grad, d> = ', num2str(object)])
 disp(['it. ', num2str(i + 1), ' alpha = ', num2str(alpha), ' f(x) = ', num2str(fx(2))])
 
 % New iteration
@@ -122,7 +122,7 @@ i = i + 1;
 w = waitforbuttonpress;
 
 % Iterate until convergence
-while (obj < - eps)
+while (object < - eps)
     D = Df(x);
     y = zeros(n, 1);
     for k = 1 : K
@@ -133,8 +133,8 @@ while (obj < - eps)
         y(jk) = 1;
     end
     d = y - x;
-    obj = D'*d;
-    O(i) = obj;
+    object = D'*d;
+    E(i) = object;
     if isequal(line_search,'LBM')
         alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
         if (alphaStart <= 1)
@@ -178,7 +178,7 @@ while (obj < - eps)
     disp(D)
     disp('argmin <y,Df(x)>:')
     disp(y)
-    disp(['<grad, d> = ', num2str(obj)])
+    disp(['<grad, d> = ', num2str(object)])
     disp(['it. ', num2str(i), ', alpha = ', num2str(alpha), ', f(x) = ', num2str(fx(i))])
     if (beta > 0)
         disp(['par_momentum = ', num2str(par_momentum)])
@@ -187,7 +187,7 @@ while (obj < - eps)
 end
 
 figure('Name','Objective Function');
-plot(O, 'ro-')
+plot(E, 'ro-')
 hold on
 plot(fx, 'bo-')
 hold off
