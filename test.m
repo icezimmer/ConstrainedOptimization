@@ -2,11 +2,13 @@
 Search the minimum of a funtion f = x'*Q*x + q'*x in a constrained convex domain
 %}
 
+addpath src
+
 % Space dimension and kernel dimension of the matrix Q
 n = 100; dim_ker = 80;
-
 % Minimum eigenvalue of the matrix Q and the maximum eigenvalue of the matrix Q
 min_eig = 2; max_eig = 10;
+
 % Minimum value, maximum value and number of zero in the vector q
 min_q = 3; max_q = 9; zero_q = 3;
 
@@ -15,13 +17,11 @@ min_q = 3; max_q = 9; zero_q = 3;
 
 % Stop criteria: max error and max number of steps for Frank Wolfe
 eps = 0.1; max_steps = 1000;
-
 % Stop criterion for the line search methods
 eps_ls = 0.01;
 
 % List of line search methods to try ("Trivial", "LBM", "QBM", "NM")
 line_search_methods = ["QBM", "Trivial", "LBM", "NM"];
-
 % Minimum value of momentum coefficient, maximum value of momentum coefficient and width of the sub-intervals for the momentum coefficient
 left = 0; right = 0.1; delta = 0.01;
 
