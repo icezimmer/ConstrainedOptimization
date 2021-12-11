@@ -198,7 +198,7 @@ f_min = f(x);
 num_steps = i - 1;
 
 % Control the convergence of the algorithm
-if(num_steps >= max_steps && object < - eps)
+if(num_steps >= max_steps && object < - eps && Domain(x_min, P))
     converging = "No";
 else
     converging = "Yes";
@@ -215,4 +215,6 @@ if curve
     fx(i) = f_min;
     plot(fx, 'bo-')
     hold off
+end
+
 end

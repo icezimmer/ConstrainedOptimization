@@ -61,3 +61,5 @@ x_min = x_min';
 grid_search = grid_search(:, 1 : end-1);
 
 best = grid_search(1, :);
+
+end

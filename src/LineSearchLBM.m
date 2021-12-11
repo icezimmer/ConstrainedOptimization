@@ -27,3 +27,5 @@ while(norm(dPhi(alpha)) > eps && norm(alphaPlus - alphaMinus) > eps)
         alphaPlus = alpha;
     end
 end
+
+end

@@ -31,3 +31,5 @@ hold on
 
 plot(1, f(1), 'r*')
 hold off
+
+end

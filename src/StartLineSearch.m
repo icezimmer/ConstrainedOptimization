@@ -23,3 +23,5 @@ end
 if (alphaStart > 1)
     alphaStart = 1;
 end
+
+end

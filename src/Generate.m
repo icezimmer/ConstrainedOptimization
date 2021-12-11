@@ -1,7 +1,7 @@
 function [Q, q, P, x_start, minima] = Generate(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
-    of indices) and the point x_start belonging to the domain
+    of indices) and the point x_start belonging to the domain.
 Input:
     n       : (integer) dimension of the space
     dim_Ker : (integer) dimension of the kernel space
@@ -40,7 +40,6 @@ q = min_q + abs(max_q - min_q) * rand(n - zero_q, 1);
 q = [q; zeros(zero_q, 1)];
 q = q(randperm(n));
 
-
 % Ceck if the vector q belong to the image of the matrix Q
 minima = (rank(Q) == rank([Q, q]));
 
@@ -68,4 +67,6 @@ s = r(1);
 for i = 2 : m
     x_start(s + 1 : s + r(i)) = ones(r(i), 1) / r(i);
     s = s + r(i);
+end
+
 end

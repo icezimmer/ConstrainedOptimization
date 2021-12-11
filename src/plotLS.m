@@ -28,3 +28,5 @@ hold on
 
 plot(alpha, f(alpha), 'r*')
 hold off
+
+end
