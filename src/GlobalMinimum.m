@@ -12,7 +12,7 @@ Output:
 f = @(x) x'*Q*x + q'*x;
 
 if (rank(Q) == rank([Q, q]))
-    x_min = Q \ (-q);
+    x_min = (-2 * Q) \ q;
     f_min = f(x_min);
 end
 

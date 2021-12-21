@@ -15,7 +15,7 @@ min_q = 3; max_q = 9; zero_q = 3;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, x_start, minima] = Generate(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q);
 
-% Check if the global minimum exist and if satisfy the constraints
+% Check if the global minimum exists and if it satisfies the constraints
 is_in = false;
 if minima
     [x_min, f_min] = GlobalMinimum(Q, q);
