@@ -6,7 +6,7 @@ addpath src
 
 % Space dimension and kernel dimension of the matrix Q
 n = 100; dim_ker = 10;
-% Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
+% Minimum eigenvalue of the matrix Q and  maximum eigenvalue of the matrix Q
 min_eig = 2; max_eig = 10;
 
 % Minimum value, maximum value and number of zero in the vector q

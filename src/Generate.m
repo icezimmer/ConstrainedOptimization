@@ -19,6 +19,9 @@ Output:
     minima : (boolean) 1 iff the function has any minima in R^n space
 %}
 
+%initialize the random seed
+rng(0)
+
 % Construct the orthogonal matrices U and V
 U = orth(randn(n));
 V = orth(randn(n));

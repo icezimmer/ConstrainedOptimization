@@ -1,17 +1,17 @@
-function [x_min, best, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, candidates, tomography, curve)
+function [x_min, best, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, hyperparameters, tomography, curve)
 %{
 Grid search on line search method and momentum coefficient.
 Input:
-    Q          : (matrix) nxn positive semi-definite
-    q          : (vector) of length n
-    P          : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    x_start    : (vector) start point
-    eps        : (float) stop criterion for Frank Wolfe (max error for Frank Wolfe)
-    max_steps  : (integer) stop criterion for Frank Wolfe (max number of steps for Frank Wolfe)
-    eps_ls     : (float) stop criterion for the line search
-    candidates : (Map object) container for wich keys are the hyperparameters, and values the possible values of each parameter 
+    Q               : (matrix) nxn positive semi-definite
+    q               : (vector) of length n
+    P               : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    x_start         : (vector) start point
+    eps             : (float) stop criterion for Frank Wolfe (max error for Frank Wolfe)
+    max_steps       : (integer) stop criterion for Frank Wolfe (max number of steps for Frank Wolfe)
+    eps_ls          : (float) stop criterion for the line search
+    hyperparameters : (Map object) container for wich keys are the hyperparameters, and values the possible values of each parameter 
     tomography : (logical) plot or not the tomography for each step
-    curve      : (logical) plot or not the optimization curve
+    curve       : (logical) plot or not the optimization curve
 Output:
     x_min       : (vector) solution in the domain
     best        : (table) best method and parameters
@@ -21,7 +21,7 @@ Output:
 line_search_methods = candidates('ls_method');
 line_search_methods = line_search_methods(:);
 
-beta_values = candidates('beta');
+beta_values = hyperparameters('beta');
 beta_values = beta_values(:);
 
 Minimum = zeros(0,1);
