@@ -7,7 +7,7 @@ addpath src
 % Space dimension and kernel dimension of the matrix Q
 n = 100; dim_ker = 10;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
-min_eig = 2; max_eig = 10;
+min_eig = 1; max_eig = 10;
 
 % Minimum value, maximum value and number of zero in the vector q
 min_q = 3; max_q = 9; zero_q = 3;
@@ -29,16 +29,16 @@ end
 % If the global minimum is not in the domain or it doesn't exist compute a grid search the Franke-Wolfe method
 if ~is_in
     % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
-    eps = 0.1; max_steps = 1000;
+    eps = 0.1; max_steps = 500;
     % Stop criterion for the line search methods
     eps_ls = 0.01;
     
     % Define a Map object for the grid search (the line search methods and the beta values (momentum coefficients))
     candidates = containers.Map({'ls_method', 'beta'}, ...
-        {["Trivial", "LBM", "QBM", "NM"], [0, 1e-6, 1e-4, 1e-3, 1e-2, 1e-1, 1.0]});
-
+        {["Trivial", "LBM", "QBM", "NM"], [0]});
+    
     % Plot or not the tomography for each step and/or the optimization curve for each method
-    tomography = false; curve = false;
+    tomography = false; curve = true;
 
     % Search the best solution
     [x_min, solution, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, candidates, tomography, curve);

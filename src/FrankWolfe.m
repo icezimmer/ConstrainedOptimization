@@ -29,7 +29,7 @@ elseif isequal(line_search,'LBM')
     disp('LineSearch Linear Bisection Method')
 elseif isequal(line_search,'QBM')
     disp('LineSearch Quadratic Bisection Method')
-else
+elseif isequal(line_search,'Trivial')
     disp('LineSearch Trivial Method')
 end
 
@@ -51,7 +51,6 @@ Df = @(x) 2*Q*x + q;
 tic
 % First iteration
 i = 1;
-fx(i) = f(x);
 
 D = Df(x);
 y = zeros(n, 1);
@@ -73,15 +72,6 @@ d = y - x;
 
 % Scalar product between the gradient in x and the descent direction
 object = D' * d;
-E(i) = object;
-
-if tomography
-	% Print the first iteration
-	disp(['it. ', num2str(i), ', f(x) = ', num2str(fx(i))])
-	disp(['<grad, d> = ', num2str(object)])
-	figure('Name','Main');
-	w = waitforbuttonpress;
-end
 
 % Line search
 if isequal(line_search,'LBM')
@@ -105,13 +95,29 @@ elseif isequal(line_search, 'NM')
     else
         alpha = 1;
     end  
-else
+elseif isequal(line_search,'Trivial')
     alpha = 2/(i + 2);
 end
 
 if tomography
-	% Plot the line search
-	plotLS(Q, q, x, d, alpha, alphaStart)
+    % Print the first iteration
+	disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
+	disp(['<grad, d> = ', num2str(object), ', alpha = ', num2str(alpha)])
+	figure('Name','Main');
+	w = waitforbuttonpress;
+    % Plot the tomography
+    if ~isequal(line_search, 'Trivial')
+        % Plot the line search
+        plotLS(Q, q, x, d, alpha, alphaStart)
+    end
+    if isequal(line_search, 'Trivial')
+        plotLS(Q, q, x, d, alpha, 1)
+    end
+end
+
+if curve
+    fx(i) = f(x);
+    E(i) = object;
 end
 
 % Upgrade the vector x
@@ -125,7 +131,6 @@ i = i + 1;
 
 % Iterate until convergence
 while (object < - eps && i <= max_steps)
-	fx(i) = f(x);
     D = Df(x);
     y = zeros(n, 1);
     for k = 1 : K
@@ -137,15 +142,6 @@ while (object < - eps && i <= max_steps)
     end
     d = y - x;
     object = D'*d;
-    E(i) = object;
-	if tomography
-        disp(['it. ', num2str(i), ', alpha = ', num2str(alpha), ', f(x) = ', num2str(fx(i))])
-    	disp(['<grad, d> = ', num2str(object)])
-    	if (beta > 0)
-        	disp(['par_momentum = ', num2str(par_momentum)])
-    	end
-    	w = waitforbuttonpress;
-	end
     if isequal(line_search,'LBM')
         alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
         if (alphaStart <= 1)
@@ -167,7 +163,7 @@ while (object < - eps && i <= max_steps)
         else
             alpha = 1;
         end  
-    else
+    elseif isequal(line_search, 'Trivial')
         alpha = 2/(i + 2);
     end
     % Compute the momentum:
@@ -175,14 +171,32 @@ while (object < - eps && i <= max_steps)
     %   and d_new
     par_momentum = min(beta, 1 - alpha);
     par_momentum = max(0, par_momentum);
-	if tomography
-		if(beta > 0)
-            plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
-    	else
-        	plotLS(Q, q, x, d, alpha, alphaStart)
-    	end
-	end
     momentum = par_momentum * d_old;
+    % Plot tomography
+    if tomography
+        disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
+        disp(['<grad, d> = ', num2str(object), ', alpha = ', num2str(alpha)])
+        w = waitforbuttonpress;
+        if ~isequal(line_search, 'Trivial')
+            if(beta > 0)
+                plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
+            else
+                plotLS(Q, q, x, d, alpha, alphaStart)
+            end
+        end
+        if isequal(line_search, 'Trivial')
+            if(beta > 0)
+                plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
+            else
+                plotLS(Q, q, x, d, alpha, 1)
+            end
+        end
+    end
+    if curve
+        fx(i) = f(x);
+        E(i) = object;
+    end
+    % Upgrade the point
     x = x + alpha * d + momentum;
     d_old = y - x;
     i = i + 1;
@@ -197,8 +211,8 @@ f_min = f(x);
 % Number of steps
 num_steps = i - 1;
 
-% Control the convergence of the algorithm
-if(num_steps >= max_steps && object < - eps && Domain(x_min, P))
+% Check the convergence of the algorithm
+if(object < - eps || ~Domain(x_min, P))
     converging = "No";
 else
     converging = "Yes";
@@ -207,14 +221,14 @@ end
 % Final error 
 error = abs(E(end));
 
+if tomography
+    disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
+end
+
 % Plot the optimizaion curve
 if curve
-    figure('Name', strcat(line_search, " with momentum = ", num2str(beta)));
-    plot(E, 'ro-')
-    hold on
     fx(i) = f_min;
-    plot(fx, 'bo-')
-    hold off
+    plotCURVE(fx, E, line_search, beta)
 end
 
 end

@@ -27,6 +27,7 @@ end
 
 figure('Name','Tomography with momentum');
 plot(linspace(0,1,i),y, 'k')
+ylabel('f')
 hold on
 
 plot(1, f(1), 'r*')

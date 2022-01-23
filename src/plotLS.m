@@ -24,6 +24,8 @@ end
 
 figure('Name','Tomography');
 plot(linspace(0,alpha_start,i),y, 'k')
+xlabel('alpha')
+ylabel('f')
 hold on
 
 plot(alpha, f(alpha), 'r*')
