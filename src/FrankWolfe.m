@@ -43,66 +43,20 @@ x = x_start(:);
 
 % Function f
 f = @(x) x'*Q*x + q'*x;
-% Gradient function
-Df = @(x) 2*Q*x + q;
-
-[K, n] = size(P);
 
 tic
 % First iteration
 i = 1;
 
-D = Df(x);
-y = zeros(n, 1);
-
-for k = 1 : K
-    % Take the non-zero indices (indeces in I_k)
-    Ik = find(P(k,:) == 1);
-    % Extract the gradient components
-    Dk = D(Ik);
-    % Compute the argmin of D_k
-    [~, j] = min(Dk);
-    % Take the j-th idex of I_k
-    jk = Ik(j);
-    % Insert 1 at the position j_k
-    y(jk) = 1;
-end
-% Define the descent direction
-d = y - x;
-
-% Scalar product between the gradient in x and the descent direction
-object = D' * d;
+[d, y, target] = LinearApproximationMinimizer(Q, q, P, x);
 
 % Line search
-if isequal(line_search,'LBM')
-    alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-    if (alphaStart <= 1)
-        alpha = LineSearchLBM(Q, q, x, d, alphaStart, eps_ls);
-    else
-        alpha = 1;
-    end  
-elseif isequal(line_search,'QBM')
-    alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-    if (alphaStart <= 1)
-        alpha = LineSearchQBM(Q, q, x, d, alphaStart, eps_ls);
-    else
-        alpha = 1;
-    end 
-elseif isequal(line_search, 'NM')
-    alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-    if (alphaStart <= 1)
-        alpha = LineSearchNM(Q, q, x, d, alphaStart, eps_ls);
-    else
-        alpha = 1;
-    end  
-elseif isequal(line_search,'Default')
-    alpha = 2/(i + 2);
-end
+alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
 
 if tomography
     % Print the first iteration
 	disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-	disp(['<grad, d> = ', num2str(object), ', alpha = ', num2str(alpha)])
+	disp(['<grad, d> = ', num2str(target), ', alpha = ', num2str(alpha)])
 	figure('Name','Main');
 	w = waitforbuttonpress;
     % Plot the tomography
@@ -117,7 +71,7 @@ end
 
 if curve
     fx(i) = f(x);
-    E(i) = object;
+    E(i) = target;
 end
 
 % Upgrade the vector x
@@ -130,56 +84,22 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (object < - eps && i <= max_steps)
-    D = Df(x);
-    y = zeros(n, 1);
-    for k = 1 : K
-        Ik = find(P(k,:) == 1);
-        Dk = D(Ik);
-        [~, j] = min(Dk);
-        jk = Ik(j);
-        y(jk) = 1;
-    end
-    d = y - x;
-    object = D'*d;
-    if isequal(line_search,'LBM')
-        alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-        if (alphaStart <= 1)
-            alpha = LineSearchLBM(Q, q, x, d, alphaStart, eps_ls);
-        else
-            alpha = 1;
-        end  
-    elseif isequal(line_search,'QBM')
-        alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-        if (alphaStart <= 1)
-            alpha = LineSearchQBM(Q, q, x, d, alphaStart, eps_ls);
-        else
-            alpha = 1;
-        end 
-    elseif isequal(line_search, 'NM')
-        alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
-        if (alphaStart <= 1)
-            alpha = LineSearchNM(Q, q, x, d, alphaStart, eps_ls);
-        else
-            alpha = 1;
-        end  
-    elseif isequal(line_search, 'Default')
-        alpha = 2/(i + 2);
-    end
+while (target < - eps && i <= max_steps)
+    [d, y, target] = LinearApproximationMinimizer(Q, q, P, x);
+    
+    alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
+    
     % Compute the momentum:
-    %   the new point must be inside the triangular with vertices x, d_old 
-    %   and d_new
-    par_momentum = min(beta, 1 - alpha);
-    par_momentum = max(0, par_momentum);
-    momentum = par_momentum * d_old;
+    [momentum, momentum_coeff] = Momentum(d_old, alpha, beta);
+    
     % Plot tomography
     if tomography
         disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-        disp(['<grad, d> = ', num2str(object), ', alpha = ', num2str(alpha)])
+        disp(['<grad, d> = ', num2str(target), ', alpha = ', num2str(alpha)])
         w = waitforbuttonpress;
         if ~isequal(line_search, 'Default')
             if(beta > 0)
-                plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
+                plotMOMENTUM(Q, q, x, d_old, momentum_coeff, d, alpha)
             else
                 plotLS(Q, q, x, d, alpha, alphaStart)
             end
@@ -192,13 +112,18 @@ while (object < - eps && i <= max_steps)
             end
         end
     end
+    
+    % Append new value of the funtion and the error for the optimization curve
     if curve
         fx(i) = f(x);
-        E(i) = object;
+        E(i) = target;
     end
+    
     % Upgrade the point
     x = x + alpha * d + momentum;
+    
     d_old = y - x;
+    
     i = i + 1;
 end
 
@@ -212,7 +137,7 @@ f_min = f(x);
 num_steps = i - 1;
 
 % Check the convergence of the algorithm
-if(object < - eps || ~Domain(x_min, P))
+if(target < - eps || ~Domain(x_min, P))
     converging = "No";
 else
     converging = "Yes";
@@ -225,7 +150,7 @@ if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
 end
 
-% Plot the optimizaion curve
+% Plot the optimization curve
 if curve
     fx(i) = f_min;
     plotCURVE(fx, E, line_search, beta)

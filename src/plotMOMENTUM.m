@@ -1,17 +1,17 @@
-function plotMOMENTUM(Q, q, x, d_old, par_momentum, d_new, alpha_new)
+function plotMOMENTUM(Q, q, x, d_old, momentum_coeff, d_new, alpha_new)
 %{
 Plot the tomography (momentum version)
 Input:
-    Q            : (matrix) nxn positive semi-definite
-    q            : (vector) of length n
-    x            : (vector) start point
-    d_old        : (vector) old direction
-    par_momentum : (float) momentum coefficient
-    d_new        : (vector) new direction
-    alpha_new    : (float) coefficient for the new direction
+    Q              : (matrix) nxn positive semi-definite
+    q              : (vector) of length n
+    x              : (vector) start point
+    d_old          : (vector) old direction
+    momentum_coeff : (float) momentum coefficient
+    d_new          : (vector) new direction
+    alpha_new      : (float) coefficient for the new direction
 %}
 
-d = (alpha_new * d_new) + (par_momentum * d_old); 
+d = (alpha_new * d_new) + (momentum_coeff * d_old); 
 
 f = @(t) (x+t*d)'*Q*(x+t*d) + q'*(x+t*d);
 

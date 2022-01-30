@@ -1,6 +1,6 @@
 function plotCURVE(fx, E, line_search, beta)
 %{
-Plot the tomography
+Plot the optimization curve
 Input:
     fx          : (vector) function values sequence
     E           : (vector) error values sequence

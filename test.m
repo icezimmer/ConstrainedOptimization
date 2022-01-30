@@ -8,12 +8,12 @@ addpath src
 n = 100; dim_ker = 10;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
 min_eig = 1; max_eig = 10;
-
 % Minimum value, maximum value and number of zero in the vector q
 min_q = 3; max_q = 9; zero_q = 3;
-
+% Seed for the random generator
+seed = 0;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, x_start, minima] = Generate(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q);
+[Q, q, P, x_start, minima] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed);
 
 % Check if the global minimum exists and if it satisfies the constraints
 is_in = false;
@@ -35,7 +35,7 @@ if ~is_in
     
     % Define a Map object for the grid search (the line search methods and the beta values (momentum coefficients))
     candidates = containers.Map({'ls_method', 'beta'}, ...
-        {["Trivial", "LBM", "QBM", "NM"], [0]});
+        {["Default", "LBM", "QBM", "NM"], [0]});
     
     % Plot or not the tomography for each step and/or the optimization curve for each method
     tomography = false; curve = true;

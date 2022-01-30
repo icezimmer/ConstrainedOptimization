@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, minima] = Generate(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q)
+function [Q, q, P, x_start, minima] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -10,6 +10,7 @@ Input:
     min_q   : (float) min value of the vector q
     max_q   : (float) max value of the vector q
     zero_q  : (integer) number of zero values in the vector q
+    seed    : (inetger) seed for the random generator
 Output:
     Q      : (matrix) nxn positive semi-definite with non-zero eigenvalues in the
         range (min_eig, max_eig) 
@@ -20,7 +21,7 @@ Output:
 %}
 
 %initialize the random seed
-rng(0)
+rng(seed)
 
 % Construct the orthogonal matrices U and V
 U = orth(randn(n));
