@@ -1,8 +1,7 @@
 function [d, y, target] = LinearApproximationMinimizer(Q, q, P, x)
 %{
-Compute the y that minimizes the dot product with the gradient of the function
-    in the point x, the descent direction and the scalar product between
-    the gradient in x and the descent direction
+Minimize the linear approximation of the function in the point x; compute the
+    descent direction and the "residual error"
 INPUT:
     Q : (matrix) nxn positive semi-definite
     q : (vector) of length n
@@ -19,18 +18,24 @@ OUTPUT:
 Df = @(x) 2*Q*x + q;
 
 D = Df(x);
+
 [K, n] = size(P);
+
 y = zeros(n, 1);
 
 for k = 1 : K
     % Take the non-zero indices (indeces in I_k)
     Ik = find(P(k,:) == 1);
+    
     % Extract the gradient components
     Dk = D(Ik);
+    
     % Compute the argmin of D_k
     [~, j] = min(Dk);
+    
     % Take the j-th idex of I_k
     jk = Ik(j);
+    
     % Insert 1 at the position j_k
     y(jk) = 1;
 end
@@ -42,4 +47,3 @@ d = y - x;
 target = D' * d;
 
 end
-

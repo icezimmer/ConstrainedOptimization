@@ -1,5 +1,5 @@
 %{
-Compute the minimum of a funtion f = x'*Q*x + q'*x in a constrained convex domain.
+Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 %}
 
 addpath src
