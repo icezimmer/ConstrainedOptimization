@@ -24,13 +24,13 @@ Output:
 %}
 
 if isequal(line_search,'NM')
-    disp('LineSearch Newton Method')
+    disp('LineSearch: Newton Method')
 elseif isequal(line_search,'LBM')
-    disp('LineSearch Linear Bisection Method')
+    disp('LineSearch: Linear Bisection Method')
 elseif isequal(line_search,'QBM')
-    disp('LineSearch Quadratic Bisection Method')
-elseif isequal(line_search,'Trivial')
-    disp('LineSearch Trivial Method')
+    disp('LineSearch: Quadratic Bisection Method')
+elseif isequal(line_search,'Default')
+    disp('LineSearch: Default Method')
 end
 
 if (beta > 0)
@@ -95,7 +95,7 @@ elseif isequal(line_search, 'NM')
     else
         alpha = 1;
     end  
-elseif isequal(line_search,'Trivial')
+elseif isequal(line_search,'Default')
     alpha = 2/(i + 2);
 end
 
@@ -106,11 +106,11 @@ if tomography
 	figure('Name','Main');
 	w = waitforbuttonpress;
     % Plot the tomography
-    if ~isequal(line_search, 'Trivial')
+    if ~isequal(line_search, 'Default')
         % Plot the line search
         plotLS(Q, q, x, d, alpha, alphaStart)
     end
-    if isequal(line_search, 'Trivial')
+    if isequal(line_search, 'Default')
         plotLS(Q, q, x, d, alpha, 1)
     end
 end
@@ -163,7 +163,7 @@ while (object < - eps && i <= max_steps)
         else
             alpha = 1;
         end  
-    elseif isequal(line_search, 'Trivial')
+    elseif isequal(line_search, 'Default')
         alpha = 2/(i + 2);
     end
     % Compute the momentum:
@@ -177,14 +177,14 @@ while (object < - eps && i <= max_steps)
         disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
         disp(['<grad, d> = ', num2str(object), ', alpha = ', num2str(alpha)])
         w = waitforbuttonpress;
-        if ~isequal(line_search, 'Trivial')
+        if ~isequal(line_search, 'Default')
             if(beta > 0)
                 plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
             else
                 plotLS(Q, q, x, d, alpha, alphaStart)
             end
         end
-        if isequal(line_search, 'Trivial')
+        if isequal(line_search, 'Default')
             if(beta > 0)
                 plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
             else
