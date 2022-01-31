@@ -1,4 +1,4 @@
-function [d, y, target] = LinearApproximationMinimizer(Q, q, P, x)
+function [d, y, gap] = LinearApproximationMinimizer(Q, q, P, x)
 %{
 Minimize the linear approximation of the function in the point x; compute the
     descent direction and the "residual error"
@@ -8,10 +8,10 @@ INPUT:
     P : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     x : (vettor) point where compute and minimize the linear approximation of the funtion
 OUTPUT:
-    d      : (vector) descent direction
-    y      : (vector) point that minimizes the dot product with the gradient of the function
+    d   : (vector) descent direction
+    y   : (vector) point that minimizes the dot product with the gradient of the function
         in the point x
-    target : (float) scalar product between the gradient in x and the descent direction
+    gap : (float) scalar product between the gradient in x and the descent direction
 %}
 
 % Gradient function
@@ -44,6 +44,6 @@ end
 d = y - x;
 
 % Scalar product between the gradient in x and the descent direction
-target = D' * d;
+gap = D' * d;
 
 end

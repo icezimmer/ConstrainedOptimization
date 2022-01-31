@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, converging, error] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, line_search, beta, tomography, curve)
+function [x_min, f_min, elapsed_time, num_steps, converging, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, line_search, beta, tomography, curve)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -6,7 +6,7 @@ Input:
     q           : (vector) of length n
     P           : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     x_start     : (vector) start point
-    eps         : (float) stop criterion (max error for Frank Wolfe)
+    eps         : (float) stop criterion (max duality_gap for Frank Wolfe)
     max_steps   : (integer) stop criterion (max number of steps for Frank Wolfe)
     eps_ls      : (float) stop criterion for the line search
     line_search : (string) method for line search
@@ -19,7 +19,7 @@ Output:
     elapsed_time : (float) time elapsed for the computation
     num_steps    : (integer) number of steps for the convergence
     converging   : (string) method converge or not
-    error        : (float) absolute value given by the scalar product between
+    duality_gap  : (float) opposite value given by the scalar product between
         the gradient and the direction 
 %}
 
@@ -48,7 +48,7 @@ tic
 % First iteration
 i = 1;
 
-[d, y, target] = LinearApproximationMinimizer(Q, q, P, x);
+[d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
 
 % Line search
 alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
@@ -56,7 +56,7 @@ alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
 if tomography
     % Print the first iteration
 	disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-	disp(['<grad, d> = ', num2str(target), ', alpha = ', num2str(alpha)])
+	disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
 	figure('Name','Main');
 	w = waitforbuttonpress;
     % Plot the tomography
@@ -71,7 +71,7 @@ end
 
 if curve
     fx(i) = f(x);
-    E(i) = target;
+    E(i) = gap;
 end
 
 % Upgrade the vector x
@@ -84,8 +84,8 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (target < - eps && i <= max_steps)
-    [d, y, target] = LinearApproximationMinimizer(Q, q, P, x);
+while (gap < - eps && i <= max_steps)
+    [d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
     
     alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
     
@@ -95,7 +95,7 @@ while (target < - eps && i <= max_steps)
     % Plot tomography
     if tomography
         disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-        disp(['<grad, d> = ', num2str(target), ', alpha = ', num2str(alpha)])
+        disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
         w = waitforbuttonpress;
         if ~isequal(line_search, 'Default')
             if(beta > 0)
@@ -113,10 +113,10 @@ while (target < - eps && i <= max_steps)
         end
     end
     
-    % Append new value of the funtion and the error for the optimization curve
+    % Append new value of the funtion and the duality_gap for the optimization curve
     if curve
         fx(i) = f(x);
-        E(i) = target;
+        E(i) = gap;
     end
     
     % Upgrade the point
@@ -137,14 +137,14 @@ f_min = f(x);
 num_steps = i - 1;
 
 % Check the convergence of the algorithm
-if(target < - eps || ~Domain(x_min, P))
+if(gap < - eps || ~Domain(x_min, P))
     converging = "No";
 else
     converging = "Yes";
 end
 
-% Final error 
-error = abs(E(end));
+% Final duality_gap (duality gap) 
+duality_gap = -E(end);
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])

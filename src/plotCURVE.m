@@ -14,14 +14,14 @@ tiledlayout(2,1)
 
 nexttile
 plot(fx, 'bo-')
-title('Optimization curve')
+title('Primal optimization')
 xlabel('step')
 ylabel('f(x)')
 
 nexttile
 plot(abs(E), 'ro-')
-title('Error curve')
+title('Dual optimization')
 xlabel('step')
-ylabel('error')
+ylabel('duality gap')
 
 end
