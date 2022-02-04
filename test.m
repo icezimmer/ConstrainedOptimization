@@ -29,13 +29,13 @@ end
 % If the global minimum is not in the domain or it doesn't exist compute a grid search the Franke-Wolfe method
 if ~is_in
     % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
-    eps = 0.1; max_steps = 1000;
+    eps = 0.1; max_steps = 10;
     % Stop criterion for the line search methods
     eps_ls = 0.01;
     
     % Define a Map object for the grid search (the line search methods and the beta values (momentum coefficients))
     candidates = containers.Map({'ls_method', 'beta'}, ...
-        {["Default", "LBM", "QBM", "NM"], [0, 1e-2, 1e-4, 1e-3]});
+        {["Default", "NM"], [0]});
     
     % Plot or not the tomography for each step and/or the optimization curve for each method
     tomography = false; curve = true;

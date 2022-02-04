@@ -46,7 +46,7 @@ f = @(x) x'*Q*x + q'*x;
 
 tic
 % First iteration
-i = 1;
+i = 0;
 
 [d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
 
@@ -54,24 +54,25 @@ i = 1;
 alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
 
 if tomography
-    % Print the first iteration
-	disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-	disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
-	figure('Name','Main');
+    figure('Name','Main');
 	w = waitforbuttonpress;
+    % Print the f value for the start point
+	disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
     % Plot the tomography
     if ~isequal(line_search, 'Default')
         % Plot the line search
-        plotLS(Q, q, x, d, alpha, alphaStart)
+        plotLS(Q, q, x, d, alpha, alphaStart, i)
     end
     if isequal(line_search, 'Default')
-        plotLS(Q, q, x, d, alpha, 1)
+        plotLS(Q, q, x, d, alpha, 1, i)
     end
+    % Print the direction and the alpha step computed at the first iteration
+    disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
 end
 
 if curve
-    fx(i) = f(x);
-    E(i) = gap;
+    fx(i+1) = f(x);
+    E(i+1) = gap;
 end
 
 % Upgrade the vector x
@@ -84,7 +85,7 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (gap < - eps && i <= max_steps)
+while (gap < - eps && i < max_steps)
     [d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
     
     alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
@@ -95,28 +96,28 @@ while (gap < - eps && i <= max_steps)
     % Plot tomography
     if tomography
         disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
-        disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
         w = waitforbuttonpress;
         if ~isequal(line_search, 'Default')
             if(beta > 0)
                 plotMOMENTUM(Q, q, x, d_old, momentum_coeff, d, alpha)
             else
-                plotLS(Q, q, x, d, alpha, alphaStart)
+                plotLS(Q, q, x, d, alpha, alphaStart, i)
             end
         end
         if isequal(line_search, 'Default')
             if(beta > 0)
                 plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
             else
-                plotLS(Q, q, x, d, alpha, 1)
+                plotLS(Q, q, x, d, alpha, 1, i)
             end
         end
+        disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
     end
     
     % Append new value of the funtion and the duality_gap for the optimization curve
     if curve
-        fx(i) = f(x);
-        E(i) = gap;
+        fx(i+1) = f(x);
+        E(i+1) = gap;
     end
     
     % Upgrade the point
@@ -134,7 +135,7 @@ x_min = x;
 % Minimum value of the function
 f_min = f(x);
 % Number of steps
-num_steps = i - 1;
+num_steps = i;
 
 % Check the convergence of the algorithm
 if(gap < - eps || ~Domain(x_min, P))
@@ -152,7 +153,7 @@ end
 
 % Plot the optimization curve
 if curve
-    fx(i) = f_min;
+    fx(i+1) = f_min;
     plotCURVE(fx, E, line_search, beta)
 end
 

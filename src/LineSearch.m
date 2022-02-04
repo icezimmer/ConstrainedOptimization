@@ -1,6 +1,15 @@
 function alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%{
+Plot the tomography
+Input:
+    Q           : (matrix) nxn positive semi-definite
+    q           : (vector) of length n
+    x           : (vector) start point
+    d           : (vector) descent direction
+    eps_ls      : (float) stop criterion for the line search
+    i           : (integer) number of iteration
+    line_search : (string) method for line search
+%}
 if isequal(line_search,'LBM')
     alphaStart = StartLineSearch(Q, q, x, d, eps_ls);
     if (alphaStart <= 1)

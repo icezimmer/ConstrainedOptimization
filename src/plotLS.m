@@ -1,4 +1,4 @@
-function plotLS(Q, q, x, d, alpha, alpha_start)
+function plotLS(Q, q, x, d, alpha, alpha_start, k)
 %{
 Plot the tomography
 Input:
@@ -8,6 +8,7 @@ Input:
     d           : (vector) descent direction
     alpha       : (float) coefficient for the descent direction
     alpha_start : (float) start value for alpha
+    k           : (integer) number of iteration
 %}
 
 f = @(t) (x+t*d)'*Q*(x+t*d) + q'*(x+t*d);
@@ -24,8 +25,9 @@ end
 
 figure('Name','Tomography');
 plot(linspace(0,alpha_start,i),y, 'k')
+title(['From ', 'f(x(', num2str(k), '))', '  to  ', 'f(x(', num2str(k+1), '))'])
 xlabel('alpha')
-ylabel('f')
+ylabel('f(x)')
 hold on
 
 plot(alpha, f(alpha), 'r*')
