@@ -19,7 +19,7 @@ xlabel('step')
 ylabel('f(x)')
 
 nexttile
-plot(abs(E), 'ro-')
+plot(E, 'ro-')
 title('Dual optimization')
 xlabel('step')
 ylabel('duality gap')

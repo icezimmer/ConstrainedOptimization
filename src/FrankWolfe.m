@@ -19,8 +19,8 @@ Output:
     elapsed_time : (float) time elapsed for the computation
     num_steps    : (integer) number of steps for the convergence
     converging   : (string) method converge or not
-    duality_gap  : (float) opposite value given by the scalar product between
-        the gradient and the direction 
+    duality_gap  : (float) opposite value of the scalar product between
+        the descent direction and the gradient
 %}
 
 if isequal(line_search,'NM')
@@ -48,7 +48,7 @@ tic
 % First iteration
 i = 0;
 
-[d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
+[d, y, duality_gap] = LinearApproximationMinimizer(Q, q, P, x);
 
 % Line search
 alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
@@ -67,12 +67,12 @@ if tomography
         plotLS(Q, q, x, d, alpha, 1, i)
     end
     % Print the direction and the alpha step computed at the first iteration
-    disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
+    disp(['Duality Gap = ', num2str(duality_gap), ', alpha = ', num2str(alpha)])
 end
 
 if curve
     fx(i+1) = f(x);
-    E(i+1) = gap;
+    E(i+1) = duality_gap;
 end
 
 % Upgrade the vector x
@@ -85,8 +85,8 @@ d_old = y - x;
 i = i + 1;
 
 % Iterate until convergence
-while (gap < - eps && i < max_steps)
-    [d, y, gap] = LinearApproximationMinimizer(Q, q, P, x);
+while (duality_gap >  eps && i < max_steps)
+    [d, y, duality_gap] = LinearApproximationMinimizer(Q, q, P, x);
     
     alpha = LineSearch(Q, q, x, d, eps_ls, i, line_search);
     
@@ -105,19 +105,19 @@ while (gap < - eps && i < max_steps)
             end
         end
         if isequal(line_search, 'Default')
-            if(beta > 0)
+           if(beta > 0)
                 plotMOMENTUM(Q, q, x, d_old, par_momentum, d, alpha)
             else
                 plotLS(Q, q, x, d, alpha, 1, i)
             end
         end
-        disp(['<grad, d> = ', num2str(gap), ', alpha = ', num2str(alpha)])
+        disp(['Duality Gap = ', num2str(duality_gap), ', alpha = ', num2str(alpha)])
     end
     
     % Append new value of the funtion and the duality_gap for the optimization curve
     if curve
         fx(i+1) = f(x);
-        E(i+1) = gap;
+        E(i+1) = duality_gap;
     end
     
     % Upgrade the point
@@ -138,14 +138,14 @@ f_min = f(x);
 num_steps = i;
 
 % Check the convergence of the algorithm
-if(gap < - eps || ~Domain(x_min, P))
+if(duality_gap >  eps || ~Domain(x_min, P))
     converging = "No";
 else
     converging = "Yes";
 end
 
 % Final duality_gap (duality gap) 
-duality_gap = -E(end);
+duality_gap = E(end);
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
