@@ -1,4 +1,4 @@
-function alphaStart = StartLineSearch(Q, q, x, d, eps)
+function alpha_start = StartLineSearch(Q, q, x, d, eps)
 %{
 Initialize the parameter alpha for the line search
 Input:
@@ -13,15 +13,15 @@ Output:
 
 dPhi = @(alpha) (2 * Q * (x + alpha * d) + q)' * d;
 
-alphaStart = 0.1;
+alpha_start = 0.1;
 
 % Until the gradient is negative and alpha is grater than one
-while(dPhi(alphaStart) <= -eps && alphaStart <= 1 + eps)
-    alphaStart = 2*alphaStart;
+while(dPhi(alpha_start) <= -eps && alpha_start <= 1 + eps)
+    alpha_start = 2*alpha_start;
 end
 
-if (alphaStart > 1)
-    alphaStart = 1;
+if (alpha_start > 1)
+    alpha_start = 1;
 end
 
 end

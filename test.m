@@ -5,9 +5,9 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 100; dim_ker = 10;
+n = 1000; dim_ker = 1;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
-min_eig = 1; max_eig = 5000;
+min_eig = 1; max_eig = 2;
 % Minimum value, maximum value and number of zero in the vector q
 min_q = -5; max_q = 9; zero_q = 3;
 % Seed for the random generator
@@ -34,14 +34,14 @@ if ~is_in
     eps_ls = 0.01;
     
     % Define a Map object for the grid search (the line search methods and the beta values (momentum coefficients))
-    candidates = containers.Map({'ls_method', 'beta'}, ...
-        {["Default", "LBM", "QBM", "NM"], [0]});
+    candidates = containers.Map({'ls_method'}, ...
+        {["Default", "LBM", "QBM", "NM"]});
     
     % Plot or not the tomography for each step and/or the optimization curve for each method
-    tomography = false; curve = true;
+    tomography = false; optimization_curve = true;
 
     % Search the best solution
-    [x_min, solution, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, candidates, tomography, curve);
+    [x_min, solution, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, candidates, tomography, optimization_curve);
     
     % Print the solution x, the info about the best model and the grid search table
     x_min

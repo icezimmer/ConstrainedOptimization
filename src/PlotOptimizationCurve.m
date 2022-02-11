@@ -1,14 +1,13 @@
-function plotCURVE(fx, E, line_search, beta)
+function PlotOptimizationCurve(fx, E, line_search)
 %{
 Plot the optimization curve
 Input:
     fx          : (vector) function values sequence
     E           : (vector) error values sequence
     line_search : (string) line search method
-    beta        : (float) momentum coefficient
 %}
 
-figure('Name', strcat(line_search, " with momentum = ", num2str(beta)));
+figure('Name', strcat(line_search));
 
 tiledlayout(2,1)
 

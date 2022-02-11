@@ -1,4 +1,4 @@
-function plotLS(Q, q, x, d, alpha, alpha_start, k)
+function PlotLineSearch(Q, q, x, d, alpha, alpha_start, k)
 %{
 Plot the tomography
 Input:
