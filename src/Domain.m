@@ -10,7 +10,9 @@ Output:
 
 x = x(:);
 [K, ~] = size(P); 
-is_in = all(single(P * x) == single(ones(length(K), 1, 'like', x)));
+is_in = (isequal(single(P * x), ones(K, 1, 'like', x)) && all(x >= 0));
+%is_in = isequal(single(P * x), single(ones(length(K), 1, 'like', x)));
+%is_in = (rank([P, ones(K,1)]) == rank(P) && all(x >= 0));
 
 end
 

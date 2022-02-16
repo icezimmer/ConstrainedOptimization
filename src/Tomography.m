@@ -1,6 +1,17 @@
 function Tomography(Q, q, x, d, step_size_method, alpha, alpha_start, i, duality_gap)
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+%{
+Give info about the computation and plot the tomography in agiven iteration
+Input:
+    Q           : (matrix) nxn positive semi-definite
+    q           : (vector) of length n
+    x           : (vector) starting point
+    d           : (vector) descent direction
+    alpha       : (float) coefficient for the descent direction
+    alpha_start : (float) start value for alpha
+    i           : (integer) iteration number
+    duality_gap : (float) opposite value of the scalar product between
+        the descent direction and the gradient
+%}
 
 % Function f
 f = @(x) x'*Q*x + q'*x;

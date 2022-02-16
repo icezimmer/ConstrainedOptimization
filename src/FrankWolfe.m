@@ -1,26 +1,30 @@
-function [x_min, f_min, elapsed_time, num_steps, converging, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve)
+function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, date)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
     Q                  : (matrix) nxn positive semi-definite
     q                  : (vector) of length n
     P                  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    x_start            : (vector) start point
+    x_start            : (vector) starting point
     eps                : (float) stop criterion (max duality_gap for Frank Wolfe)
     max_steps          : (integer) stop criterion (max number of steps for Frank Wolfe)
     eps_ls             : (float) stop criterion for the line search
     step_size_method   : (string) method for line search
     tomography         : (logical) plot or not the tomography for each step
     optimization_curve : (logical) plot or not the optimization curve
+    date               : (string) date for saving the results
 Output:
     x_min        : (vector) argmin of the function
     f_min        : (vector) min of the function
     elapsed_time : (float) time elapsed for the computation
     num_steps    : (integer) number of steps for the convergence
-    converging   : (string) method converge or not
+    converging   : (logical) method converge or not
+    feasible     : (logical) solution is feasible or not
     duality_gap  : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
+
+method = "FW";
 
 if isequal(step_size_method,'NM')
     disp('LineSearch by Newton Method')
@@ -97,12 +101,11 @@ f_min = f(x);
 % Number of steps
 num_steps = i;
 
-% Check the convergence of the algorithm
-if(duality_gap >  eps || ~Domain(x_min, P))
-    converging = "No";
-else
-    converging = "Yes";
-end
+% Convergence of the algorithm
+converging = (duality_gap <=  eps);
+
+% Feasibility of the solution
+feasible = Domain(x_min, P);
 
 % Final duality_gap (duality gap) 
 duality_gap = E(end);
@@ -114,7 +117,7 @@ end
 % Plot the optimization curve
 if optimization_curve
     fx(i+1) = f_min;
-    PlotOptimizationCurve(fx, E, step_size_method)
+    PlotOptimizationCurve(fx, E, step_size_method, date)
 end
 
 end

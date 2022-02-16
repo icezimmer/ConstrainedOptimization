@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, minima] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed)
+function [Q, q, P, x_start, minima, spectral_radius, K_plus, date] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -12,15 +12,18 @@ Input:
     zero_q  : (integer) number of zero values in the vector q
     seed    : (inetger) seed for the random generator
 Output:
-    Q      : (matrix) nxn positive semi-definite with non-zero eigenvalues in the
+    Q               : (matrix) nxn positive semi-definite with non-zero eigenvalues in the
         range (min_eig, max_eig) 
-    q      : (vector) of length n with values in the range (min_q, max_q)
-    P      : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    xStart : (vector) start point
-    minima : (boolean) 1 iff the function has any minima in R^n space
+    q               : (vector) of length n with values in the range (min_q, max_q)
+    P               : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    xStart          : (vector) starting point
+    minima          : (boolean) 1 iff the function has any minima in R^n space
+    spectral_radius : (float) spectral radius of the matrix Q
+    K_plus          : (integer) number of simplices with at least 2 vertices
+    date            : (float) date for saving parameters, figures and results 
 %}
 
-%initialize the random seed
+% Initialize the random seed
 rng(seed)
 
 % Construct the orthogonal matrices U and V
@@ -38,6 +41,9 @@ A = U * S * V;
 
 % Construct the matrix Q
 Q = A' * A;
+
+% Compute the spectral radius of Q
+spectral_radius = eigs(Q, 1, 'lm');
 
 % Construct the vector q
 q = min_q + abs(max_q - min_q) * rand(n - zero_q, 1);
@@ -63,14 +69,23 @@ for i = 2 : m
     P(i, s + 1 : s + r(i)) = ones(1, r(i));
     s = s + r(i);
 end
+% Randomly shuffle the columns of the matrix P
+shuffle = randperm(n);
+P = P(:,shuffle);
+
+% Compute the number of simplices with at least 2 vertices
+K_plus = sum(sum(P,2) >1);
 
 % Construct the starting point for the Frank Wolfe algorithm
 x_start = zeros(n, 1);
-x_start(1 : r(1)) = ones(r(1), 1) / r(1);
-s = r(1);
-for i = 2 : m
-    x_start(s + 1 : s + r(i)) = ones(r(i), 1) / r(i);
-    s = s + r(i);
+[K, ~] = size(P);
+for k = 1 : K
+    i = find(P(k,:), 1);
+    x_start(i) = 1;
 end
+
+formatOut = 'mm_dd_yy_HH_MM_SS';
+date = datestr(now,formatOut);
+mkdir(fullfile('results',date));
 
 end

@@ -1,13 +1,14 @@
-function PlotOptimizationCurve(fx, E, line_search)
+function PlotOptimizationCurve(fx, E, line_search, date)
 %{
 Plot the optimization curve
 Input:
     fx          : (vector) function values sequence
     E           : (vector) error values sequence
     line_search : (string) line search method
+    date        : (string) date for saving figures
 %}
 
-figure('Name', strcat(line_search));
+gcf = figure('Name', strcat(line_search));
 
 tiledlayout(2,1)
 
@@ -22,5 +23,7 @@ plot(E, 'ro-')
 title('Dual optimization')
 xlabel('step')
 ylabel('duality gap')
+
+saveas(gcf, fullfile('results', date, strcat(line_search, '.png')))
 
 end

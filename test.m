@@ -5,46 +5,32 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 1000; dim_ker = 1;
+n = 500; dim_ker = 0;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
-min_eig = 1; max_eig = 2;
+min_eig = 0.25; max_eig = 10;
 % Minimum value, maximum value and number of zero in the vector q
-min_q = -5; max_q = 9; zero_q = 3;
+min_q = -5; max_q = 5; zero_q = 0;
 % Seed for the random generator
 seed = 0;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, x_start, minima] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed);
+[Q, q, P, x_start, minima, spectral_radius, K_plus, date] = GenerateInstance(n, dim_ker, min_eig, max_eig, min_q, max_q, zero_q, seed);
 
-% Check if the global minimum exists and if it satisfies the constraints
-is_in = false;
-if minima
-    [x_min, f_min] = GlobalMinimum(Q, q);
-    is_in = Domain(x_min, P);
-    if is_in
-        x_min
-        f_min
-    end
-end
+% Save the parameters
+PrintParameters(n, dim_ker, spectral_radius, K_plus, date)
 
-% If the global minimum is not in the domain or it doesn't exist compute a grid search the Franke-Wolfe method
-if ~is_in
-    % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
-    eps = 0.1; max_steps = 1000;
-    % Stop criterion for the line search methods
-    eps_ls = 0.01;
-    
-    % Define a Map object for the grid search (the line search methods and the beta values (momentum coefficients))
-    candidates = containers.Map({'ls_method'}, ...
-        {["Default", "LBM", "QBM", "NM"]});
-    
-    % Plot or not the tomography for each step and/or the optimization curve for each method
-    tomography = false; optimization_curve = true;
+% Save the variables
+PrintVariables(Q, q, P, date)
 
-    % Search the best solution
-    [x_min, solution, grid_search] = GridSearch(Q, q, P, x_start, eps, max_steps, eps_ls, candidates, tomography, optimization_curve);
+% Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
+eps = 0.1; max_steps = 1000;
+% Stop criterion for the line search methods
+eps_ls = 0.01;
     
-    % Print the solution x, the info about the best model and the grid search table
-    x_min
-    solution
-    grid_search
-end
+% Plot or not the tomography for each step and/or the optimization curve for each method
+tomography = false; optimization_curve = true;
+% Comparing the methods
+[table_results, table_solutions] = ComparingMethods(Q, q, P, x_start, eps, max_steps, eps_ls, tomography, optimization_curve, date);
+
+% Save the results
+PrintResults(table_results, table_solutions, date)
+
