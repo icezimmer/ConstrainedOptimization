@@ -57,7 +57,7 @@ Duality_Gap = [Duality_Gap; duality_gap];
 Solutions = [Solutions, x_min];
 
 
-[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = QuadraticProgramming(Q, q, P);
+[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = QuadraticProgramming(Q, q, P, x_start, max_steps);
 Method = [Method; type];
 Step_Size = [Step_Size; step_size_method];
 Minimum = [Minimum; f_min];

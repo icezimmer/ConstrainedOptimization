@@ -34,7 +34,7 @@ tic
 [x_min, f_min, exitflag, output] = quadprog(H, f, [], [], Aeq, beq, lb, [], x0, options);
 elapsed_time = toc;
 
-method = convertCharsToStrings(output.algotithm);
+method = convertCharsToStrings(output.algorithm);
 num_steps = output.iterations;
 converging = (exitflag > 0);
 feasible = (exitflag > 0);
