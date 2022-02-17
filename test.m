@@ -28,7 +28,10 @@ eps_ls = 0.01;
 % Define the step size selection method
 step_size_method = 'Default';
 
+% Plot or not the tomography for each iteration
 tomography = false;
+% Plot or not the optimization curve
 optimization_curve = true;
+% Plot or not the log-log otimization curve (for the convergence rate)
 convergence_rate = true;
 [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate, date);
