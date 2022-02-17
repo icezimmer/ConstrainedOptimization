@@ -5,9 +5,9 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 100; dim_ker = 10;
+n = 500; dim_ker = 0;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
-min_eig = 0.25; max_eig = 500;
+min_eig = 0.25; max_eig = 10;
 % Minimum value, maximum value and number of zero in the vector q
 min_q = -5; max_q = 5; zero_q = 0;
 % Seed for the random generator
@@ -22,13 +22,13 @@ PrintParameters(n, dim_ker, spectral_radius, K_plus, date)
 PrintVariables(Q, q, P, date)
 
 % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
-eps = 0.1; max_steps = 99;
-% Stop criterion for the line search method
+eps = 0.1; max_steps = 1000;
+% Stop criterion for the line search methods
 eps_ls = 0.01;
-% Define the step size selection method
-step_size_method = 'Default';
 
-tomography = false;
-optimization_curve = true;
-convergence_rate = true;
-[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate, date);
+% Comparing the methods
+[table_results, table_solutions] = ComparingMethods(Q, q, P, x_start, eps, max_steps, eps_ls, date);
+
+% Save the results
+PrintResults(table_results, table_solutions, date)
+

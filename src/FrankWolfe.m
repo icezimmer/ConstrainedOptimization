@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, date)
+function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate, date)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -12,6 +12,7 @@ Input:
     step_size_method   : (string) method for line search
     tomography         : (logical) plot or not the tomography for each step
     optimization_curve : (logical) plot or not the optimization curve
+    convergence_rate   : (logical) plot or not the log-log optimization curve
     date               : (string) date for saving the results
 Output:
     x_min        : (vector) argmin of the function
@@ -56,7 +57,7 @@ if tomography
     Tomography(Q, q, x, d, step_size_method, alpha, alpha_start, i, duality_gap)
 end
 
-if optimization_curve
+if (optimization_curve || convergence_rate)
     fx(i+1) = f(x);
     E(i+1) = duality_gap;
 end
@@ -79,7 +80,7 @@ while (duality_gap >  eps && i < max_steps)
     end
     
     % Append new value of the funtion and the duality_gap for the optimization curve
-    if optimization_curve
+    if (optimization_curve || convergence_rate)
         fx(i+1) = f(x);
         E(i+1) = duality_gap;
     end
@@ -114,10 +115,19 @@ if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
 end
 
+% Append the value of the function (last iteration)
+if (optimization_curve || convergence_rate)
+    fx(i+1) = f_min;
+end
+
 % Plot the optimization curve
 if optimization_curve
-    fx(i+1) = f_min;
     PlotOptimizationCurve(fx, E, step_size_method, date)
 end
+
+% Plot the log-log optimization curve
+if convergence_rate
+    PlotConvergenceRate(fx, E, step_size_method, date)
+end    
 
 end

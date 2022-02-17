@@ -1,4 +1,4 @@
-function [table_results, table_solutions] = ComparingMethods(Q, q, P, x_start, eps, max_steps, eps_ls, tomography, optimization_curve, date)
+function [table_results, table_solutions] = ComparingMethods(Q, q, P, x_start, eps, max_steps, eps_ls, date)
 %{
 Grid search on line search method and momentum coefficient.
 Input:
@@ -9,13 +9,15 @@ Input:
     eps                : (float) stop criterion for Frank Wolfe (max Duality_gap for Frank Wolfe)
     max_steps          : (integer) stop criterion for Frank Wolfe (max number of steps for Frank Wolfe)
     eps_ls             : (float) stop criterion for the line search 
-    tomography         : (logical) plot or not the tomography for each step
-    optimization_curve : (logical) plot or not the optimization curve
 Output:
     table_results   : (table) results obtained by the methods. They are sorted by the minimum, duality_gap, time
         and number of steps
     table_solutions : (table) table of solutions (x_min) for all the methods
 %}
+
+tomography = false;
+optimization_curve = true;
+convergence_rate = false;
 
 [n, ~] = size(Q);
 
@@ -33,7 +35,7 @@ Duality_Gap = zeros(0,1);
 Solutions = zeros(n, 0);
 
 for i = 1:length(step_size_methods)
-    [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_methods(i), tomography, optimization_curve, date);
+    [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_methods(i), tomography, optimization_curve, convergence_rate, date);
     Method = [Method; type];
     Step_Size = [Step_Size; step_size_method];
     Minimum = [Minimum; f_min];

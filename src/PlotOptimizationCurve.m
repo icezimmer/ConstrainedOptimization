@@ -8,7 +8,7 @@ Input:
     date        : (string) date for saving figures
 %}
 
-gcf = figure('Name', strcat(line_search));
+gcf = figure('Name', strcat('curve_FW_', line_search));
 
 tiledlayout(2,1)
 
@@ -24,6 +24,6 @@ title('Dual optimization')
 xlabel('step')
 ylabel('duality gap')
 
-saveas(gcf, fullfile('results', date, strcat(line_search, '.png')))
+saveas(gcf, fullfile('results', date, strcat('curve_FW_', line_search, '.png')))
 
 end
