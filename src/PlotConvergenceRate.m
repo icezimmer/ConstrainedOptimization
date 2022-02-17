@@ -16,14 +16,11 @@ tiledlayout(2,1)
 
 nexttile
 plot(fx,'go-')
+% Symlog beacuse fx is not a positive vector
 symlog('y')
 title('Rate of convergence (primal)')
 xlabel('step')
 ylabel('f(x)')
-% Do nothing else to get just exponents.  Otherwise:
-%yt = get(gca,'YTick')';
-% Or, for scientific notation
-%set(gca,'YTickLabel',strcat('10^',cellstr(num2str(abs(yt)))))
 
 nexttile
 semilogy(E, 'mo-')
