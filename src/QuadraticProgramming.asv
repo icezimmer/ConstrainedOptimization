@@ -5,7 +5,7 @@ Input:
     Q         : (matrix) nxn positive semi-definite
     q         : (vector) of length n
     P         : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    algorithm : (string) typt of algorithm for the quadratic programming
+    alg
     x_start   : (vector) starting point
     max_steps : (integer) stop criterion (max number of steps for Frank Wolfe)
 Output:
@@ -35,7 +35,7 @@ tic
 [x_min, f_min, exitflag, output] = quadprog(H, f, [], [], Aeq, beq, lb, [], x0, options);
 elapsed_time = toc;
 
-method = algorithm;
+method = convertCharsToStrings(algorithm);
 num_steps = output.iterations;
 converging = (exitflag > 0);
 feasible = (exitflag > 0);

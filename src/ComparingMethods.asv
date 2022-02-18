@@ -52,7 +52,7 @@ end
 algorithms = ["interior-point-convex", "active-set"];
 
 for i = 1:length(algorithms)
-    [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = QuadraticProgramming(Q, q, P, algorithms(i), x_start, max_steps);
+    [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = QuadraticProgramming(Q, q, P, algoruthms(i), x_start, max_steps);
     Method = [Method; type];
     Step_Size = [Step_Size; step_size_method];
     Minimum = [Minimum; f_min];
@@ -80,6 +80,6 @@ Solutions = [Solutions, x_min];
 table_results = table(Method, Step_Size, Minimum, Time, Steps, Converging, Feasible, Duality_Gap);
 table_results = sortrows(table_results, {'Minimum', 'Duality_Gap', 'Time', 'Steps'});
 
-table_solutions = array2table(Solutions, 'VariableNames', {'FW_Default', 'FW_LBM', 'FW_QBM', 'FW_NM', 'Direct', 'interior-point-convex', 'active-set'});
+table_solutions = array2table(Solutions, 'VariableNames', {'FW_Default', 'FW_LBM', 'FW_QBM', 'FW_NM', 'Direct', 'QuadProg'});
 
 end

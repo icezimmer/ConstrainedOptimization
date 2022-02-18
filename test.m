@@ -5,7 +5,7 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 100; dim_ker = 10;
+n = 1000; dim_ker = 10;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
 min_eig = 0.25; max_eig = 500;
 % Minimum value, maximum value and number of zero in the vector q
