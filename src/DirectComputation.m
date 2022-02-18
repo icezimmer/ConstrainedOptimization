@@ -14,6 +14,8 @@ Output:
         the descent direction and the gradient
 %}
 
+disp('Direct computation')
+
 % Function f
 f = @(x) x'*Q*x + q'*x;
 

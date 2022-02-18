@@ -28,13 +28,13 @@ Output:
 method = "FW";
 
 if isequal(step_size_method,'NM')
-    disp('LineSearch by Newton Method')
+    disp('Frank-Wolfe algorithm with LineSearch by Newton Method')
 elseif isequal(step_size_method,'LBM')
-    disp('LineSearch by Linear Bisection Method')
+    disp('Frank-Wolfe algorithm with LineSearch by Linear Bisection Method')
 elseif isequal(step_size_method,'QBM')
-    disp('LineSearch by Quadratic Bisection Method')
+    disp('Frank-Wolfe algorithm with LineSearch by Quadratic Bisection Method')
 elseif isequal(step_size_method,'Default')
-    disp('Default Step Size Selection')
+    disp('Frank-Wolfe algorithm with Default Step Size Selection')
 end
 
 % Force q and x to be column vectors

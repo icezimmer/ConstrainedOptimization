@@ -23,6 +23,8 @@ Output:
     date            : (float) date for saving parameters, figures and results 
 %}
 
+disp('Generating the instance')
+
 % Initialize the random seed
 rng(seed)
 

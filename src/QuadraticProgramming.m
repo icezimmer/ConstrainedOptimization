@@ -19,6 +19,8 @@ Output:
         the descent direction and the gradient
 %}
 
+disp('Quadratic Programming by the optimization toolbox')
+
 step_size_method = "--";
 duality_gap = NaN;
 
