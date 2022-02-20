@@ -40,7 +40,7 @@ elapsed_time = toc;
 method = algorithm;
 num_steps = output.iterations;
 converging = (exitflag > 0);
-feasible = (exitflag > 0);
+feasible = (exitflag ~= -2);
 
 end
 

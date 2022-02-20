@@ -32,7 +32,7 @@ duality_gap = NaN;
 converging = false;
 feasible = false;
 
-if (rank(Q) == rank([Q, q]))
+if (rank(full(Q)) == rank(full([Q, q])))
     tic
     x_min = (-2 * Q) \ q;
     f_min = f(x_min);

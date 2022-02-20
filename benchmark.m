@@ -5,7 +5,7 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 3000; dim_ker = 0;
+n = 30; dim_ker = 0;
 % Minimum and maximum of the strictly positive eigenvalues of the matrix Q 
 min_eig = 0.1; max_eig = 10;
 % Minimum value, maximum value and number of zero in the vector q
@@ -19,7 +19,7 @@ seed = 0;
 PrintParameters(n, dim_ker, spectral_radius, K_plus, date)
 
 % Save the variables (not necessary)
-%PrintVariables(Q, q, P, date)
+PrintVariables(Q, q, P, date)
 
 % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
 eps = 0.1; max_steps = 10;
