@@ -12,17 +12,19 @@ gcf = figure('Name', strcat('curve_FW_', line_search));
 
 tiledlayout(2,1)
 
-nexttile
+primal = nexttile;
 plot(fx, 'bo-')
 title('Primal optimization')
 xlabel('step')
 ylabel('f(x)')
 
-nexttile
+dual = nexttile;
 plot(E, 'ro-')
 title('Dual optimization')
 xlabel('step')
 ylabel('duality gap')
+
+linkaxes([primal, dual],'x')
 
 saveas(gcf, fullfile('results', date, strcat('curve_FW_', line_search, '.png')))
 

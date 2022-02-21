@@ -17,7 +17,7 @@ Output:
     q               : (vector) of length n with values in the range (min_q, max_q)
     P               : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     xStart          : (vector) starting point
-    minima          : (boolean) 1 iff the function has any minima in R^n space
+    minima          : (logical) true iff the function has any minima in R^n space
     spectral_radius : (float) spectral radius of the matrix Q
     K_plus          : (integer) number of simplices with at least 2 vertices
     date            : (float) date for saving parameters, figures and results 
@@ -61,7 +61,7 @@ P = GenerateConstraints(n, seed);
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);
 
-% Construct the starting point for the Frank Wolfe algorithm
+% Construct the starting point for the Frank-Wolfe algorithm
 x_start = zeros(n, 1);
 [K, ~] = size(P);
 for k = 1 : K

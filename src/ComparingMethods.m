@@ -21,8 +21,6 @@ convergence_rate = false;
 
 [n, ~] = size(Q);
 
-step_size_methods = ["Default", "LBM", "QBM", "NM"];
-
 Method = zeros(0,1);
 Minimum = zeros(0,1);
 Time = zeros(0,1);
@@ -35,6 +33,7 @@ Duality_Gap = zeros(0,1);
 Solutions = zeros(n, 0);
 
 % Frank-Wolfe type algorithms
+step_size_methods = ["Default", "LBM", "QBM", "NM"];
 for i = 1:length(step_size_methods)
     [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_methods(i), tomography, optimization_curve, convergence_rate, date);
     Method = [Method; type];
@@ -48,9 +47,8 @@ for i = 1:length(step_size_methods)
     Solutions = [Solutions, x_min];
 end
 
-% Quadratic Programming
+% Quadratic Programming algorithms
 algorithms = ["interior-point-convex", "active-set"];
-
 for i = 1:length(algorithms)
     [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = QuadraticProgramming(Q, q, P, algorithms(i), x_start, max_steps);
     Method = [Method; type];

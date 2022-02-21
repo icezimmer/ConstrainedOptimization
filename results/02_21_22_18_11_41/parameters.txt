@@ -1,0 +1,4 @@
+n:2003
+dim_ker:762
+spectral_radius:257.9266
+K_plus:5

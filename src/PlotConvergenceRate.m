@@ -14,7 +14,7 @@ gcf = figure('Name', strcat('rate_FW_', line_search));
 
 tiledlayout(2,1)
 
-nexttile
+primal = nexttile;
 plot(fx,'go-')
 % Symlog beacuse fx is not a positive vector
 symlog('y')
@@ -22,11 +22,13 @@ title('Rate of convergence (primal)')
 xlabel('step')
 ylabel('f(x)')
 
-nexttile
+dual = nexttile;
 semilogy(E, 'mo-')
 title('Rate of convergence (dual)')
 xlabel('step')
 ylabel('duality gap')
+
+linkaxes([primal, dual],'x')
 
 saveas(gcf, fullfile('results', date, strcat('rate_FW_', line_search, '.png')))
 
