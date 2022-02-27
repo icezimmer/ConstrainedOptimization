@@ -37,7 +37,7 @@ if (rank(full(Q)) == rank(full([Q, q])))
     x_min = (-2 * Q) \ q;
     f_min = f(x_min);
     converging = true;
-    feasible = Domain(x_min, P);
+    feasible = CheckDomain(x_min, P);
     elapsed_time = toc;
 end
 

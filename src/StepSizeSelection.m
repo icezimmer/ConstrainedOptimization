@@ -14,21 +14,21 @@ Input:
 alpha_start = 1;
 
 if isequal(step_size_method,'LBM')
-    alpha_start = StartLineSearch(Q, q, x, d, eps_ls);
+    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
     if (alpha_start <= 1)
         alpha = LineSearchLBM(Q, q, x, d, alpha_start, eps_ls);
     else
         alpha = 1;
     end  
 elseif isequal(step_size_method,'QBM')
-    alpha_start = StartLineSearch(Q, q, x, d, eps_ls);
+    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
     if (alpha_start <= 1)
         alpha = LineSearchQBM(Q, q, x, d, alpha_start, eps_ls);
     else
         alpha = 1;
     end 
 elseif isequal(step_size_method, 'NM')
-    alpha_start = StartLineSearch(Q, q, x, d, eps_ls);
+    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
     if (alpha_start <= 1)
         alpha = LineSearchNM(Q, q, x, d, alpha_start, eps_ls);
     else

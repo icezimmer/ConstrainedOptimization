@@ -106,7 +106,7 @@ num_steps = i;
 converging = (duality_gap <=  eps);
 
 % Feasibility of the solution
-feasible = Domain(x_min, P);
+feasible = CheckDomain(x_min, P);
 
 % Final duality_gap (duality gap) 
 duality_gap = E(end);

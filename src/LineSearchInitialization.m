@@ -1,4 +1,4 @@
-function alpha_start = StartLineSearch(Q, q, x, d, eps)
+function alpha_start = LineSearchInitialization(Q, q, x, d, eps)
 %{
 Initialize the parameter alpha for the line search
 Input:

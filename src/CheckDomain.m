@@ -1,4 +1,4 @@
-function is_in = Domain(x, P)
+function is_in = CheckDomain(x, P)
 %{
 Check if the point x is in the domain, i.e. the point satisfies all K constraints
 Input:
