@@ -24,7 +24,7 @@ while(t < alpha_start)
 end
 
 figure('Name','Tomography');
-plot(linspace(0,alpha_start,i),y, 'k')
+plot(linspace(0,alpha_start,k),y, 'k')
 title(['From ', 'f(x(', num2str(i), '))', '  to  ', 'f(x(', num2str(i+1), '))'])
 xlabel('alpha')
 ylabel('f(x)')

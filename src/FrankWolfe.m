@@ -108,9 +108,6 @@ converging = (duality_gap <=  eps);
 % Feasibility of the solution
 feasible = CheckDomain(x_min, P);
 
-% Final duality_gap (duality gap) 
-duality_gap = E(end);
-
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
 end
