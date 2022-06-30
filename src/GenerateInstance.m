@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, dim_Ker, spectral_radius, dns, min_q, max_q, zero_q)
+function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -6,8 +6,8 @@ Input:
     n               : (integer) dimension of the space
     seed            : (integer) seed for the random generator
     dim_Ker         : (integer) dimension of the kernel space
-    min_eig         : (float) min eigenvalue of the matrix Q
     spectral_radius : (float) max eigenvalue of the matrix Q
+    density         : (float) density of the matrix Q
     min_q           : (float) min value of the vector q
     max_q           : (float) max value of the vector q
     zero_q          : (integer) number of zero values in the vector q
@@ -28,18 +28,18 @@ disp('Generating the instance')
 if nargin < 3 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
     dim_Ker = 0;
     spectral_radius = 10;
-    dns = 1;
+    density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
 elseif nargin == 3 % no spectral_radius, dns, min_q, max_q, zero_q
     spectral_radius = 10;
-    dns = 1;
+    density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
 elseif nargin == 4 % no dns, min_q, max_q, zero_q
-    dns = 1;
+    density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
@@ -60,7 +60,7 @@ rng(seed)
 % Vector of eigenvalues of Q
 rc = [abs(spectral_radius) * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
 
-if dns == 1
+if density == 1
     sv = sqrt(rc);
     S = diag(sv);
     U = orth(rand(n));
@@ -68,7 +68,7 @@ if dns == 1
     A = U * S * V;
     Q = A' * A;
 else
-    Q = sprandsym(n, dns, rc);
+    Q = sprandsym(n, density, rc);
 end
 
 % Construct the vector q

@@ -1,4 +1,0 @@
-n:100
-dim_ker:50
-spectral_radius:99.0379
-K_plus:5

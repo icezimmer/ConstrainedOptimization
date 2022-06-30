@@ -1,4 +1,0 @@
-n:1473
-dim_ker:0
-spectral_radius:13.4156
-K_plus:4
