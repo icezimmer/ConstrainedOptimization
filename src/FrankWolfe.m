@@ -1,10 +1,11 @@
-function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate, date)
+function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, date, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
     Q                  : (matrix) nxn positive semi-definite
     q                  : (vector) of length n
     P                  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    date               : (string) date for saving the results
     x_start            : (vector) starting point
     eps                : (float) stop criterion (max duality_gap for Frank Wolfe)
     max_steps          : (integer) stop criterion (max number of steps for Frank Wolfe)
@@ -13,7 +14,6 @@ Input:
     tomography         : (logical) plot or not the tomography for each step
     optimization_curve : (logical) plot or not the optimization curve
     convergence_rate   : (logical) plot or not the log-log optimization curve
-    date               : (string) date for saving the results
 Output:
     x_min        : (vector) argmin of the function
     f_min        : (vector) min of the function
@@ -24,6 +24,57 @@ Output:
     duality_gap  : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
+
+if nargin < 5 % no x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate
+    x_start = zeros(length(Q), 1);
+    [K, ~] = size(P);
+    for k = 1 : K
+        i = find(P(k,:), 1);
+        x_start(i) = 1;
+    end
+    eps = 0.1;
+    max_steps = 1000;
+    eps_ls = 0.01;
+    step_size_method = 'Default';
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 5 % no eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate
+    eps = 0.1;
+    max_steps = 1000;
+    eps_ls = 0.01;
+    step_size_method = 'Default';
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 6 % no max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate
+    max_steps = 1000;
+    eps_ls = 0.01;
+    step_size_method = 'Default';
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 7 % no eps_ls, step_size_method, tomography, optimization_curve, convergence_rate
+    eps_ls = 0.01;
+    step_size_method = 'Default';
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 8 % no step_size_method, tomography, optimization_curve, convergence_rate
+    step_size_method = 'Default';
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 9 % no tomography, optimization_curve, convergence_rate
+    tomography = false;
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 10 % no optimization_curve, convergence_rate
+    optimization_curve = true;
+    convergence_rate = false;
+elseif nargin == 11 % no convergence_rate
+    convergence_rate = false;
+end
 
 method = "FW";
 

@@ -5,7 +5,7 @@ Input:
     Q         : (matrix) nxn positive semi-definite
     q         : (vector) of length n
     P         : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    algorithm : (string) typt of algorithm for the quadratic programming
+    algorithm : (string) name of algorithm for the quadratic programming
     x_start   : (vector) starting point
     max_steps : (integer) stop criterion (max number of steps for Frank Wolfe)
 Output:
@@ -20,6 +20,27 @@ Output:
 %}
 
 disp('Quadratic Programming by the optimization toolbox')
+
+if nargin < 4 % no algorithm, x_start, max_steps
+    algorithm = "interior-point-convex";
+    x_start = zeros(length(Q), 1);
+    [K, ~] = size(P);
+    for k = 1 : K
+        i = find(P(k,:), 1);
+        x_start(i) = 1;
+    end
+    max_steps = 1000;
+elseif nargin == 4 % no x_start, max_steps
+        x_start = zeros(length(Q), 1);
+    [K, ~] = size(P);
+    for k = 1 : K
+        i = find(P(k,:), 1);
+        x_start(i) = 1;
+    end
+    max_steps = 1000;
+elseif nargin == 5 % no max_steps
+    max_steps = 1000;
+end
 
 step_size_method = "--";
 duality_gap = NaN;

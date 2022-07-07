@@ -5,11 +5,11 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and kernel dimension of the matrix Q
-n = 1000; dim_ker = 10;
+n = 1000; dim_ker = 0;
 % Spectral radius of the matrix Q (it must be > 0)
-spectral_radius = 10;
+spectral_radius = 1000;
 % Density of the matrix Q
-density = 1;
+density = 0.005;
 % Minimum value, maximum value and number of zero in the vector q
 min_q = -5; max_q = 5; zero_q = 0;
 % Seed for the random generator
@@ -33,8 +33,8 @@ step_size_method = 'Default';
 % Plot or not the tomography for each iteration
 tomography = false;
 % Plot or not the optimization curve
-optimization_curve = true;
+optimization_curve = false;
 % Plot or not the log-log otimization curve (for the convergence rate)
 convergence_rate = false;
 % Perform the Frank-Wolfe algorithm
-[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate, date);
+[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, date, x_start, eps, max_steps, eps_ls, step_size_method, tomography, optimization_curve, convergence_rate);
