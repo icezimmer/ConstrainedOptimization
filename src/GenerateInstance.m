@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
+function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, K, seed, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -25,32 +25,37 @@ Output:
 
 disp('Generating the instance')
 
-if nargin < 3 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
+if K<1 || K > n
+    error("Number of simplices K must be an intenger >= 1 and <= n")
+end
+
+
+if nargin < 4 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 3 % no spectral_radius, dns, min_q, max_q, zero_q
+elseif nargin == 4 % no spectral_radius, dns, min_q, max_q, zero_q
     spectral_radius = 10;
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 4 % no dns, min_q, max_q, zero_q
+elseif nargin == 5 % no dns, min_q, max_q, zero_q
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 5 % no min_q, max_q, zero_q
+elseif nargin == 6 % no min_q, max_q, zero_q
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 6 % no max_q, zero_q
+elseif nargin == 7 % no max_q, zero_q
     max_q = 5;
     zero_q = 0;
-elseif nargin == 7 % no zero_q
+elseif nargin == 8 % no zero_q
     zero_q = 0;
 end
 
@@ -77,7 +82,7 @@ q = [q; zeros(zero_q, 1)];
 q = q(randperm(n));
 
 % Construct the matrix P representing the partition of indices {I_k}
-P = GenerateConstraints(n, seed);
+P = GenerateConstraints(n, K, seed);
 
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);
