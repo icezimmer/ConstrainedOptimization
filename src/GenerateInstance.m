@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, K, seed, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
+function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, K, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -25,12 +25,15 @@ Output:
 
 disp('Generating the instance')
 
-if K<1 || K > n
-    error("Number of simplices K must be an intenger >= 1 and <= n")
-end
-
-
-if nargin < 4 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
+if nargin < 3 % no K, dim_ker, spectral_radius, dns, min_q, max_q, zero_q
+    K = ceil(0.01*n);
+    dim_Ker = 0;
+    spectral_radius = 10;
+    density = 1;
+    min_q = -5;
+    max_q = 5;
+    zero_q = 0;
+elseif nargin == 3 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
@@ -57,6 +60,10 @@ elseif nargin == 7 % no max_q, zero_q
     zero_q = 0;
 elseif nargin == 8 % no zero_q
     zero_q = 0;
+end
+
+if K<1 || K > n
+    error("Number of simplices K must be an intenger >= 1 and <= n")
 end
 
 % Initialize the random seed
