@@ -7,15 +7,15 @@ addpath src
 % Space dimension and number of simplices
 n = 1000; K = 5;
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
-dim_ker = 0; spectral_radius = 1;
+dim_ker = 0; spectral_radius = 10;
 % Density of the matrix Q
-density = 1;
+density = 0.005;
 % Minimum value, maximum value and number of zero in the vector q
 min_q = -5; max_q = 5; zero_q = 0;
 % Seed for the random generator
 seed = 0;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, K, dim_ker, spectral_radius, density, min_q, max_q, zero_q);
+[Q, q, P, x_start, K_plus, date] = GenerateInstance(n, K, seed, dim_ker, spectral_radius, density, min_q, max_q, zero_q);
 
 % Save the parameters
 SaveParameters(n, dim_ker, spectral_radius, density, K_plus, date)
