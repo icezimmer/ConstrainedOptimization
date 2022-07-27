@@ -11,16 +11,6 @@ Output:
 
 rng(seed)
 
-%{
-r = zeros(1, 0);
-n0 = n;
-while (n0 > 0)
-    r0 = randi([1, n0]);
-    r = [r, r0];
-    n0 = n0 - r0;
-end
-%}
-
 aux=sort(randperm(n,K));
 dim_Simplex=diff(aux);
 dim_Simplex(end+1)=n-sum(dim_Simplex);

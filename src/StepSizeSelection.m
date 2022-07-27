@@ -1,4 +1,4 @@
-function [alpha, alpha_start] = StepSizeSelection(Q, q, x, d, eps_ls, i, step_size_method)
+function alpha = StepSizeSelection(Q, q, x, d, i, step_size_method)
 %{
 Plot the tomography
 Input:
@@ -11,31 +11,13 @@ Input:
     step_size_method : (string) method for the step size selection
 %}
 
-alpha_start = 1;
-
-if isequal(step_size_method,'LBM')
-    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
-    if (alpha_start <= 1)
-        alpha = LineSearchLBM(Q, q, x, d, alpha_start, eps_ls);
-    else
-        alpha = 1;
-    end  
-elseif isequal(step_size_method,'QBM')
-    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
-    if (alpha_start <= 1)
-        alpha = LineSearchQBM(Q, q, x, d, alpha_start, eps_ls);
-    else
-        alpha = 1;
-    end 
-elseif isequal(step_size_method, 'NM')
-    alpha_start = LineSearchInitialization(Q, q, x, d, eps_ls);
-    if (alpha_start <= 1)
-        alpha = LineSearchNM(Q, q, x, d, alpha_start, eps_ls);
-    else
-        alpha = 1;
-    end  
+if isequal(step_size_method, 'Exact')
+    alpha = ExactLineSearch(Q, q, x, d); 
 elseif isequal(step_size_method,'Default')
     alpha = 2/(i + 2);
+else
+    error("Step Size Method name wrong")
 end
+
 
 end

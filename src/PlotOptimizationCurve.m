@@ -1,4 +1,4 @@
-function PlotOptimizationCurve(fx, E, line_search, date)
+function PlotOptimizationCurve(fx, f_star, E, line_search, date)
 %{
 Plot the optimization curve
 Input:
@@ -8,23 +8,18 @@ Input:
     date        : (string) date for saving figures
 %}
 
+gap_R = (fx - f_star) / abs(f_star);
+
 gcf = figure('Name', strcat('curve_FW_', line_search));
+relative_gap = semilogy(gap_R, 'ko-','DisplayName','Relative Gap');
+hold on
+duality_gap = semilogy(E, 'ro-','DisplayName','Duality Gap');
+hold off
 
-tiledlayout(2,1)
-
-primal = nexttile;
-plot(fx, 'bo-')
-title('Primal optimization')
+title('Error plot')
 xlabel('step')
-ylabel('f(x)')
-
-dual = nexttile;
-plot(E, 'ro-')
-title('Dual optimization')
-xlabel('step')
-ylabel('duality gap')
-
-linkaxes([primal, dual],'x')
+xlabel('error')
+legend([relative_gap, duality_gap], 'Location','best')
 
 saveas(gcf, fullfile('results', date, strcat('curve_FW_', line_search, '.png')))
 

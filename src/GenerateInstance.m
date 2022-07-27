@@ -1,4 +1,4 @@
-function [Q, q, P, x_start, K_plus, date] = GenerateInstance(n, seed, K, dim_Ker, spectral_radius, density, min_q, max_q, zero_q)
+function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, dim_Ker, spectral_radius, density, min_q, max_q, zero_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
     of indices) and the point x_start belonging to the domain.
@@ -25,7 +25,7 @@ Output:
 
 disp('Generating the instance')
 
-if nargin < 3 % no K, dim_ker, spectral_radius, dns, min_q, max_q, zero_q
+if nargin < 2
     K = ceil(0.01*n);
     dim_Ker = 0;
     spectral_radius = 10;
@@ -33,33 +33,42 @@ if nargin < 3 % no K, dim_ker, spectral_radius, dns, min_q, max_q, zero_q
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 3 % no dim_ker, spectral_radius, dns, min_q, max_q, zero_q
+    seed = 0;
+elseif nargin == 2
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 4 % no spectral_radius, dns, min_q, max_q, zero_q
+    seed = 0;
+elseif nargin == 3
     spectral_radius = 10;
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 5 % no dns, min_q, max_q, zero_q
+    seed = 0;
+elseif nargin == 4
     density = 1;
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 6 % no min_q, max_q, zero_q
+    seed = 0;
+elseif nargin == 5
     min_q = -5;
     max_q = 5;
     zero_q = 0;
-elseif nargin == 7 % no max_q, zero_q
+    seed = 0;
+elseif nargin == 6
     max_q = 5;
     zero_q = 0;
-elseif nargin == 8 % no zero_q
+    seed = 0;
+elseif nargin == 7
     zero_q = 0;
+    seed = 0;
+elseif nargin == 8
+    seed = 0;
 end
 
 if K<1 || K > n
@@ -94,13 +103,11 @@ P = GenerateConstraints(n, K, seed);
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);
 
-% Construct the starting point for the Frank-Wolfe algorithm
-x_start = zeros(n, 1);
-[K, ~] = size(P);
-for k = 1 : K
-    i = find(P(k,:), 1);
-    x_start(i) = 1;
-end
+% Compute the average dimension of simplices among simplices with at least 2 vertices
+if K_plus == 0
+    K_avg = 1;
+else
+    K_avg = (n-(K-K_plus))/K_plus;
 
 formatOut = 'mm_dd_yy_HH_MM_SS';
 date = datestr(now,formatOut);

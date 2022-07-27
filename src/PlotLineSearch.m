@@ -1,4 +1,4 @@
-function PlotLineSearch(Q, q, x, d, alpha, alpha_start, i)
+function PlotLineSearch(Q, q, x, d, alpha, i)
 %{
 Plot the tomography
 Input:
@@ -7,24 +7,22 @@ Input:
     x           : (vector) starting point
     d           : (vector) descent direction
     alpha       : (float) coefficient for the descent direction
-    alpha_start : (float) start value for alpha
     i           : (integer) iteration number
 %}
 
 f = @(t) (x+t*d)'*Q*(x+t*d) + q'*(x+t*d);
 
 t=0;
-y(1)=f(t);
-delta=alpha_start/100;
-k=1;
-while(t < alpha_start)
-    k=k+1;
+y=f(t);
+delta=(2*alpha)/100;
+stop = (2*alpha)*(2*alpha<1) + 1*(2*alpha >=1);
+while(t < stop)
     t=t+delta;
-    y(k)=f(t);
+    y=cat(1,y,f(t));
 end
 
 figure('Name','Tomography');
-plot(linspace(0,alpha_start,k),y, 'k')
+plot(linspace(0,stop,length(y)),y, 'k')
 title(['From ', 'f(x(', num2str(i), '))', '  to  ', 'f(x(', num2str(i+1), '))'])
 xlabel('alpha')
 ylabel('f(x)')
