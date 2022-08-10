@@ -1,6 +1,13 @@
 function condition = StoppingCriteria(fx, f_star, eps_R)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%{
+Stopping Criteria for the numerical optimization
+Input:
+    fx     : (vector) function values sequence
+    f_star : (float) optimal value of the function in the domainr
+    eps_R  : (float) maximum relative error for stop condition
+Output:
+    condition : (logical) true if the stop condition is verified
+%}
 
 %{
 if nargin<5

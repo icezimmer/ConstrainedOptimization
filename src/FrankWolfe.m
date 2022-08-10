@@ -2,24 +2,25 @@ function [x_min, f_min, elapsed_time, method,  step_size_method, num_steps, conv
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
-    Q                  : (matrix) nxn positive semi-definite
-    q                  : (vector) of length n
-    P                  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    date               : (string) date for saving the results
-    eps                : (float) stop criterion (max duality_gap for Frank Wolfe)
-    max_steps          : (integer) stop criterion (max number of steps for Frank Wolfe)
-    step_size_method   : (string) method for line search
-    tomography         : (logical) plot or not the tomography for each step
-    optimization_curve : (logical) plot or not the optimization curve
-    convergence_rate   : (logical) plot or not the log-log optimization curve
+    Q                : (matrix) nxn positive semi-definite
+    q                : (vector) of length n
+    P                : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    step_size_method : (string) method for line search
+    eps_R            : (float) maximum relative error for stop condition
+    max_steps        : (integer) stop criterion (max number of steps for Frank Wolfe)
+    tomography       : (logical) plot or not the tomography for each step
+    error_plot       : (logical) plot or not the error curve
+    date             : (string) date for saving the results
 Output:
-    x_min        : (vector) argmin of the function
-    f_min        : (vector) min of the function
-    elapsed_time : (float) time elapsed for the computation
-    num_steps    : (integer) number of steps for the convergence
-    converging   : (logical) method converge or not
-    feasible     : (logical) solution is feasible or not
-    duality_gap  : (float) opposite value of the scalar product between
+    x_min            : (vector) argmin of the function
+    f_min            : (vector) min of the function
+    elapsed_time     : (float) time elapsed for the computation
+    method           : (string)
+    step_size_method : (string)
+    num_steps        : (integer) number of steps for the convergence
+    converging       : (logical) method converge or not
+    feasible         : (logical) solution is feasible or not
+    duality_gap      : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
 if nargin < 4

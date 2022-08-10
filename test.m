@@ -5,9 +5,9 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and number of simplices
-n = 1000; K = 990;
+n = 1000; K = 50;
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
-dim_ker = 0; spectral_radius = 10;
+dim_ker = 999; spectral_radius = 10;
 % Density of the matrix Q
 density = 1;
 % Minimum value, maximum value and number of zero in the vector q

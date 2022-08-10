@@ -6,7 +6,6 @@ Input:
     q                : (vector) of length n
     x                : (vector) start point
     d                : (vector) descent direction
-    eps_ls           : (float) stop criterion for the line search
     i                : (integer) iteration number
     step_size_method : (string) method for the step size selection
 %}

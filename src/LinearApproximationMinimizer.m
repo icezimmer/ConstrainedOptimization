@@ -3,10 +3,11 @@ function [d, y, duality_gap] = LinearApproximationMinimizer(Q, q, x, indices, pa
 Minimize the linear approximation of the function in the point x; compute the
     descent direction and the "residual error"
 INPUT:
-    Q : (matrix) nxn positive semi-definite
-    q : (vector) of length n
-    P : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    x : (vettor) point where compute and minimize the linear approximation of the funtion
+    Q         : (matrix) nxn positive semi-definite
+    q         : (vector) of length n
+    x         : (vettor) point where compute and minimize the linear approximation of the funtion
+    indices   : (vector) indices belongind to the simplices with at least two vertices
+    partition : (cell-array) each array represents a simplex
 OUTPUT:
     d           : (vector) descent direction
     y           : (vector) point that minimizes the dot product with the gradient of the function

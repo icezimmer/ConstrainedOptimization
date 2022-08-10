@@ -6,7 +6,7 @@ Input:
     d     : (vector) descent direction
     alpha : (float) step size
 Output:
-    d_new : (vector) new point
+    x_new : (vector) new point
 %}
 x_new = x_old + alpha * d;
 end

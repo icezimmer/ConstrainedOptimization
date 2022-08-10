@@ -2,12 +2,12 @@ function PlotLineSearch(Q, q, x, d, alpha, i)
 %{
 Plot the tomography
 Input:
-    Q           : (matrix) nxn positive semi-definite
-    q           : (vector) of length n
-    x           : (vector) starting point
-    d           : (vector) descent direction
-    alpha       : (float) coefficient for the descent direction
-    i           : (integer) iteration number
+    Q     : (matrix) nxn positive semi-definite
+    q     : (vector) of length n
+    x     : (vector) starting point
+    d     : (vector) descent direction
+    alpha : (float) coefficient for the descent direction
+    i     : (integer) iteration number
 %}
 
 f = @(t) (x+t*d)'*Q*(x+t*d) + q'*(x+t*d);

@@ -1,6 +1,9 @@
 function x_start = StartingPoint(P)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%{
+Compute the starting point for the Frank-Wolfe algorithm
+Input:
+    P : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+%}
 
 [K, n] = size(P);
 x_start = zeros(n, 1);

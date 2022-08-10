@@ -3,6 +3,7 @@ function PlotOptimizationCurve(fx, f_star, E, line_search, date)
 Plot the optimization curve
 Input:
     fx          : (vector) function values sequence
+    f_star      : (float) optimal value of the function in the domain
     E           : (vector) error values sequence
     line_search : (string) line search method
     date        : (string) date for saving figures

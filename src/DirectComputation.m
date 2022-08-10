@@ -3,6 +3,8 @@ function [x_min, f_min, elapsed_time, method, step_size_method, num_steps, conve
 Input:
     Q : (matrix) nxn positive semi-definite
     q : (vector) of length n
+    P : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+
 Output:
     x_min        : (vector) argmin of the function
     f_min        : (vector) min of the function

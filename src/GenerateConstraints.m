@@ -2,11 +2,11 @@ function P = GenerateConstraints(n, K, seed)
 %{
 Construct the matrix P representing the partion of indices {I_k}. Each row represents a simplex.
 Input:
-    n     : (integer) dimension of the space
-    K     : (integer) number of simplices
-    seed  : (integer) seed for the random generator
+    n    : (integer) dimension of the space
+    K    : (integer) number of simplices
+    seed : (integer) seed for the random generator
 Output:
-    P     : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    P    : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
 %}
 
 rng(seed)

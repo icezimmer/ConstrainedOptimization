@@ -8,13 +8,14 @@ Input:
     algorithm : (string) name of algorithm for the quadratic programming
     max_steps : (integer) stop criterion (max number of steps for Frank Wolfe)
 Output:
-    x_min        : (vector) argmin of the function
-    f_min        : (vector) min of the function
-    elapsed_time : (float) time elapsed for the computation
-    num_steps    : (integer) number of steps for the convergence
-    converging   : (logical) method converge or not
-    feasible     : (logical) solution is feasible or not
-    duality_gap  : (float) opposite value of the scalar product between
+    x_min            : (vector) argmin of the function
+    f_min            : (vector) min of the function
+    elapsed_time     : (float) time elapsed for the computation
+    step_size_method : (string)
+    num_steps        : (integer) number of steps for the convergence
+    converging       : (logical) method converge or not
+    feasible         : (logical) solution is feasible or not
+    duality_gap      : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
 

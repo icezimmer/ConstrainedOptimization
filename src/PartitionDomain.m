@@ -1,10 +1,13 @@
 function [indices, partition] = PartitionDomain(P)
 %{
-Eliminate the siplices of dimension 1 and their respective dimensions.
+Give the indices belonging to the simplices with at least two vertices and the partition of these indices.
 Input:
     Q  : (matrix) nxn positive semi-definite
     q  : (vector) of length n
     P  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+Output:
+    indices   : (vector) indices belongind to the simplices with at least two vertices
+    partition : (cell-array) each array represents a simplex
 %}
 
 simplices = sum(P,2)>1;

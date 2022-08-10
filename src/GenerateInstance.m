@@ -4,23 +4,22 @@ Generate randomly the matrix Q, the vector q, the matrix P (representing the par
     of indices) and the point x_start belonging to the domain.
 Input:
     n               : (integer) dimension of the space
-    seed            : (integer) seed for the random generator
+    K               : (integer) number of simplices
     dim_Ker         : (integer) dimension of the kernel space
     spectral_radius : (float) max eigenvalue of the matrix Q
     density         : (float) density of the matrix Q
     min_q           : (float) min value of the vector q
     max_q           : (float) max value of the vector q
     zero_q          : (integer) number of zero values in the vector q
+    seed            : (integer) seed for the random generator
 Output:
-    Q               : (matrix) nxn positive semi-definite with non-zero eigenvalues in the
+    Q      : (matrix) nxn positive semi-definite with non-zero eigenvalues in the
         range (min_eig, max_eig) 
-    q               : (vector) of length n with values in the range (min_q, max_q)
-    P               : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
-    xStart          : (vector) starting point
-    minima          : (logical) true iff the function has any minima in R^n space
-    spectral_radius : (float) spectral radius of the matrix Q
-    K_plus          : (integer) number of simplices with at least 2 vertices
-    date            : (float) date for saving parameters, figures and results 
+    q      : (vector) of length n with values in the range (min_q, max_q)
+    P      : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
+    K_plus : (integer) number of simplices with at least 2 vertices
+    K_avg  : (integer) average of dimensions of the simplices with at least 2 vertices
+    date   : (float) date for saving parameters, figures and results 
 %}
 
 disp('Generating the instance')
@@ -75,11 +74,19 @@ if K<1 || K > n
     error("Number of simplices K must be an intenger >= 1 and <= n")
 end
 
+if dim_Ker<0 || dim_Ker>n
+    error("Dimension of Ker must be an intenger >= 0 and <= n")
+end
+
 % Initialize the random seed
 rng(seed)
 
 % Vector of eigenvalues of Q
-rc = [abs(spectral_radius) * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
+if dim_Ker == n
+    rc = zeros(1, n);
+else
+    rc = [abs(spectral_radius) * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
+end
 
 if density == 1
     sv = sqrt(rc);

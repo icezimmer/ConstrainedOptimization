@@ -6,8 +6,7 @@ Input:
     q                  : (vector) of length n
     P                  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     date               : (string) date for saving the results
-    x_start            : (vector) start point
-    eps                : (float) stop criterion for Frank Wolfe (max Duality_gap for Frank Wolfe)
+    eps_R              : (float) max relative error
     max_steps          : (integer) stop criterion for Frank Wolfe (max number of steps for Frank Wolfe)
 Output:
     table_results   : (table) results obtained by the methods. They are sorted by the minimum, duality_gap, time
