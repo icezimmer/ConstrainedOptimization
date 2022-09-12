@@ -5,9 +5,9 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and number of simplices
-n = 1000; K = 5;
+n = 100; K = 50;
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
-dim_ker = 0; spectral_radius = 1;
+dim_ker = 0; spectral_radius = 10;
 % Density of the matrix Q
 density = 0.005;
 % Minimum value, maximum value and number of zero in the vector q
@@ -24,7 +24,7 @@ SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
 SaveVariables(Q, q, P, date)
 
 % Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
-eps_R = 1e-10; max_steps = 10000;
+eps_R = 1e-6; max_steps = 10000;
 
 % Comparing the methods
 [table_results, table_solutions] = ComparingMethods(Q, q, P, date, eps_R, max_steps);

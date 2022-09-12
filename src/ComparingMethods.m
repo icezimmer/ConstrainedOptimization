@@ -35,19 +35,17 @@ Duality_Gap = zeros(0,1);
 Solutions = zeros(n, 0);
 
 % Frank-Wolfe type algorithms
-step_size_methods = ["Default", "Exact"];
-for i = 1:length(step_size_methods)
-    [x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, step_size_methods(i), eps_R, max_steps, false, false, date);
-    Method = cat(1, Method, type);
-    Step_Size = cat(1, Step_Size, step_size_method);
-    Minimum = cat(1, Minimum, f_min);
-    Time = cat(1, Time, elapsed_time);
-    Steps = cat(1, Steps, num_steps);
-    Converging = cat(1, Converging, converging);
-    Feasible = cat(1, Feasible, feasible);
-    Duality_Gap = cat(1, Duality_Gap, duality_gap);
-    Solutions = cat(2, Solutions, x_min);
-end
+step_size_methods = "Exact";
+[x_min, f_min, elapsed_time, type, step_size_method, num_steps, converging, feasible, duality_gap] = FrankWolfe(Q, q, P, step_size_methods, eps_R, max_steps, false, false, date);
+Method = cat(1, Method, type);
+Step_Size = cat(1, Step_Size, step_size_method);
+Minimum = cat(1, Minimum, f_min);
+Time = cat(1, Time, elapsed_time);
+Steps = cat(1, Steps, num_steps);
+Converging = cat(1, Converging, converging);
+Feasible = cat(1, Feasible, feasible);
+Duality_Gap = cat(1, Duality_Gap, duality_gap);
+Solutions = cat(2, Solutions, x_min);
 
 % Quadratic Programming algorithms
 algorithms = ["interior-point-convex", "active-set"];
@@ -80,6 +78,6 @@ Solutions = [Solutions, x_min];
 table_results = table(Method, Step_Size, Minimum, Time, Steps, Converging, Feasible, Duality_Gap);
 table_results = sortrows(table_results, {'Minimum', 'Duality_Gap', 'Time', 'Steps'});
 
-table_solutions = array2table(Solutions, 'VariableNames', {'FW_Default', 'FW_Exact', 'Direct', 'interior-point-convex', 'active-set'});
+table_solutions = array2table(Solutions, 'VariableNames', {'FW_Exact', 'Direct', 'interior-point-convex', 'active-set'});
 
 end

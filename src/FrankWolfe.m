@@ -24,7 +24,7 @@ Output:
         the descent direction and the gradient
 %}
 if nargin < 4
-    step_size_method = 'Default';
+    step_size_method = 'Exact';
     eps_R = 1e-5;
     max_steps = 10000;
     tomography = false;
@@ -66,14 +66,6 @@ end
 
 method = "FW";
 
-if isequal(step_size_method,'Exact')
-    disp('Frank-Wolfe algorithm with Exact Line Search')
-elseif isequal(step_size_method,'Default')
-    disp('Frank-Wolfe algorithm with Default Step Size Selection')
-else
-    error('Wrong Line Search name')
-end
-
 % Construct the starting point for the Frank-Wolfe algorithm
 x_start = StartingPoint(P);
 
@@ -84,6 +76,8 @@ x = x_start(:);
 % Function f
 f = @(x) x'*Q*x + q'*x;
 
+disp('Pre-compute the optimum for the relative bound')
+
 % Compute the minimum with off-the-shelf method
 H = 2 * Q;
 vec = q;
@@ -91,8 +85,16 @@ vec = q;
 Aeq = P;
 beq = ones(size(Aeq,1),1);
 lb = zeros(size(Aeq,2),1);
-options = optimoptions(@quadprog, 'Algorithm', "interior-point-convex", 'Display', 'off');
+options = optimoptions(@quadprog, 'Algorithm', "interior-point-convex", 'FunctionTolerance', 1e-10, 'Display', 'off');
 [~, f_star] = quadprog(H, vec, [], [], Aeq, beq, lb, [], [], options);
+
+if isequal(step_size_method,'Exact')
+    disp('Frank-Wolfe algorithm with Exact Line Search')
+elseif isequal(step_size_method,'Standard')
+    disp('Frank-Wolfe algorithm with Standard Step Size Selection')
+else
+    error('Wrong Line Search name')
+end
 
 [indices, partition] = PartitionDomain(P);
 
@@ -153,7 +155,7 @@ end
 % Append the value of the function (last iteration) and plot the error
 if error_plot
     fx(i+1) = f(x);
-    PlotOptimizationCurve(fx, f_star, E, step_size_method, date)
+    PlotErrorCurve(fx, f_star, E, step_size_method, date)
 end  
 
 end

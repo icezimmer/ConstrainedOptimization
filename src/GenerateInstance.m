@@ -25,7 +25,7 @@ Output:
 disp('Generating the instance')
 
 if nargin < 2
-    K = ceil(0.01*n);
+    K = randi([1,n]);
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;

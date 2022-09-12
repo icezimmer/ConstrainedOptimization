@@ -1,6 +1,6 @@
 function alpha = StepSizeSelection(Q, q, x, d, i, step_size_method)
 %{
-Plot the tomography
+Step size selection
 Input:
     Q                : (matrix) nxn positive semi-definite
     q                : (vector) of length n
@@ -12,7 +12,7 @@ Input:
 
 if isequal(step_size_method, 'Exact')
     alpha = ExactLineSearch(Q, q, x, d); 
-elseif isequal(step_size_method,'Default')
+elseif isequal(step_size_method,'Standard')
     alpha = 2/(i + 2);
 else
     error("Step Size Method name wrong")
