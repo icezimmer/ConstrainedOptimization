@@ -76,12 +76,11 @@ x = x_start(:);
 % Function f
 f = @(x) x'*Q*x + q'*x;
 
-disp('Pre-compute the optimum for the relative bound')
+disp('Pre-compute the optimum for the stop condition')
 
 % Compute the minimum with off-the-shelf method
 H = 2 * Q;
 vec = q;
-%Aeq = P_slim;
 Aeq = P;
 beq = ones(size(Aeq,1),1);
 lb = zeros(size(Aeq,2),1);

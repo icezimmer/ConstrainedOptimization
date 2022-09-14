@@ -1,20 +1,19 @@
 function [indices, partition] = PartitionDomain(P)
 %{
-Give the indices belonging to the simplices with at least two vertices and the partition of these indices.
+Give the indices belonging to the simplices with only one vertex and
+the partition of the indices belonging to the simplices with at least 2 vertices.
 Input:
     Q  : (matrix) nxn positive semi-definite
     q  : (vector) of length n
     P  : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
 Output:
-    indices   : (vector) indices belongind to the simplices with at least two vertices
-    partition : (cell-array) each array represents a simplex
+    indices   : (vector) indices belonging to the simplices with only one vertex
+    partition : (cell-array) each array represents a simplex with at least two vertices
 %}
 
 simplices = sum(P,2)>1;
 
-P_no = P(~simplices,:);
-indices_no = sum(P_no,1);
-indices = ~indices_no;
+indices = logical(sum(P(~simplices,:),1));
 
 % Take the non-zero indices (indices in I_k)
 P = P(simplices, :);

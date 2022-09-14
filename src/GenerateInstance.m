@@ -1,7 +1,7 @@
 function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, dim_Ker, spectral_radius, density, min_q, max_q, zero_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
-    of indices) and the point x_start belonging to the domain.
+of indices) and the point x_start belonging to the domain.
 Input:
     n               : (integer) dimension of the space
     K               : (integer) number of simplices
@@ -76,6 +76,10 @@ end
 
 if dim_Ker<0 || dim_Ker>n
     error("Dimension of Ker must be an intenger >= 0 and <= n")
+end
+
+if density<0 || density>1
+    error("Density must be >= 0 and <= 1")
 end
 
 % Initialize the random seed
