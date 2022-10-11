@@ -10,13 +10,13 @@ Input:
 %}
 
 gap_A = (fx - f_star);
-gap_R = gap_A / abs(f_star);
+gap_R = gap_A / max(1,abs(f_star));
 
 gcf = figure('Name', strcat('curve_FW_', line_search));
-absolute_gap = semilogy(gap_A, 'bo-','DisplayName','Absolute Error');
+absolute_gap = semilogy(0:length(fx)-1, gap_A, 'b-','DisplayName','Absolute Error');
 hold on
-relative_gap = semilogy(gap_R, 'ro-','DisplayName','Relative Error');
-duality_gap = semilogy(E, 'ko-','DisplayName','Duality Gap');
+relative_gap = semilogy(0:length(fx)-1, gap_R, 'r-','DisplayName','Relative Error');
+duality_gap = semilogy(0:length(E)-1, E, 'k-','DisplayName','Duality Gap');
 hold off
 
 title('Error and Duality Gap')

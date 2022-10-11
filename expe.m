@@ -69,3 +69,19 @@ int_conv_v = var(res([3,4,7,8,9,10,13,14],5))
 act_conv_m = mean(res([3,4,7,8,9,10,13,14],6))
 act_conv_v = var(res([3,4,7,8,9,10,13,14],6))
 %}
+t=[0.003315000000000,0.016941000000000,0.225496000000000,1.981332000000000,7.563633000000000,17.862125000000000,30.819568000000000,46.077781000000000];
+s=[3,13,255,2344,9156,21891,38386,56459];
+
+figure;
+plot(t,'-sb');
+title('Elapsed time');
+xticklabels({'1e-3','1e-4','1e-5','1e-6','1e-7','1e-8','1e-9','1e-10'})
+xlabel('\epsilon_R')
+ylabel('second')
+
+figure;
+plot(s,'-sk');
+title('Number of iterations');
+xticklabels({'1e-3','1e-4','1e-4','1e-5','1e-6','1e-7','1e-8','1e-9','1e-10'})
+xlabel('\epsilon_R')
+ylabel('iteration')

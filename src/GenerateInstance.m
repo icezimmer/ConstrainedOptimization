@@ -119,6 +119,7 @@ if K_plus == 0
     K_avg = 1;
 else
     K_avg = (n-(K-K_plus))/K_plus;
+end
 
 formatOut = 'mm_dd_yy_HH_MM_SS';
 date = datestr(now,formatOut);

@@ -1,17 +1,16 @@
-function alpha = StepSizeSelection(Q, q, x, d, i, step_size_method)
+function alpha = StepSizeSelection(Q, d, duality_gap, i, step_size_method)
 %{
 Step size selection
 Input:
     Q                : (matrix) nxn positive semi-definite
-    q                : (vector) of length n
-    x                : (vector) start point
     d                : (vector) descent direction
+    duality_gap      : (float) opposite of scalar product between the gradient in x and the descent direction
     i                : (integer) iteration number
     step_size_method : (string) method for the step size selection
 %}
 
 if isequal(step_size_method, 'Exact')
-    alpha = ExactLineSearch(Q, q, x, d); 
+    alpha = ExactLineSearch(Q, d, duality_gap); 
 elseif isequal(step_size_method,'Standard')
     alpha = 2/(i + 2);
 else
