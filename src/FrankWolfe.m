@@ -97,7 +97,6 @@ end
 
 tic
 i = 0;
-%history = zeros(0,1);
 history = f(x);
 duality_gap = NaN;
 E = zeros(0,1);

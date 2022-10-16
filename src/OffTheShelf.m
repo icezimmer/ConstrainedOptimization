@@ -23,16 +23,6 @@ Output:
 step_size_method = "--";
 duality_gap = NaN;
 
-% Compute the minimum with off-the-shelf method
-%{
-H = 2 * Q;
-vec = q;
-Aeq = P;
-beq = ones(size(Aeq,1),1);
-lb = zeros(size(Aeq,2),1);
-options = optimoptions(@quadprog, 'Algorithm', "interior-point-convex", 'FunctionTolerance', 1e-10, 'Display', 'off');
-[~, f_star] = quadprog(H, vec, [], [], Aeq, beq, lb, [], [], options);
-%}
 if nargin == 6
     f_star = Optimum(Q, q, P);
 end
@@ -66,7 +56,7 @@ void_options = optimoptions(@fmincon,'OutputFcn',@outfun, 'Algorithm', algorithm
     'StepTolerance', 0, ...
     'ConstraintTolerance', 0, ...
     'OptimalityTolerance', 0, ...
-    'ObjectiveLimit', -inf, 'Display', 'final');
+    'ObjectiveLimit', -inf, 'Display', 'off');
 
 disp(strcat('Off-the-shelf constrained optimization: ', algorithm))
 

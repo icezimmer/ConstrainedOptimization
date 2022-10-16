@@ -86,7 +86,7 @@ table_results = sortrows(table_results, {'Minimum', 'Duality_Gap', 'Time', 'Step
 
 table_solutions = array2table(Solutions, 'VariableNames', {'FW_Exact', 'Direct', 'interior-point-convex', 'active-set'});
 
-gap_FW = (Histories{1} - f_star) / max(1,abs(f_star));
+gap_FW = abs(Histories{1} - f_star) / max(1,abs(f_star));
 gap_IP = abs(Histories{2} - f_star) / max(1,abs(f_star));
 gap_SQ = abs(Histories{3} - f_star) / max(1,abs(f_star));
 gcf = figure('Name', 'Comparison');

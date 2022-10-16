@@ -9,7 +9,7 @@ Input:
     date        : (string) date for saving figures
 %}
 
-gap_A = (fx - f_star);
+gap_A = abs(fx - f_star);
 gap_R = gap_A / max(1,abs(f_star));
 
 gcf = figure('Name', strcat('curve_FW_', line_search));
