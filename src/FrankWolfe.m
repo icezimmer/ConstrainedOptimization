@@ -30,8 +30,7 @@ if nargin < 4
     max_steps = 10000;
     tomography = false;
     error_plot = false;
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 4
@@ -39,34 +38,29 @@ elseif nargin == 4
     max_steps = 10000;
     tomography = false;
     error_plot = false;
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 5
     max_steps = 10000;
     tomography = false;
     error_plot = false;
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 6
     tomography = false;
     error_plot = false;
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 7
     error_plot = false;
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 8
-    formatOut = 'mm_dd_yy_HH_MM_SS';
-    date = datestr(now,formatOut);
+    date = string(datetime('now','TimeZone','local','Format','d-MMM-y-HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 9

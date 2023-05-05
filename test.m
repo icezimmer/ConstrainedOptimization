@@ -7,7 +7,7 @@ addpath src
 % Space dimension and number of simplices
 n = 10; K = ceil(0.2*n);
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
-dim_ker = 0; spectral_radius = 1000;
+dim_ker = 0; spectral_radius = 10;
 % Density of the matrix Q
 density = 1;
 % Minimum value, maximum value and number of zero in the vector q
@@ -23,13 +23,13 @@ SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
 % Save the variables
 SaveVariables(Q, q, P, date)
 
-% Stoping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
+% Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
 eps_R = 1e-6; max_steps = 1e10;
 % Define the step size selection method: 'Exact' or 'Standard'
 step_size_method = 'Exact';
 
 % Plot or not the tomography for each iteration
-tomography = true;
+tomography = false;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm
