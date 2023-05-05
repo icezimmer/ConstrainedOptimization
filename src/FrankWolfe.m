@@ -99,7 +99,7 @@ while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
     [d, ~, duality_gap] = LinearApproximationMinimizer(Q, q, x, indices, partition);
     
-    alpha = StepSizeSelection(Q, d, duality_gap, i, step_size_method);
+    alpha = StepSizeSelection(Q, d, duality_gap, 1, i, step_size_method);
     
     % Plot tomography
     if tomography

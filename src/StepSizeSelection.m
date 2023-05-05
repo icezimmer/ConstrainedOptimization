@@ -1,4 +1,4 @@
-function alpha = StepSizeSelection(Q, d, duality_gap, i, step_size_method)
+function alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, step_size_method)
 %{
 Step size selection
 Input:
@@ -10,7 +10,7 @@ Input:
 %}
 
 if isequal(step_size_method, 'Exact')
-    alpha = ExactLineSearch(Q, d, duality_gap); 
+    alpha = ExactLineSearch(Q, d, duality_gap, alpha_max); 
 elseif isequal(step_size_method,'Standard')
     alpha = 2/(i + 2);
 else

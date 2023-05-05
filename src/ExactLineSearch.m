@@ -1,4 +1,4 @@
-function alpha = ExactLineSearch(Q, d, duality_gap)
+function alpha = ExactLineSearch(Q, d, duality_gap, alpha_max)
 %{
 Compute the exact line search
 Input:
@@ -12,8 +12,8 @@ Output:
 % If the denominator is zero alpha will be infinity so we'll fix alpha to 1
 alpha = duality_gap / (2*d'* Q *d);
 
-if alpha > 1
-    alpha = 1;
+if alpha > alpha_max
+    alpha = alpha_max;
 end
 
 
