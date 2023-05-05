@@ -1,4 +1,4 @@
-function Tomography(Q, q, x, d, alpha, i, duality_gap)
+function Tomography(Q, q, x, d, alpha, alpha_max, i, duality_gap)
 %{
 Give info about the computation and plot the tomography in agiven iteration
 Input:
@@ -25,10 +25,10 @@ waitforbuttonpress;
 disp(['it. ', num2str(i), ', f(x) = ', num2str(f(x))])
 
 % Plot the line search
-PlotLineSearch(Q, q, x, d, alpha, i)
+PlotLineSearch(Q, q, x, d, alpha, alpha_max, i)
 
 
 % Print the direction and the alpha step computed at the first iteration
-disp(['Duality Gap = ', num2str(duality_gap), ', alpha = ', num2str(alpha)])
+disp(['Duality Gap = ', num2str(duality_gap), ', alpha = ', num2str(alpha), ', alpha_max = ', num2str(alpha_max)])
 
 end

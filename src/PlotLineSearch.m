@@ -1,4 +1,4 @@
-function PlotLineSearch(Q, q, x, d, alpha, i)
+function PlotLineSearch(Q, q, x, d, alpha, alpha_max, i)
 %{
 Plot the tomography
 Input:
@@ -23,7 +23,7 @@ end
 
 figure('Name','Tomography');
 plot(linspace(0,stop,length(y)),y, 'k')
-title(['From ', 'f(x(', num2str(i), '))', '  to  ', 'f(x(', num2str(i+1), '))'])
+title(['From ', 'f(x_{', num2str(i), '})', '  to  ', 'f(x_{', num2str(i+1), '}) with \alpha_{max} = ', num2str(alpha_max)])
 xlabel('alpha')
 ylabel('f(x)')
 hold on

@@ -103,7 +103,7 @@ while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
     
     % Plot tomography
     if tomography
-        Tomography(Q, q, x, d, alpha, i, duality_gap)
+        Tomography(Q, q, x, d, alpha, 1, i, duality_gap)
     end
     
     % Append new value of the duality_gap for the error plot
@@ -127,9 +127,6 @@ elapsed_time = toc;
 x_min = x;
 % Minimum value of the function
 f_min = history(end);
-
-%Append the value of the function (last iteration)
-%history(i+1) = f_min;
 
 % Number of steps
 num_steps = i;

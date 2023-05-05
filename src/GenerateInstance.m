@@ -103,14 +103,10 @@ else
     Q = sprandsym(n, density, rc);
 end
 
-cond(Q)
-
 % Construct the vector q
 q = min_q + abs(max_q - min_q) * rand(n - zero_q, 1);
 q = [q; zeros(zero_q, 1)];
 q = q(randperm(n));
-
-norm(q)
 
 % Construct the matrix P representing the partition of indices {I_k}
 P = GenerateConstraints(n, K, seed);
