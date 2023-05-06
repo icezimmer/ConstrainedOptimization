@@ -21,27 +21,6 @@ grad = @(x) 2*Q*x + q;
 grad_x = grad(x);
 n = size(Q, 1);
 
-% y = zeros(n, 1);
-% y(indices) = 1;
-% 
-% for simplex = partition
-%     % Take the non-zero indices (indices in I_k)
-%     I_k = simplex{:};
-%     
-%     % Compute the argmin of D restricted on Ik
-%     [~, j] = min(grad_x(I_k));
-%     
-%     % Insert 1 at the position j_k
-%     y(I_k(j)) = 1;
-% end
-% 
-% % Compute the descent direction
-% d = y - x;
-% 
-% % Compute the duality gap
-% duality_gap = - d' * grad_x;
-
-
 y = zeros(n, 1);
 y(indices) = 1;
 
