@@ -23,11 +23,14 @@ SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
 % Save the variables (not necessary)
 SaveVariables(Q, q, P, date)
 
-% Stoping criteria for the Frank Wolfe method: max error and max number of steps for Frank Wolfe
+% List of off-the-shelves algorithms by Quadratic Programming: "interior-point", "active-set", "sqp"
+off_the_shelves = "interior-point";
+
+% Stoping criteria for the algorithms: max error and max number of steps
 eps_R = 1e-7; max_steps = 100;
 
 % Comparing the methods
-[table_results, table_solutions] = ComparingMethods(Q, q, P, date, eps_R, max_steps);
+[table_results, table_solutions] = ComparingMethods(Q, q, P, date, off_the_shelves, eps_R, max_steps);
 
 % Save the results
 SaveResults(table_results, table_solutions, date)

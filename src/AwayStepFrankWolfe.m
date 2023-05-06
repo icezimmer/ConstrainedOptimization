@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  step_size_method, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, step_size_method, eps_R, max_steps, tomography, error_plot, date, f_star)
+function [x_min, f_min, elapsed_time, num_steps, method,  step_size_method, converging, feasible, duality_gap, history] = AwayStepFrankWolfe(Q, q, P, eps_R, max_steps, tomography, error_plot, date, f_star)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -24,8 +24,8 @@ Output:
     duality_gap      : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
+
 if nargin < 4
-    step_size_method = "Exact";
     eps_R = 1e-5;
     max_steps = 10000;
     tomography = false;
@@ -34,7 +34,6 @@ if nargin < 4
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 4
-    eps_R = 1e-5;
     max_steps = 10000;
     tomography = false;
     error_plot = false;
@@ -42,32 +41,26 @@ elseif nargin == 4
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 5
-    max_steps = 10000;
     tomography = false;
     error_plot = false;
     date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 6
-    tomography = false;
     error_plot = false;
     date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 7
-    error_plot = false;
     date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
     mkdir(fullfile('results',date));
     f_star = Optimum(Q, q(:), P);
 elseif nargin == 8
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y-HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 9
     f_star = Optimum(Q, q(:), P);
 end
 
-method = "FW";
+step_size_method = "Exact";
+method = "AFW";
 
 % Construct the starting point for the Frank-Wolfe algorithm
 x_start = StartingPoint(P);
@@ -79,13 +72,7 @@ x = x_start(:);
 % Function f
 f = @(x) x'*Q*x + q'*x;
 
-if isequal(step_size_method,'Exact')
-    disp('Frank-Wolfe algorithm with Exact Line Search')
-elseif isequal(step_size_method,'Standard')
-    disp('Frank-Wolfe algorithm with Standard Step Size Selection')
-else
-    error('Wrong Line Search name')
-end
+disp('Away-step Frank-Wolfe algorithm with Exact Line Search')
 
 [indices, partition] = PartitionDomain(P);
 
@@ -97,13 +84,22 @@ E = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
-    [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
+    [d, ~, duality_gap, d_a, ~, duality_gap_a, alpha_max] = LinearizationMinimizerAFW(Q, q, x, indices, partition);
     
-    alpha = StepSizeSelection(Q, d, duality_gap, 1, i, step_size_method);
+    if duality_gap >= duality_gap_a
+        alpha_max = 1;
+    else
+        d = d_a;
+        duality_gap = duality_gap_a;
+    end
+
+    %alpha_max
+
+    alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, step_size_method);
     
     % Plot tomography
     if tomography
-        Tomography(Q, q, x, d, alpha, 1, i, duality_gap)
+        Tomography(Q, q, x, d, alpha, alpha_max, i, duality_gap)
     end
     
     % Append new value of the duality_gap for the error plot

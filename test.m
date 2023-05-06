@@ -26,7 +26,7 @@ SaveVariables(Q, q, P, date)
 % Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
 eps_R = 1e-6; max_steps = 2*1e3;
 % Define the step size selection method: 'Exact' or 'Standard'
-step_size_method = 'Exact';
+step_size_method = "Exact";
 
 % Plot or not the tomography for each iteration
 tomography = false;

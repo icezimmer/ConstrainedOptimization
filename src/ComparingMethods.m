@@ -1,4 +1,4 @@
-function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, eps_R, max_steps)
+function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, off_the_shelves, eps_R, max_steps)
 %{
 Comparason between the FW algorithm and two off-the-shelf methods (interior-point-convex and active-set)
 Input:
@@ -37,9 +37,8 @@ Duality_Gap = zeros(0,1);
 Solutions = zeros(n, 0);
 Histories = cell(1, 3);
 
-% Frank-Wolfe type algorithm
-step_size_method = "Exact";
-[x_min, f_min, elapsed_time, num_steps, type, step_size_method, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, step_size_method, eps_R, max_steps, false, false, date, f_star);
+% Away-step Frank-Wolfe type algorithm
+[x_min, f_min, elapsed_time, num_steps, type, step_size_method, converging, feasible, duality_gap, history] = AwayStepFrankWolfe(Q, q, P, eps_R, max_steps, false, false, date, f_star);
 Method = cat(1, Method, type);
 Step_Size = cat(1, Step_Size, step_size_method);
 Minimum = cat(1, Minimum, f_min);
@@ -52,10 +51,8 @@ Solutions = cat(2, Solutions, x_min);
 Histories{1} = history;
 
 % Quadratic Programming algorithms
-%algorithms = ["interior-point", "active-set"];
-algorithms = ["interior-point", "sqp"];
-for i = 1:length(algorithms)
-    [x_min, f_min, elapsed_time, num_steps, type, step_size_method, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithms(i), max_steps, eps_R, f_star);
+for i = 1:length(off_the_shelves)
+    [x_min, f_min, elapsed_time, num_steps, type, step_size_method, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, off_the_shelves(i), max_steps, eps_R, f_star);
     Method = cat(1, Method, type);
     Step_Size = cat(1, Step_Size, step_size_method);
     Minimum = cat(1, Minimum, f_min);
@@ -84,21 +81,24 @@ Solutions = [Solutions, x_min];
 table_results = table(Method, Step_Size, Minimum, Time, Steps, Converging, Feasible, Duality_Gap);
 table_results = sortrows(table_results, {'Minimum', 'Duality_Gap', 'Time', 'Steps'});
 
-table_solutions = array2table(Solutions, 'VariableNames', {'FW_Exact', 'Direct', 'interior-point-convex', 'active-set'});
+label_column = {'FW_Exact', 'Direct'};
+label_column = cat(2,label_column,string(off_the_shelves));
+table_solutions = array2table(Solutions, 'VariableNames', label_column);
 
-gap_FW = abs(Histories{1} - f_star) / max(1,abs(f_star));
-gap_IP = abs(Histories{2} - f_star) / max(1,abs(f_star));
-gap_SQ = abs(Histories{3} - f_star) / max(1,abs(f_star));
+colors = ['k','b','r','g','y'];
+iterative_algorithms = cat(2,Method{1},off_the_shelves);
 gcf = figure('Name', 'Comparison');
-plt_FW = semilogy(0:length(gap_FW)-1, gap_FW, 'b-','DisplayName','FW-exact');
 hold on
-plt_IP = semilogy(0:length(gap_IP)-1, gap_IP, 'r-','DisplayName','interior-point');
-plt_SQ = semilogy(0:length(gap_SQ)-1, gap_SQ, 'k-','DisplayName','sqp');
+for i = 1:length(iterative_algorithms)
+    gap = abs(Histories{i} - f_star) / max(1,abs(f_star));
+    semilogy(0:length(gap)-1, gap, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+end
 hold off
+set(gca, 'YScale', 'log');
 title('Comparison')
 xlabel('step')
 ylabel('error')
-legend([plt_FW, plt_IP, plt_SQ], 'Location','best')
+legend('Location','best')
 saveas(gcf, fullfile('results', date, 'comparison.png'))
 
 end

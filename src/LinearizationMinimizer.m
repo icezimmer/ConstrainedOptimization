@@ -1,4 +1,4 @@
-function [d, y, duality_gap] = LinearApproximationMinimizer(Q, q, x, indices, partition)
+function [d, y, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition)
 %{
 Minimize the linear approximation of the function in the point x, compute the
 descent direction and the duality gap
