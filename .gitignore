@@ -1,0 +1,6 @@
+# ignore all files .asv
+*.asv
+
+# ignore all files in result folder
+results/*
+!results/.gitkeep
