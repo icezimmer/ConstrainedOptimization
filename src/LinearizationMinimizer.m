@@ -25,10 +25,10 @@ y = zeros(n, 1);
 y(indices) = 1;
 
 for simplex = partition
-    % Take the non-zero indices (indices in I_k)
+    % Take the indices in I_k
     I_k = simplex{:};
     
-    % Compute the argmin of D restricted on Ik
+    % Compute the argmin of D restricted on I_k
     [~, j] = min(grad_x(I_k));
     
     % Insert 1 at the position j_k

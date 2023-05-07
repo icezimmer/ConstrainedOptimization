@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  step_size_method, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, step_size_method, eps_R, max_steps, tomography, error_plot, date, f_star)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_R, max_steps, tomography, error_plot, date, f_star)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -25,7 +25,7 @@ Output:
         the descent direction and the gradient
 %}
 if nargin < 4
-    step_size_method = "Exact";
+    variant = "Away-step";
     eps_R = 1e-5;
     max_steps = 10000;
     tomography = false;
@@ -79,12 +79,14 @@ x = x_start(:);
 % Function f
 f = @(x) x'*Q*x + q'*x;
 
-if isequal(step_size_method,'Exact')
+if isequal(variant,'Away-step')
+    disp('Away-step Frank-Wolfe algorithm')
+elseif isequal(variant,'Exact')
     disp('Frank-Wolfe algorithm with Exact Line Search')
-elseif isequal(step_size_method,'Standard')
+elseif isequal(variant,'Standard')
     disp('Frank-Wolfe algorithm with Standard Step Size Selection')
 else
-    error('Wrong Line Search name')
+    error('Wrong variant name')
 end
 
 [indices, partition] = PartitionDomain(P);
@@ -97,9 +99,21 @@ E = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
-    [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
+    if isequal(variant, 'Away-step')    
+        [d, ~, duality_gap, d_a, ~, duality_gap_a, alpha_max] = LinearizationMinimizerAFW(Q, q, x, indices, partition);
+        
+        if duality_gap >= duality_gap_a
+            alpha_max = 1;
+        else
+            d = d_a;
+            duality_gap = duality_gap_a;
+        end
     
-    alpha = StepSizeSelection(Q, d, duality_gap, 1, i, step_size_method);
+        alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, variant);
+    else
+        [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
+        alpha = StepSizeSelection(Q, d, duality_gap, 1, i, variant);
+    end
     
     % Plot tomography
     if tomography
@@ -143,7 +157,7 @@ end
 
 % Plot the error
 if error_plot
-    PlotErrorCurve(history, f_star, E, step_size_method, date)
+    PlotErrorCurve(history, f_star, E, variant, date)
 end  
 
 end

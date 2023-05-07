@@ -25,29 +25,29 @@ y = zeros(n, 1);
 y(indices) = 1;
 
 y_a = zeros(n, 1);
-active_set = (x > 0)';
+% Search the active indices
+active_set = x > 0;
 y_a(indices & active_set) = 1;
 
 alpha_max = inf;
 for simplex = partition
 
-    % Take the non-zero indices (indices in I_k)
+    % Take the indices in I_k
     I_k = simplex{:};
     % Compute the argmin of D restricted on Ik
     [~, j_min] = min(grad_x(I_k));
     % Insert 1 at the position j_min
     y(I_k(j_min)) = 1;
 
+    % Take the active indices of I_k
     S_k = I_k(active_set(I_k));
-    if numel(S_k) > 0
-        % Compute the argmax of D restricted on Sk
-        [~, j_max] = max(grad_x(S_k));     
-        % Insert 1 at the position j_max
-        y_a(S_k(j_max)) = 1;
-        new_alpha_max = x(S_k(j_max)) / (1 - x(S_k(j_max)));
-        if new_alpha_max < alpha_max
-            alpha_max = new_alpha_max;
-        end
+    % Compute the argmax of D restricted on Sk
+    [~, j_max] = max(grad_x(S_k));     
+    % Insert 1 at the position j_max
+    y_a(S_k(j_max)) = 1;
+    new_alpha_max = x(S_k(j_max)) / (1 - x(S_k(j_max)));
+    if new_alpha_max < alpha_max
+        alpha_max = new_alpha_max;
     end
 
 end

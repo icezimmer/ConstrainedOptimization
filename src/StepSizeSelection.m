@@ -1,4 +1,4 @@
-function alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, step_size_method)
+function alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, variant)
 %{
 Step size selection
 Input:
@@ -9,12 +9,12 @@ Input:
     step_size_method : (string) method for the step size selection
 %}
 
-if isequal(step_size_method, 'Exact')
+if isequal(variant, 'Exact') || isequal(variant, 'Away-step')
     alpha = ExactLineSearch(Q, d, duality_gap, alpha_max); 
-elseif isequal(step_size_method,'Standard')
+elseif isequal(variant,'Standard')
     alpha = 2/(i + 2);
 else
-    error("Step Size Method name wrong")
+    error("Variant name wrong")
 end
 
 

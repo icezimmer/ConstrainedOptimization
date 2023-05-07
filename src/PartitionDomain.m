@@ -13,9 +13,9 @@ Output:
 
 simplices = sum(P,2)>1;
 
-indices = logical(sum(P(~simplices,:),1));
+indices = logical(sum(P(~simplices,:),1))';
 
-% Take the non-zero indices (indices in I_k)
+% Save in partition the subsets I_k with at least two indices
 P = P(simplices, :);
 partition = cell(1,size(P,1));
 k=1;

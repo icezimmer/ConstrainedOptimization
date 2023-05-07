@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, method, step_size_method, num_steps, converging, feasible, duality_gap] = DirectComputation(Q, q, P)
+function [x_min, f_min, elapsed_time, method, variant, num_steps, converging, feasible, duality_gap] = DirectComputation(Q, q, P)
 %{
 Input:
     Q : (matrix) nxn positive semi-definite
@@ -27,7 +27,7 @@ x_min = NaN(n, 1);
 f_min = NaN;
 elapsed_time = NaN;
 method = "Direct";
-step_size_method = "--";
+variant = "--";
 num_steps = NaN;
 duality_gap = NaN;
 

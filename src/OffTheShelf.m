@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  step_size_method, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithm, max_steps, eps_R, f_star)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithm, max_steps, eps_R, f_star)
 %{
 Quadratic programming using the built-in function "quadprog" by the optimization-toolbox of MATLAB
 Input:
@@ -20,7 +20,7 @@ Output:
         the descent direction and the gradient
 %}
 
-step_size_method = "--";
+variant = "--";
 duality_gap = NaN;
 
 if nargin == 6
