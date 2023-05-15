@@ -5,6 +5,3 @@
 results/*
 !results/.gitkeep
 
-# ignore file for experiments
-test.m
-benchmark.m
