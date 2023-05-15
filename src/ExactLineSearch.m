@@ -9,12 +9,6 @@ Output:
     alpha : (float) step-size value
 %}
 
-% If the denominator is zero alpha will be infinity so we'll fix alpha to 1
-alpha = duality_gap / (2*d'* Q *d);
-
-if alpha > alpha_max
-    alpha = alpha_max;
-end
-
+alpha = min(alpha_max, duality_gap / (2*d'* Q *d));
 
 end

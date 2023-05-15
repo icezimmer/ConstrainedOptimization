@@ -45,7 +45,8 @@ for simplex = partition
     [~, j_max] = max(grad_x(S_k));     
     % Insert 1 at the position j_max
     y_a(S_k(j_max)) = 1;
-    new_alpha_max = x(S_k(j_max)) / (1 - x(S_k(j_max)));
+    % Avoid division by denominator < 0
+    new_alpha_max = x(S_k(j_max)) / max(0, 1-x(S_k(j_max)));
     if new_alpha_max < alpha_max
         alpha_max = new_alpha_max;
     end

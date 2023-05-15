@@ -99,17 +99,20 @@ E = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
-    if isequal(variant, 'Away-step')    
+    if isequal(variant, 'Away-step') 
         [d, ~, duality_gap, d_a, ~, duality_gap_a, alpha_max] = LinearizationMinimizerAFW(Q, q, x, indices, partition);
         
         if duality_gap >= duality_gap_a
+            % Standard step
             alpha_max = 1;
         else
+            % Away-step
             d = d_a;
             duality_gap = duality_gap_a;
         end
     
         alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, variant);
+        
     else
         [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
         alpha = StepSizeSelection(Q, d, duality_gap, 1, i, variant);
@@ -117,7 +120,7 @@ while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
     
     % Plot tomography
     if tomography
-        Tomography(Q, q, x, d, alpha, 1, i, duality_gap)
+        Tomography(Q, q, x, d, alpha, alpha_max, i, duality_gap)
     end
     
     % Append new value of the duality_gap for the error plot
