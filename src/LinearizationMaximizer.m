@@ -1,4 +1,4 @@
-function [d, y, duality_gap, d_a, y_a, duality_gap_a, alpha_max] = LinearizationMinimizerAFW(Q, q, x, indices, partition)
+function [d_a, y_a, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, indices, partition)
 %{
 Minimize the linear approximation of the function in the point x, compute the
 descent direction and the duality gap
@@ -21,23 +21,16 @@ grad = @(x) 2*Q*x + q;
 grad_x = grad(x);
 n = size(Q, 1);
 
-y = zeros(n, 1);
-y(indices) = 1;
-
 y_a = zeros(n, 1);
 % Search the active indices
 active_set = x > 0;
 y_a(indices & active_set) = 1;
 
-alpha_max = inf;
+alpha_max_a = inf;
 for simplex = partition
 
     % Take the indices in I_k
     I_k = simplex{:};
-    % Compute the argmin of D restricted on Ik
-    [~, j_min] = min(grad_x(I_k));
-    % Insert 1 at the position j_min
-    y(I_k(j_min)) = 1;
 
     % Take the active indices of I_k
     S_k = I_k(active_set(I_k));
@@ -47,16 +40,11 @@ for simplex = partition
     y_a(S_k(j_max)) = 1;
     % Avoid division by denominator < 0
     new_alpha_max = x(S_k(j_max)) / max(0, 1-x(S_k(j_max)));
-    if new_alpha_max < alpha_max
-        alpha_max = new_alpha_max;
+    if new_alpha_max < alpha_max_a
+        alpha_max_a = new_alpha_max;
     end
 
 end
-
-% Compute the descent direction
-d = y - x;
-% Compute the duality gap respect the descent direction
-duality_gap = - d' * grad_x;
 
 % Compute the opposite of away direction
 d_a = x - y_a;

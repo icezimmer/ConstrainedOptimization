@@ -67,24 +67,10 @@ for i = 1:length(off_the_shelves)
     Histories = cat(2, Histories, history);
 end
 
-% Direct Computation
-[x_min, f_min, elapsed_time, type, variant, num_steps, converging, feasible, duality_gap] = DirectComputation(Q, q, P);
-Method = [Method; type];
-Variants = [Variants; variant];
-Minima = [Minima; f_min];
-Time = [Time; elapsed_time];
-Steps = [Steps; num_steps];
-Converging = [Converging; converging];
-Feasible = [Feasible; feasible];
-Duality_Gap = [Duality_Gap; duality_gap];
-Solutions = [Solutions, x_min];
-
-
 table_results = table(Method, Variants, Minima, Time, Steps, Converging, Feasible, Duality_Gap);
 table_results = sortrows(table_results, {'Minima', 'Duality_Gap', 'Time', 'Steps'});
 
 label_column = string(frank_wolfe_variants);
-label_column = cat(2,label_column,'Direct');
 label_column = cat(2,label_column,string(off_the_shelves));
 table_solutions = array2table(Solutions, 'VariableNames', label_column);
 

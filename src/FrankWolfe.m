@@ -81,10 +81,8 @@ f = @(x) x'*Q*x + q'*x;
 
 if isequal(variant,'Away-step')
     disp('Away-step Frank-Wolfe algorithm')
-elseif isequal(variant,'Exact')
-    disp('Frank-Wolfe algorithm with Exact Line Search')
 elseif isequal(variant,'Standard')
-    disp('Frank-Wolfe algorithm with Standard Step Size Selection')
+    disp('Frank-Wolfe algorithm with Exact Line Search')
 else
     error('Wrong variant name')
 end
@@ -99,24 +97,25 @@ E = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
+    [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
+    alpha_max = 1;
+
     if isequal(variant, 'Away-step') 
-        [d, ~, duality_gap, d_a, ~, duality_gap_a, alpha_max] = LinearizationMinimizerAFW(Q, q, x, indices, partition);
+        [d_a, ~, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, indices, partition);
         
-        if duality_gap >= duality_gap_a
-            % Standard step
-            alpha_max = 1;
-        else
+        if duality_gap_a > duality_gap
             % Away-step
             d = d_a;
             duality_gap = duality_gap_a;
+            alpha_max = alpha_max_a;
         end
-    
-        alpha = StepSizeSelection(Q, d, duality_gap, alpha_max, i, variant);
-        
-    else
-        [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
-        alpha = StepSizeSelection(Q, d, duality_gap, 1, i, variant);
     end
+
+    alpha = ExactLineSearch(Q, d, duality_gap, alpha_max);
+
+%     [d,duality_gap] = Boost(Q,q,x,indices, partition);
+%     alpha_max = 1;
+%     alpha = ExactLineSearch(Q, d, duality_gap, alpha_max);
     
     % Plot tomography
     if tomography
