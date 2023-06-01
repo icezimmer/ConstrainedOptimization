@@ -69,15 +69,11 @@ end
 
 method = "FW";
 
-% Construct the starting point for the Frank-Wolfe algorithm
-x_start = StartingPoint(P);
-
-% Force q and x to be column vectors
-q = q(:);
-x = x_start(:);
-
 % Function f
-f = @(x) x'*Q*x + q'*x;
+%f = @(x) x'*Q*x + q'*x;
+%g=@(x,free) (x(free))'*Q(free,free)*x(free)+(q(free))'*x(free);
+%h=@(x,free,fixed) 2*(sum(Q(free,fixed),2))'*x(free) + sum(Q(fixed,fixed),'all') + sum(q(fixed));
+%f = @(x,free,fixed) g(x,free)+h(x,free,fixed);
 
 if isequal(variant,'Away-step')
     disp('Away-step Frank-Wolfe algorithm')
@@ -87,7 +83,18 @@ else
     error('Wrong variant name')
 end
 
-[indices, partition] = PartitionDomain(P);
+% Semplify the task restricting the optimization on polytopes with at least two vertices
+[Q, q, c, P, partition] = SemplifyTask(Q, q, P);
+% New function f
+f = @(x) x'*Q*x + q'*x + c;
+
+
+% Construct the starting point for the Frank-Wolfe algorithm
+x_start = StartingPoint(P);
+
+% Force q and x to be column vectors
+q = q(:);
+x = x_start(:);
 
 tic
 i = 0;
@@ -97,11 +104,11 @@ E = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
 
-    [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition);
+    [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, partition);
     alpha_max = 1;
 
     if isequal(variant, 'Away-step') 
-        [d_a, ~, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, indices, partition);
+        [d_a, ~, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, partition);
         
         if duality_gap_a > duality_gap
             % Away-step
@@ -112,10 +119,6 @@ while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
     end
 
     alpha = ExactLineSearch(Q, d, duality_gap, alpha_max);
-
-%     [d,duality_gap] = Boost(Q,q,x,indices, partition);
-%     alpha_max = 1;
-%     alpha = ExactLineSearch(Q, d, duality_gap, alpha_max);
     
     % Plot tomography
     if tomography

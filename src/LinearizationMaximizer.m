@@ -1,4 +1,4 @@
-function [d_a, y_a, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, indices, partition)
+function [d_a, y_a, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, partition)
 %{
 Minimize the linear approximation of the function in the point x, compute the
 descent direction and the duality gap
@@ -22,9 +22,9 @@ grad_x = grad(x);
 n = size(Q, 1);
 
 y_a = zeros(n, 1);
+
 % Search the active indices
 active_set = x > 0;
-y_a(indices & active_set) = 1;
 
 alpha_max_a = inf;
 for simplex = partition

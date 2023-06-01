@@ -1,4 +1,4 @@
-function [d, y, duality_gap] = LinearizationMinimizer(Q, q, x, indices, partition)
+function [d, y, duality_gap] = LinearizationMinimizer(Q, q, x, partition)
 %{
 Minimize the linear approximation of the function in the point x, compute the
 descent direction and the duality gap
@@ -22,7 +22,6 @@ grad_x = grad(x);
 n = size(Q, 1);
 
 y = zeros(n, 1);
-y(indices) = 1;
 
 for simplex = partition
     % Take the indices in I_k
