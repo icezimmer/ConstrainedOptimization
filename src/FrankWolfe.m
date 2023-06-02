@@ -86,7 +86,11 @@ end
 % Semplify the task restricting the optimization on polytopes with at least two vertices
 [Q, q, c, P, partition] = SemplifyTask(Q, q, P);
 % New function f
-f = @(x) x'*Q*x + q'*x + c;
+if ~isempty(partition)
+    f = @(x) x'*Q*x + q'*x + c;
+else % if K = n
+    f = @(x) c;
+end
 
 
 % Construct the starting point for the Frank-Wolfe algorithm

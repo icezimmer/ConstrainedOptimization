@@ -1,4 +1,4 @@
-function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, dim_Ker, spectral_radius, density, min_q, max_q, zero_q, seed)
+function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, simplifyable, dim_Ker, spectral_radius, density, min_q, max_q, zero_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
 of indices) and the point x_start belonging to the domain.
@@ -109,7 +109,7 @@ q = [q; zeros(zero_q, 1)];
 q = q(randperm(n));
 
 % Construct the matrix P representing the partition of indices {I_k}
-P = GenerateConstraints(n, K, seed);
+P = GenerateConstraints(n, K, simplifyable, seed);
 
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);
