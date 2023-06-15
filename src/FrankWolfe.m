@@ -111,7 +111,7 @@ while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
     [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, partition);
     alpha_max = 1;
 
-    if isequal(variant, 'Away-step') 
+    if isequal(variant, 'Away-step')
         [d_a, ~, duality_gap_a, alpha_max_a] = LinearizationMaximizer(Q, q, x, partition);
         
         if duality_gap_a > duality_gap

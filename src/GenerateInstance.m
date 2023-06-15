@@ -1,4 +1,4 @@
-function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, simplifyable, dim_Ker, spectral_radius, density, min_q, max_q, zero_q, seed)
+function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, force_non_point_simplices, dim_Ker, spectral_radius, density, norm_q, seed)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
 of indices) and the point x_start belonging to the domain.
@@ -24,49 +24,40 @@ Output:
 
 disp('Generating the instance')
 
-if nargin < 2
+if nargin == 1
     K = randi([1,n]);
+    force_non_point_simplices = false;
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
-    min_q = -5;
-    max_q = 5;
-    zero_q = 0;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 2
+    force_non_point_simplices = false;
     dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
-    min_q = -5;
-    max_q = 5;
-    zero_q = 0;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 3
+    dim_Ker = 0;
     spectral_radius = 10;
     density = 1;
-    min_q = -5;
-    max_q = 5;
-    zero_q = 0;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 4
+    spectral_radius = 10;
     density = 1;
-    min_q = -5;
-    max_q = 5;
-    zero_q = 0;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 5
-    min_q = -5;
-    max_q = 5;
-    zero_q = 0;
+    density = 1;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 6
-    max_q = 5;
-    zero_q = 0;
+    norm_q = 1;
     seed = 0;
 elseif nargin == 7
-    zero_q = 0;
-    seed = 0;
-elseif nargin == 8
     seed = 0;
 end
 
@@ -104,12 +95,17 @@ else
 end
 
 % Construct the vector q
-q = min_q + abs(max_q - min_q) * rand(n - zero_q, 1);
-q = [q; zeros(zero_q, 1)];
-q = q(randperm(n));
+if norm_q > 0
+    q = 0.5 - rand(n, 1);
+    q = norm_q * q/norm(q);
+elseif norm_q == 0
+    q = zeros(n,1);
+else
+    error("Norm of vector q must be >= 0")
+end
 
 % Construct the matrix P representing the partition of indices {I_k}
-P = GenerateConstraints(n, K, simplifyable, seed);
+P = GenerateConstraints(n, K, force_non_point_simplices, seed);
 
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);

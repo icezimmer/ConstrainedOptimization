@@ -1,4 +1,4 @@
-function P = GenerateConstraints(n, K, simplifyable, seed)
+function P = GenerateConstraints(n, K, force_non_point_simplices, seed)
 %{
 Construct the matrix P representing the partion of indices {I_k}. Each row represents a simplex.
 Input:
@@ -11,13 +11,13 @@ Output:
 
 rng(seed)
 
-if simplifyable
-    aux=sort(randperm(n,K));
-else
+if force_non_point_simplices
     if K > floor(n/2)
         error("If you want only polytopes with at least two vertices, K must be at least floor(n/2)")
     end
     aux=sort(randperm(floor(n/2),K)*2);
+else
+    aux=sort(randperm(n,K));
 end
 
 dim_Simplex=diff(aux);

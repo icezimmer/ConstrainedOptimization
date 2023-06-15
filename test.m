@@ -5,17 +5,17 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and number of simplices
-n = 1; K = 1; simplifyable = true;
+n = 1000; K = 1; force_non_point_simplices = true;
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
 dim_ker = 0; spectral_radius = 1000;
 % Density of the matrix Q
 density = 1;
 % Minimum value, maximum value and number of zero in the vector q
-min_q = 0; max_q = 10; zero_q = 0;
+norm_q = 1000;
 % Seed for the random generator
-seed = 2;
+seed = 3;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, simplifyable, dim_ker, spectral_radius, density, min_q, max_q, zero_q, seed);
+[Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, force_non_point_simplices, dim_ker, spectral_radius, density, norm_q, seed);
 
 % Save the parameters
 SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
@@ -24,7 +24,7 @@ SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
 SaveVariables(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
-eps_R = 1e-10; max_steps = 1e4;
+eps_R = 1e-10; max_steps = 1e3;
 % Define the step size selection method: "Away-step" or "Standard"
 variant = "Away-step";
 
