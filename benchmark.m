@@ -10,12 +10,14 @@ n = 1000; K = 5; force_non_point_simplices = true;
 dim_ker = 100; spectral_radius = 10;
 % Density of the matrix Q
 density = 1;
-% Minimum value, maximum value and number of zero in the vector q
-norm_q = 1;
+% Norm of the vector q
+% norm_q = 1000;
+% Fraction of active constrained for the solution
+actv = 0;
 % Seed for the random generator
 seed = 2;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, dim_ker, force_non_point_simplices, spectral_radius, density, norm_q, seed);
+[Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, dim_ker, force_non_point_simplices, spectral_radius, density, actv, seed);
 
 % Save the parameters
 SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)

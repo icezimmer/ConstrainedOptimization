@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithm, max_steps, eps_R, f_star)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithm, max_steps, eps_R, varargin)
 %{
 Quadratic programming using the built-in function "quadprog" by the optimization-toolbox of MATLAB
 Input:
@@ -20,12 +20,19 @@ Output:
         the descent direction and the gradient
 %}
 
+numvarargs = length(varargin);
+if numvarargs > 1
+    error('myfuns:OffTheShelf:TooManyInputs', ...
+        'requires at most 1 optional inputs');
+end
+
+% set defaults for optional inputs
+optargs = {Optimum(Q, q, P)};
+optargs(1:numvarargs) = varargin;
+[f_star] = optargs{:};
+
 variant = "--";
 duality_gap = NaN;
-
-if nargin == 6
-    f_star = Optimum(Q, q, P);
-end
 
 fun = @(x) x'*Q*x + q'*x;
 x0 = StartingPoint(P);

@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_R, max_steps, tomography, error_plot, date, f_star)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -24,56 +24,23 @@ Output:
     duality_gap      : (float) opposite value of the scalar product between
         the descent direction and the gradient
 %}
-if nargin < 4
-    variant = "Away-step";
-    eps_R = 1e-5;
-    max_steps = 10000;
-    tomography = false;
-    error_plot = false;
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
+
+numvarargs = length(varargin);
+if numvarargs > 7
+    error('myfuns:FrankWolfe:TooManyInputs', ...
+        'requires at most 7 optional inputs');
+end
+
+% set defaults for optional inputs
+optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss')),Optimum(Q, q(:), P)};
+optargs(1:numvarargs) = varargin;
+[variant, eps_R, max_steps, tomography, error_plot, date, f_star] = optargs{:};
+
+if ~exist(fullfile('results',date), 'dir')
     mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 4
-    eps_R = 1e-5;
-    max_steps = 10000;
-    tomography = false;
-    error_plot = false;
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 5
-    max_steps = 10000;
-    tomography = false;
-    error_plot = false;
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 6
-    tomography = false;
-    error_plot = false;
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 7
-    error_plot = false;
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 8
-    date = string(datetime('now','TimeZone','local','Format','d-MMM-y-HH:mm:ss'));
-    mkdir(fullfile('results',date));
-    f_star = Optimum(Q, q(:), P);
-elseif nargin == 9
-    f_star = Optimum(Q, q(:), P);
 end
 
 method = "FW";
-
-% Function f
-%f = @(x) x'*Q*x + q'*x;
-%g=@(x,free) (x(free))'*Q(free,free)*x(free)+(q(free))'*x(free);
-%h=@(x,free,fixed) 2*(sum(Q(free,fixed),2))'*x(free) + sum(Q(fixed,fixed),'all') + sum(q(fixed));
-%f = @(x,free,fixed) g(x,free)+h(x,free,fixed);
 
 if isequal(variant,'Away-step')
     disp('Away-step Frank-Wolfe algorithm')
@@ -158,7 +125,7 @@ num_steps = i;
 feasible = CheckDomain(x_min, P);
 
 % Convergence of the algorithm
-converging = StoppingCriteria(f(x), f_star, eps_R) && feasible;
+converging = StoppingCriteria(f(x_min), f_star, eps_R) && feasible;
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])

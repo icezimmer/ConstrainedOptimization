@@ -1,4 +1,4 @@
-function condition = StoppingCriteria(fx, f_star, eps_R, type)
+function condition = StoppingCriteria(fx, f_star, eps_R, varargin)
 %{
 Stopping Criteria for the numerical optimization
 Input:
@@ -9,9 +9,16 @@ Output:
     condition : (logical) true if the stop condition is verified
 %}
 
-if nargin < 4
-    type = 'Relative';
+numvarargs = length(varargin);
+if numvarargs > 1
+    error('myfuns:StoppingCriteria:TooManyInputs', ...
+        'requires at most 1 optional inputs');
 end
+
+% set defaults for optional inputs
+optargs = {'Relative'};
+optargs(1:numvarargs) = varargin;
+[type] = optargs{:};
 
 if isequal(type,'Relative')
     condition = (fx - f_star) < eps_R * max(1,abs(f_star));

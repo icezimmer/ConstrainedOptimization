@@ -1,4 +1,4 @@
-function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, eps_R, max_steps)
+function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, varargin)
 %{
 Comparason between the FW algorithm and two off-the-shelf methods (interior-point-convex and active-set)
 Input:
@@ -14,12 +14,16 @@ Output:
     table_solutions : (table) table of solutions (x_min) for all the methods
 %}
 
-if nargin < 5 % no eps, max_steps
-    eps_R = 1e-5;
-    max_steps = 1000;
-elseif nargin == 5 % no max_steps
-    max_steps = 1000;
+numvarargs = length(varargin);
+if numvarargs > 2
+    error('myfuns:ComparingMethods:TooManyInputs', ...
+        'requires at most 2 optional inputs');
 end
+
+% set defaults for optional inputs
+optargs = {1e-5,1000};
+optargs(1:numvarargs) = varargin;
+[eps_R, max_steps] = optargs{:};
 
 f_star = Optimum(Q, q, P);
 

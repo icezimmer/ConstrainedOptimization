@@ -1,4 +1,4 @@
-function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, force_non_point_simplices, dim_Ker, spectral_radius, density, norm_q, seed)
+function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, varargin)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
 of indices) and the point x_start belonging to the domain.
@@ -22,44 +22,16 @@ Output:
     date   : (float) date for saving parameters, figures and results 
 %}
 
-disp('Generating the instance')
-
-if nargin == 1
-    K = randi([1,n]);
-    force_non_point_simplices = false;
-    dim_Ker = 0;
-    spectral_radius = 10;
-    density = 1;
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 2
-    force_non_point_simplices = false;
-    dim_Ker = 0;
-    spectral_radius = 10;
-    density = 1;
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 3
-    dim_Ker = 0;
-    spectral_radius = 10;
-    density = 1;
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 4
-    spectral_radius = 10;
-    density = 1;
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 5
-    density = 1;
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 6
-    norm_q = 1;
-    seed = 0;
-elseif nargin == 7
-    seed = 0;
+numvarargs = length(varargin);
+if numvarargs > 7
+    error('myfuns:GenerateInstance:TooManyInputs', ...
+        'requires at most 7 optional inputs');
 end
+
+% set defaults for optional inputs
+optargs = {randi([1,n]),false,0,10,1,0,0};
+optargs(1:numvarargs) = varargin;
+[K, force_non_point_simplices, dim_Ker, spectral_radius, density, actv, seed] = optargs{:};
 
 if K<1 || K > n
     error("Number of simplices K must be an intenger >= 1 and <= n")
@@ -72,6 +44,12 @@ end
 if density<0 || density>1
     error("Density must be >= 0 and <= 1")
 end
+
+if actv<0 || actv>1
+    error("The fracion of active constraints must be in [0,1]")
+end
+
+disp('Generating the instance')
 
 % Initialize the random seed
 rng(seed)
@@ -94,18 +72,19 @@ else
     Q = sprandsym(n, density, rc);
 end
 
-% Construct the vector q
-if norm_q > 0
-    q = 0.5 - rand(n, 1);
-    q = norm_q * q/norm(q);
-elseif norm_q == 0
-    q = zeros(n,1);
-else
-    error("Norm of vector q must be >= 0")
-end
-
 % Construct the matrix P representing the partition of indices {I_k}
 P = GenerateConstraints(n, K, force_non_point_simplices, seed);
+
+% Construct the vector q
+% if norm_q > 0
+%     q = 0.5 - rand(n, 1);
+%     q = norm_q * q/norm(q);
+% elseif norm_q == 0
+%     q = zeros(n,1);
+% else
+%     error("Norm of vector q must be >= 0")
+% end
+[~, q] = ForceSolution(Q, P, actv);
 
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);
@@ -118,6 +97,8 @@ else
 end
 
 date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
-mkdir(fullfile('results',date));
+if ~exist(fullfile('results',date), 'dir')
+    mkdir(fullfile('results',date));
+end
 
 end
