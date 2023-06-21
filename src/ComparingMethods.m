@@ -25,7 +25,7 @@ optargs = {1e-5,1000};
 optargs(1:numvarargs) = varargin;
 [eps_R, max_steps] = optargs{:};
 
-f_star = Optimum(Q, q, P);
+f_star = Oracle(Q, q, P);
 
 [n, ~] = size(Q);
 

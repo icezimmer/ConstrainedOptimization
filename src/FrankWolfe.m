@@ -32,7 +32,7 @@ if numvarargs > 7
 end
 
 % set defaults for optional inputs
-optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss')),Optimum(Q, q(:), P)};
+optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss')),Oracle(Q, q(:), P)};
 optargs(1:numvarargs) = varargin;
 [variant, eps_R, max_steps, tomography, error_plot, date, f_star] = optargs{:};
 
@@ -125,7 +125,7 @@ num_steps = i;
 feasible = CheckDomain(x_min, P);
 
 % Convergence of the algorithm
-converging = StoppingCriteria(f(x_min), f_star, eps_R) && feasible;
+converging = StoppingCriteria(f_min, f_star, eps_R) && feasible;
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])

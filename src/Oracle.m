@@ -1,4 +1,4 @@
-function f_star = Optimum(Q, q, P)
+function f_star = Oracle(Q, q, P)
 
 disp('Pre-compute the optimum for the stop condition')
 

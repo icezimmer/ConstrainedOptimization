@@ -12,7 +12,7 @@ dim_ker = 100; spectral_radius = 10;
 density = 1;
 % Norm of the vector q
 % norm_q = 1000;
-% Fraction of active constrained for the solution
+% Fraction of active constraints for the solution
 actv = 0;
 % Seed for the random generator
 seed = 2;

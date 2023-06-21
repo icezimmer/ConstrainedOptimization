@@ -27,7 +27,7 @@ if numvarargs > 1
 end
 
 % set defaults for optional inputs
-optargs = {Optimum(Q, q, P)};
+optargs = {Oracle(Q, q, P)};
 optargs(1:numvarargs) = varargin;
 [f_star] = optargs{:};
 

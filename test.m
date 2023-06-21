@@ -5,17 +5,17 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 addpath src
 
 % Space dimension and number of simplices
-n = 1000; K = 100; force_non_point_simplices = true;
+n = 100; K = 4; force_non_point_simplices = true;
 % Kernel dimension and spectral radius of the matrix Q (it must be > 0)
 dim_ker = 0; spectral_radius = 100;
 % Density of the matrix Q
 density = 1;
 % Norm of the vector q
 % norm_q = 1000;
-% Fraction of active constrained for the solution
-actv = 0.9;
+% Fraction of active constraints for the solution
+actv = 1;
 % Seed for the random generator
-seed = 3;
+seed = 7;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, force_non_point_simplices, dim_ker, spectral_radius, density, actv, seed);
 %norm(q)
