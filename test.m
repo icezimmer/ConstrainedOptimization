@@ -4,30 +4,32 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 
 addpath src
 
-% Space dimension and number of simplices
-n = 100; K = 4; force_non_point_simplices = true;
-% Kernel dimension and spectral radius of the matrix Q (it must be > 0)
-dim_ker = 0; spectral_radius = 100;
+% Space dimension, number of simplices, force or not
+% non-point-simplices, and the fraction of active constraints respect the
+% solution
+n = 1000; K = 500; force_non_point_simplices = true; actv = 0;
+% Kernel dimension, spectral radius of the matrix Q, and minimum
+% eigenvalue (considered only if dim_ker>0)
+dim_ker = 0; spectral_radius = 1; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 % Norm of the vector q
 % norm_q = 1000;
-% Fraction of active constraints for the solution
-actv = 1;
+
 % Seed for the random generator
 seed = 7;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
-[Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, K, force_non_point_simplices, dim_ker, spectral_radius, density, actv, seed);
+[Q, q, P, K_plus, K_avg, num_vertex, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
 %norm(q)
 
 % Save the parameters
-SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, date)
+SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, num_vertex, date)
 
 % Save the variables
 SaveVariables(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
-eps_R = 1e-10; max_steps = 1e3;
+eps_R = 1e-10; max_steps = 1e4;
 % Define the step size selection method: "Away-step" or "Standard"
 variant = "Away-step";
 

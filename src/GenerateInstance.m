@@ -1,4 +1,4 @@
-function [Q, q, P, K_plus, K_avg, date] = GenerateInstance(n, varargin)
+function [Q, q, P, K_plus, K_avg, num_vertex, date] = GenerateInstance(n, varargin)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
 of indices) and the point x_start belonging to the domain.
@@ -23,30 +23,38 @@ Output:
 %}
 
 numvarargs = length(varargin);
-if numvarargs > 7
+if numvarargs > 8
     error('myfuns:GenerateInstance:TooManyInputs', ...
-        'requires at most 7 optional inputs');
+        'requires at most 8 optional inputs');
 end
 
 % set defaults for optional inputs
-optargs = {randi([1,n]),false,0,10,1,0,0};
+optargs = {randi([1,n]),false,0,0,10,1,1,0};
 optargs(1:numvarargs) = varargin;
-[K, force_non_point_simplices, dim_Ker, spectral_radius, density, actv, seed] = optargs{:};
+[K, force_non_point_simplices, actv, dim_Ker, spectral_radius, lambda_min, density, seed] = optargs{:};
 
 if K<1 || K > n
     error("Number of simplices K must be an intenger >= 1 and <= n")
+end
+
+if actv<0 || actv>1
+    error("The fraction of active constraints must be in [0,1]")
 end
 
 if dim_Ker<0 || dim_Ker>n
     error("Dimension of Ker must be an intenger >= 0 and <= n")
 end
 
-if density<0 || density>1
-    error("Density must be >= 0 and <= 1")
+if spectral_radius < 0
+    error("Spectral radius must be >=0")
 end
 
-if actv<0 || actv>1
-    error("The fracion of active constraints must be in [0,1]")
+if lambda_min <= 0 || lambda_min > spectral_radius
+    error("The minimum eigenvalue must be in (0, spectral_radius]")
+end
+
+if density<0 || density>1
+    error("Density must be in [0, 1]")
 end
 
 disp('Generating the instance')
@@ -57,8 +65,10 @@ rng(seed)
 % Vector of eigenvalues of Q
 if dim_Ker == n
     rc = zeros(1, n);
-else
-    rc = [abs(spectral_radius) * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
+elseif dim_Ker > 0 && dim_Ker < n
+    rc = [spectral_radius * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
+elseif dim_Ker == 0
+    rc = lambda_min + (spectral_radius - lambda_min) * [1, rand(1, n-2), 0];
 end
 
 if density == 1
@@ -95,6 +105,9 @@ if K_plus == 0
 else
     K_avg = (n-(K-K_plus))/K_plus;
 end
+
+% Compute the number of vertices of the domain
+num_vertex = prod(sum(P,2));
 
 date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
 if ~exist(fullfile('results',date), 'dir')
