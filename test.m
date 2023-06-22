@@ -7,7 +7,7 @@ addpath src
 % Space dimension, number of simplices, force or not
 % non-point-simplices, and the fraction of active constraints respect the
 % solution
-n = 1000; K = 500; force_non_point_simplices = true; actv = 0;
+n = 100; K = 15; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q, and minimum
 % eigenvalue (considered only if dim_ker>0)
 dim_ker = 0; spectral_radius = 1; lambda_min = 1;
@@ -20,13 +20,13 @@ density = 1;
 seed = 7;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, num_vertex, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
-%norm(q)
+norm(q)
 
 % Save the parameters
-SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, num_vertex, date)
+SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lambda_min, density, date)
 
-% Save the variables
-SaveVariables(Q, q, P, date)
+% Save the matrices
+SaveMatrices(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
 eps_R = 1e-10; max_steps = 1e4;
@@ -39,3 +39,6 @@ tomography = false;
 error_plot = true;
 % Perform the Frank-Wolfe algorithm
 [x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_R, max_steps, tomography, error_plot, date);
+
+% Save the results
+SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history, date)

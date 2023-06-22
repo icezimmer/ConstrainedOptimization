@@ -26,10 +26,11 @@ if numvarargs > 1
         'requires at most 1 optional inputs');
 end
 
-% set defaults for optional inputs
-optargs = {Oracle(Q, q, P)};
-optargs(1:numvarargs) = varargin;
-[f_star] = optargs{:};
+if numvarargs == 1
+    f_star = varargin{1};
+elseif numvarargs < 1
+    [~, f_star] = Oracle(Q, q, P);
+end
 
 variant = "--";
 duality_gap = NaN;

@@ -31,10 +31,16 @@ if numvarargs > 7
         'requires at most 7 optional inputs');
 end
 
+if numvarargs == 7
+    f_star = varargin{7};
+elseif numvarargs < 7
+    [~, f_star] = Oracle(Q, q(:), P);
+end
+
 % set defaults for optional inputs
-optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss')),Oracle(Q, q(:), P)};
-optargs(1:numvarargs) = varargin;
-[variant, eps_R, max_steps, tomography, error_plot, date, f_star] = optargs{:};
+optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'))};
+optargs(1:numvarargs-1) = varargin(1:numvarargs-1);
+[variant, eps_R, max_steps, tomography, error_plot, date] = optargs{:};
 
 if ~exist(fullfile('results',date), 'dir')
     mkdir(fullfile('results',date));

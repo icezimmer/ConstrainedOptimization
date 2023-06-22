@@ -1,4 +1,4 @@
-function f_star = Oracle(Q, q, P)
+function [x_star, f_star] = Oracle(Q, q, P)
 
 disp('Pre-compute the optimum for the stop condition')
 
@@ -16,7 +16,7 @@ options = optimoptions(@quadprog, 'Algorithm', "interior-point-convex", ...
     'StepTolerance', eps, ...
     'Display', 'off');
 
-[~, f_star] = quadprog(H, vec, [], [], Aeq, beq, lb, [], [], options);
+[x_star, f_star] = quadprog(H, vec, [], [], Aeq, beq, lb, [], [], options);
 
 %{
 Aeq = P;

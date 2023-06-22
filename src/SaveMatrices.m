@@ -1,4 +1,4 @@
-function SaveVariables(Q, q, P, date)
+function SaveMatrices(Q, q, P, date)
 %{
 Save the variables Q, q and P that represents the domain
 Input:
@@ -8,7 +8,12 @@ Input:
     date : (float) date for saving the results 
 %}
 
-path = fullfile('results', date, 'variables.mat');
-save(path, "Q","q","P");
+path = fullfile('results', date, 'matrices.mat');
+
+matrices.Q = Q;
+matrices.q = q;
+matrices.P = P;
+
+save(path, "matrices");
 
 end

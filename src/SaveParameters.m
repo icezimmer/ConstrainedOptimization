@@ -1,4 +1,4 @@
-function SaveParameters(n, dim_ker, spectral_radius, density, K_plus, K_avg, num_vertex, date)
+function SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_Ker, spectral_radius, lambda_min, density, date)
 %{
 Save parameters of the instance
 Input:
@@ -12,6 +12,16 @@ Input:
 %}
 
 path = fullfile('results', date, 'parameters.mat');
-save(path, "n","dim_ker","spectral_radius","density","K_plus","K_avg","num_vertex")
+parameters.n=n;
+parameters.K_plus=K_plus;
+parameters.K_avg=K_avg; 
+parameters.num_vertex=num_vertex; 
+parameters.actv=actv; 
+parameters.dim_Ker=dim_Ker;
+parameters.spectral_radius=spectral_radius; 
+parameters.lambda_min=lambda_min; 
+parameters.density=density;
+
+save(path, "parameters")
 
 end

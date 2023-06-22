@@ -1,4 +1,4 @@
-function SaveResults(table_results, table_solutions, date)
+function SaveBenchmarkResults(table_results, table_solutions, date)
 %{
 Print the results
 Input:
@@ -8,9 +8,11 @@ Input:
     date            : (float) date for saving the results 
 %}
 
-path1 = fullfile('results', date, 'comparison.mat');
-path2 = fullfile('results', date, 'solutions.mat');
-save(path1, "table_results");
-save(path2, "table_solutions");
+path = fullfile('results', date, 'benchmark_results.mat');
+
+benchmark_results.table_results = table_results;
+benchmark_results.table_solutions = table_solutions;
+
+save(path, "benchmark_results");
 
 end
