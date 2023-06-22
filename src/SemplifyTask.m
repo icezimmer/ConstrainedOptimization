@@ -1,4 +1,4 @@
-function [Q_new, q_new, c, P_new, partition] = SemplifyTask(Q, q, P)
+function [Q_new, q_new, c, P_new, partition, fixed] = SemplifyTask(Q, q, P)
 simplices = sum(P,2)>1;
 
 free = logical(sum(P(simplices,:),1))';

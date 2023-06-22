@@ -7,7 +7,7 @@ addpath src
 % Space dimension, number of simplices, force or not
 % non-point-simplices, and the fraction of active constraints respect the
 % solution
-n = 100; K = 15; force_non_point_simplices = true; actv = 0;
+n = 100; K = 50; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q, and minimum
 % eigenvalue (considered only if dim_ker>0)
 dim_ker = 0; spectral_radius = 1; lambda_min = 1;

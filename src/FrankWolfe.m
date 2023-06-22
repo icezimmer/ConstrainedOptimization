@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
+function [x_min_original_dim, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -56,8 +56,11 @@ else
     error('Wrong variant name')
 end
 
+% Dimension of the oringinal space before the semplification
+original_dim = length(q);
+
 % Semplify the task restricting the optimization on polytopes with at least two vertices
-[Q, q, c, P, partition] = SemplifyTask(Q, q, P);
+[Q, q, c, P, partition, fixed] = SemplifyTask(Q, q, P);
 % New function f
 if ~isempty(partition)
     f = @(x) x'*Q*x + q'*x + c;
@@ -119,8 +122,11 @@ end
 % Elapsed time for computation
 elapsed_time = toc;
 
-% Minimum belonging to the domain
+% Minimum belonging to the semplified domain
 x_min = x;
+% Minimum belonging to the original domain
+x_min_original_dim = ones(original_dim,1);
+x_min_original_dim(~fixed) = x_min;
 % Minimum value of the function
 f_min = history(end);
 
