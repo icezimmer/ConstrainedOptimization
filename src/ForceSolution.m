@@ -18,20 +18,20 @@ z = zeros(n,1);
 % The unconstrained optimum z violates the first floor(actv*K) simplices (the respective x_k are in boundary of P_k)
 K_out = floor(actv * K);
 
-% subvector of z that violates the constraints
+% Subvector of z that violates the constraints
+% Subvector belongs to [-1, 0]^|I_k| or [1, 2]^|I_k|
+negative = rand(K_out,1) <= 0.5;
+center_negative = -1/2;
+center_positive =  3/2;
+radius = 1/2;
+center = center_negative*negative + center_positive*(~negative);
 for k = 1 : K_out
-    indices = find(P(k,:));
-    % x_k = zeros(length(indices),1);
-    % negative = rand(length(indices),1) <= 0.5;
-    % x_k(negative) = -10 * rand(nnz(negative),1);
-    % x_k(~negative) = 1 + 10 * rand(nnz(~negative),1);
-    center = -2;
-    radius = 1;
-    x_k = center-radius + 2*radius*rand(length(indices),1);
-    z(indices) = x_k;
+    indices_k = find(P(k,:));
+    x_k = center(k)-radius + 2*radius*rand(length(indices_k),1);
+    z(indices_k) = x_k;
 end 
 
-% subvector of z that satisfies the constraints
+% Subvector of z that satisfies the constraints
 for k = K_out+1 : K
     indices = find(P(k,:));
     x_k = randfixedsum(length(indices),1,1,0,1);
