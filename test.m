@@ -7,20 +7,17 @@ addpath src
 % Space dimension, number of simplices, force or not
 % non-point-simplices, and the fraction of active constraints respect the
 % solution
-n = 100; K = 15; force_non_point_simplices = true; actv = 0;
+n = 10; K = 3; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q, and minimum
 % eigenvalue (considered only if dim_ker>0)
-dim_ker = 0; spectral_radius = 1; lambda_min = 1;
+dim_ker = 0; spectral_radius = 10; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
-% Norm of the vector q
-% norm_q = 1000;
 
 % Seed for the random generator
-seed = 7;
+seed = 1;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, num_vertex, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
-norm(q)
 
 % Save the parameters
 SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lambda_min, density, date)
