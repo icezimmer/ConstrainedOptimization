@@ -34,7 +34,7 @@ optargs(1:numvarargs) = varargin;
 [K, force_non_point_simplices, actv, dim_Ker, spectral_radius, lambda_min, density, seed] = optargs{:};
 
 if K<1 || K > n
-    error("Number of simplices K must be an intenger >= 1 and <= n")
+    error("The number of simplices K must be an intenger >= 1 and <= n")
 end
 
 if actv<0 || actv>1
@@ -42,19 +42,19 @@ if actv<0 || actv>1
 end
 
 if dim_Ker<0 || dim_Ker>n
-    error("Dimension of Ker must be an intenger >= 0 and <= n")
+    error("The dimension of Ker must be an intenger >= 0 and <= n")
 end
 
-if spectral_radius < 0
-    error("Spectral radius must be >=0")
+if dim_Ker<n && spectral_radius <= 0
+    error("The Spectral radius must be > 0")
 end
 
-if lambda_min <= 0 || lambda_min > spectral_radius
+if dim_Ker==0 && (lambda_min <= 0 || lambda_min > spectral_radius)
     error("The minimum eigenvalue must be in (0, spectral_radius]")
 end
 
 if density<0 || density>1
-    error("Density must be in [0, 1]")
+    error("The density must be in [0, 1]")
 end
 
 disp('Generating the instance')

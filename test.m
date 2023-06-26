@@ -4,13 +4,10 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
 
 addpath src
 
-% Space dimension, number of simplices, force or not
-% non-point-simplices, and the fraction of active constraints respect the
-% solution
+% Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
 n = 10; K = 3; force_non_point_simplices = true; actv = 0;
-% Kernel dimension, spectral radius of the matrix Q, and minimum
-% eigenvalue (considered only if dim_ker>0)
-dim_ker = 0; spectral_radius = 10; lambda_min = 1;
+% Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
+dim_ker = 1; spectral_radius = 0.5; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
