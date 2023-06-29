@@ -21,14 +21,14 @@ while(t < stop)
     y=cat(1,y,f(t));
 end
 
-figure('Name','Tomography');
+gcf = figure('Name','Tomography');
 plot(linspace(0,stop,length(y)),y, 'k')
 title(['From ', 'f(x_{', num2str(i), '})', '  to  ', 'f(x_{', num2str(i+1), '}) with \alpha_{max} = ', num2str(alpha_max)])
 xlabel('alpha')
 ylabel('f(x)')
 hold on
-
 plot(alpha, f(alpha), 'r*')
 hold off
+fontsize(gcf,scale=1.2)
 
 end

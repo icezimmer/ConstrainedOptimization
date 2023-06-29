@@ -97,6 +97,7 @@ title('Comparison')
 xlabel('step')
 ylabel('error')
 legend('Location','best')
+fontsize(gcf,scale=1.2)
 saveas(gcf, fullfile('results', date, 'comparison.png'))
 
 end
