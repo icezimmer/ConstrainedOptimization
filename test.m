@@ -1,13 +1,13 @@
 %{
-Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain.
+Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain (Minkowslìki sum of unitary simplices).
 %}
 
 addpath src
 
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
-n = 100; K = 20; force_non_point_simplices = true; actv = 0;
+n = 100; K = 10; force_non_point_simplices = true; actv = 0.5;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
-dim_ker = 0; spectral_radius = 2; lambda_min = 1;
+dim_ker = 10; spectral_radius = 2; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
@@ -23,12 +23,12 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
-eps_R = 1e-10; max_steps = 1e6;
+eps_R = 1e-10; max_steps = 1e5;
 % Define the step size selection method: "Away-step" or "Standard"
-variant = "Standard";
+variant = "Away-step";
 
 % Plot or not the tomography for each iteration
-tomography = true;
+tomography = false;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm

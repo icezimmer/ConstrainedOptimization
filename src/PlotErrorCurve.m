@@ -22,8 +22,8 @@ hold off
 title('Error and Duality Gap')
 xlabel('step')
 ylabel('error')
-legend([absolute_gap, relative_gap, duality_gap], 'Location','best')
-fontsize(gcf,scale=1.2)
+legend([absolute_gap, relative_gap, duality_gap], 'Location','northeast')
+fontsize(gcf,scale=1.4)
 
 saveas(gcf, fullfile('results', date, strcat('error_FW_', line_search, '.png')))
 

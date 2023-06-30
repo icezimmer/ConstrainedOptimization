@@ -81,23 +81,25 @@ table_solutions = array2table(Solutions, 'VariableNames', label_column);
 
 colors = ['k','b','r','g','y'];
 iterative_algorithms = cat(2,append('FW-',string(frank_wolfe_variants)),off_the_shelves);
-gcf = figure('Name', 'Comparison');
-hold on
-for i = 1:length(iterative_algorithms)
-    gap = abs(Histories{i} - f_star) / max(1,abs(f_star));
-%     if isequal(iterative_algorithms(i), 'FW-Away-step')
-%         r = 1 / sqrt(2); % max rate of linear convergence for AFW
-%         semilogy(0:length(gap)-1, gap(1) * r.^(0:length(gap)-1), 'Color', 'm', 'DisplayName', "Max-Rate-AFW");
-%     end
-    semilogy(0:length(gap)-1, gap, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
-end
-hold off
-set(gca, 'YScale', 'log');
-title('Comparison')
-xlabel('step')
-ylabel('error')
-legend('Location','best')
-fontsize(gcf,scale=1.2)
-saveas(gcf, fullfile('results', date, 'comparison.png'))
+PlotBenchmark(Histories, f_star, iterative_algorithms, colors, date)
+
+% gcf = figure('Name', 'Comparison');
+% hold on
+% for i = 1:length(iterative_algorithms)
+%     gap = abs(Histories{i} - f_star) / max(1,abs(f_star));
+% %     if isequal(iterative_algorithms(i), 'FW-Away-step')
+% %         r = 1 / sqrt(2); % max rate of linear convergence for AFW
+% %         semilogy(0:length(gap)-1, gap(1) * r.^(0:length(gap)-1), 'Color', 'm', 'DisplayName', "Max-Rate-AFW");
+% %     end
+%     semilogy(0:length(gap)-1, gap, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+% end
+% hold off
+% set(gca, 'YScale', 'log');
+% title('Comparison')
+% xlabel('step')
+% ylabel('error')
+% legend('Location','northeast')
+% fontsize(gcf,scale=1.4)
+% saveas(gcf, fullfile('results', date, 'comparison.png'))
 
 end

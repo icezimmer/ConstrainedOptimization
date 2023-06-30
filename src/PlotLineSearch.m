@@ -29,6 +29,6 @@ ylabel('f(x)')
 hold on
 plot(alpha, f(alpha), 'r*')
 hold off
-fontsize(gcf,scale=1.2)
+fontsize(gcf,scale=1.4)
 
 end
