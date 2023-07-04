@@ -27,7 +27,11 @@ title(['From ', 'f(x_{', num2str(i), '})', '  to  ', 'f(x_{', num2str(i+1), '}) 
 xlabel('alpha')
 ylabel('f(x)')
 hold on
-plot(alpha, f(alpha), 'r*')
+plot(alpha, f(alpha), '*', 'Color', 'red', 'MarkerSize',12)
+if alpha_max < stop
+    y_lim = ylim;
+    plot([alpha_max alpha_max], [y_lim(1) y_lim(2)], '--', 'Color', 'black')
+end
 hold off
 fontsize(gcf,scale=1.4)
 
