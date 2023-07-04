@@ -1,4 +1,4 @@
-function [Q, q, P, K_plus, K_avg, num_vertex, date] = GenerateInstance(n, varargin)
+function [Q, q, P, K_plus, K_avg, num_vertex, norm_q, date] = GenerateInstance(n, varargin)
 %{
 Generate randomly the matrix Q, the vector q, the matrix P (representing the partion
 of indices) and the point x_start belonging to the domain.
@@ -95,6 +95,7 @@ P = GenerateConstraints(n, K, force_non_point_simplices, seed);
 %     error("Norm of vector q must be >= 0")
 % end
 [~, q] = ForceSolution(Q, P, actv);
+norm_q = norm(q);
 
 % Compute the number of simplices with at least 2 vertices
 K_plus = sum(sum(P,2) >1);

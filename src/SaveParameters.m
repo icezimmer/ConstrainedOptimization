@@ -1,4 +1,4 @@
-function SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_Ker, spectral_radius, lambda_min, density, date)
+function SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_Ker, spectral_radius, lambda_min, density, norm_q, date)
 %{
 Save parameters of the instance
 Input:
@@ -21,6 +21,7 @@ parameters.dim_Ker=dim_Ker;
 parameters.spectral_radius=spectral_radius; 
 parameters.lambda_min=lambda_min; 
 parameters.density=density;
+parameters.norm_q = norm_q;
 
 save(path, "parameters")
 
