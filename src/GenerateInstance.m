@@ -49,8 +49,12 @@ if dim_Ker<n && spectral_radius <= 0
     error("The Spectral radius must be > 0")
 end
 
-if dim_Ker==0 && (lambda_min <= 0 || lambda_min > spectral_radius)
-    error("The minimum eigenvalue must be in (0, spectral_radius]")
+if lambda_min <= 0 || lambda_min > spectral_radius
+    error("The minimum strictly positive eigenvalue must be in (0, spectral_radius]")
+end
+
+if dim_Ker == n-1 && lambda_min ~= spectral_radius
+    error("If dim_Ker = n-1 the minimum strictly positive eigenvalue must be equal to the spectral radius")
 end
 
 if density<0 || density>1
@@ -65,10 +69,10 @@ rng(seed)
 % Vector of eigenvalues of Q
 if dim_Ker == n
     rc = zeros(1, n);
-elseif dim_Ker > 0 && dim_Ker < n
-    rc = [spectral_radius * [1, rand(1, n-dim_Ker-1)], zeros(1, dim_Ker)];
-elseif dim_Ker == 0
-    rc = lambda_min + (spectral_radius - lambda_min) * [1, rand(1, n-2), 0];
+elseif dim_Ker == n-1
+    rc = [spectral_radius, zeros(1, dim_Ker)];
+elseif dim_Ker < n-1
+    rc = [lambda_min + (spectral_radius - lambda_min) * [1, rand(1, n-dim_Ker-2), 0], zeros(1, dim_Ker)];
 end
 
 if density == 1
