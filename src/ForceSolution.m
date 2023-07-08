@@ -31,10 +31,16 @@ for k = 1 : K_out
     z(indices_k) = x_k;
 end 
 
-% Subvector of z that satisfies the constraints
+% Each k-th subvector of z forced to belong to relint(P_k)
 for k = K_out+1 : K
     indices = find(P(k,:));
-    x_k = randfixedsum(length(indices),1,1,0,1);
+    relint = false;
+    while(~relint)
+        x_k = randfixedsum(length(indices),1,1,0,1);
+        if nnz(x_k)==length(indices)
+            relint = true;
+        end
+    end
     z(indices) = x_k;
 end
 
