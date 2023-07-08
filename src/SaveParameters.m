@@ -12,6 +12,9 @@ Input:
 %}
 
 path = fullfile('results', date, 'parameters.mat');
+if dim_Ker == n-1
+    lambda_min = spectral_radius;
+end
 parameters.n=n;
 parameters.K_plus=K_plus;
 parameters.K_avg=K_avg; 

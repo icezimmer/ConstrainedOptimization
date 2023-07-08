@@ -53,10 +53,6 @@ if lambda_min <= 0 || lambda_min > spectral_radius
     error("The minimum strictly positive eigenvalue must be in (0, spectral_radius]")
 end
 
-if dim_Ker == n-1 && lambda_min ~= spectral_radius
-    error("If dim_Ker = n-1 the minimum strictly positive eigenvalue must be equal to the spectral radius")
-end
-
 if density<0 || density>1
     error("The density must be in [0, 1]")
 end
