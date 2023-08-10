@@ -72,12 +72,10 @@ elseif dim_Ker < n-1
 end
 
 if density == 1
-    sv = sqrt(rc);
-    S = diag(sv);
+    S = diag(rc);
     U = orth(rand(n));
-    V = orth(rand(n));
-    A = U * S * V;
-    Q = A' * A;
+    Q = U' * S * U; % Q and S are congruent
+    Q = (Q + Q')/2; % Avoid numerical errors
 else
     Q = sprandsym(n, density, rc);
 end
