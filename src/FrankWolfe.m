@@ -82,7 +82,7 @@ history = f(x);
 duality_gap = NaN;
 E = zeros(0,1);
 % Iterate until convergence
-while (~StoppingCriteria(history(end), f_star, eps_R) && i < max_steps)
+while (~StoppingCriteriaFW(history(end), duality_gap, eps_R) && i < max_steps)
 
     [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, partition);
     alpha_max = 1;

@@ -9,20 +9,20 @@ Input:
     date        : (string) date for saving figures
 %}
 
-gap_A = abs(fx - f_star);
-gap_R = gap_A / max(1,abs(f_star));
+gap_RE = abs(fx - f_star) / max(1,abs(f_star));
+gap_RDG = E ./ max(1,abs(fx(1:end-1)));
 
 gcf = figure('Name', strcat('curve_FW_', line_search));
-absolute_gap = semilogy(0:length(fx)-1, gap_A, 'b-','DisplayName','Absolute Error');
+duality_gap = semilogy(0:length(E)-1, E, 'k-','DisplayName','Duality Gap (DG)');
 hold on
-relative_gap = semilogy(0:length(fx)-1, gap_R, 'r-','DisplayName','Relative Error');
-duality_gap = semilogy(0:length(E)-1, E, 'k-','DisplayName','Duality Gap');
+relative_duality_gap = semilogy(0:length(E)-1, gap_RDG, 'b-','DisplayName','Relative DG');
+relative_error = semilogy(0:length(fx)-1, gap_RE, 'r-','DisplayName','Relative Error');
 hold off
 
 title('Error and Duality Gap')
 xlabel('step')
 ylabel('error')
-legend([absolute_gap, relative_gap, duality_gap], 'Location','northeast')
+legend([duality_gap, relative_duality_gap, relative_error], 'Location','northeast')
 fontsize(gcf,scale=1.4)
 
 saveas(gcf, fullfile('results', date, strcat('error_FW_', line_search, '.png')))
