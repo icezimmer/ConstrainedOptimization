@@ -22,8 +22,8 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 % Save the matrices
 SaveMatrices(Q, q, P, date)
 
-% Stopping criteria for the Frank Wolfe method: max relative error and max number of steps for Frank Wolfe
-eps_R = 1e-8; max_steps = 1e5;
+% Stopping criteria for the Frank Wolfe method: max relative duality gap and max number of steps for Frank Wolfe
+eps_RDG = 1e-1; eps_RE = 1e-2; max_steps = 1e5;
 % Define the step size selection method: "Away-step" or "Standard"
 variant = "Away-step";
 
@@ -32,7 +32,7 @@ tomography = false;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm
-[x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_R, max_steps, tomography, error_plot, date);
+[x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date);
 
 % Save the results
 SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history, date)

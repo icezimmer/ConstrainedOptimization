@@ -15,15 +15,15 @@ Output:
 %}
 
 numvarargs = length(varargin);
-if numvarargs > 2
+if numvarargs > 4
     error('myfuns:ComparingMethods:TooManyInputs', ...
-        'requires at most 2 optional inputs');
+        'requires at most 4 optional inputs');
 end
 
 % set defaults for optional inputs
-optargs = {1e-5,1000};
+optargs = {1e-6,1e-8,1e-10,1000};
 optargs(1:numvarargs) = varargin;
-[eps_R, max_steps] = optargs{:};
+[eps_RDG, eps_RT, eps_RE, max_steps] = optargs{:};
 
 % Pre-compute the optimum by the oracle
 [~, f_star] = Oracle(Q, q, P);
@@ -44,7 +44,7 @@ Histories = cell(1, 0);
 
 % Away-step Frank-Wolfe type algorithm
 for i = 1:length(frank_wolfe_variants)
-    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_R, max_steps, false, false, date, f_star);
+    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
     Method = cat(1, Method, type);
     Variants = cat(1, Variants, variant);
     Minima = cat(1, Minima, f_min);
@@ -59,7 +59,7 @@ end
 
 % Quadratic Programming algorithms
 for i = 1:length(off_the_shelves)
-    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, off_the_shelves(i), max_steps, eps_R, f_star);
+    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = QuadraticProgramming(Q, q, P, off_the_shelves(i), max_steps, eps_RT, eps_RE, f_star);
     Method = cat(1, Method, type);
     Variants = cat(1, Variants, variant);
     Minima = cat(1, Minima, f_min);

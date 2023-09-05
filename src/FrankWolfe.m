@@ -6,7 +6,7 @@ Input:
     q                : (vector) of length n
     P                : (matrix) Kxn, K is the number of subset I_k and P(k,j) = 1 iff j is in I_k
     step_size_method : (string) method for line search
-    eps_R            : (float) maximum relative error for stop condition
+    eps_RDG          : (float) maximum relative error for stop condition
     max_steps        : (integer) stop criterion (max number of steps for Frank Wolfe)
     tomography       : (logical) plot or not the tomography for each step
     error_plot       : (logical) plot or not the error curve
@@ -26,21 +26,21 @@ Output:
 %}
 
 numvarargs = length(varargin);
-if numvarargs > 7
+if numvarargs > 8
     error('myfuns:FrankWolfe:TooManyInputs', ...
-        'requires at most 7 optional inputs');
+        'requires at most 8 optional inputs');
 end
 
-if numvarargs == 7
-    f_star = varargin{7};
-elseif numvarargs < 7
+if numvarargs == 8
+    f_star = varargin{8};
+elseif numvarargs < 8
     [~, f_star] = Oracle(Q, q(:), P);
 end
 
 % set defaults for optional inputs
-optargs = {"Away-step",1e-6,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'))};
+optargs = {"Away-step",1e-6,1e-10,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'))};
 optargs(1:numvarargs-1) = varargin(1:numvarargs-1);
-[variant, eps_R, max_steps, tomography, error_plot, date] = optargs{:};
+[variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date] = optargs{:};
 
 if ~exist(fullfile('results',date), 'dir')
     mkdir(fullfile('results',date));
@@ -82,7 +82,7 @@ history = f(x);
 duality_gap = NaN;
 E = zeros(0,1);
 % Iterate until convergence
-while (~StoppingCriteriaFW(history(end), duality_gap, eps_R) && i < max_steps)
+while (~StoppingCriteria(history(end), duality_gap, eps_RDG) && i < max_steps)
 
     [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, partition);
     alpha_max = 1;
@@ -137,7 +137,7 @@ num_steps = i;
 feasible = CheckDomain(x_min, P);
 
 % Convergence of the algorithm
-converging = StoppingCriteria(f_min, f_star, eps_R) && feasible;
+converging = ConvergingError(f_min, f_star, eps_RE) && feasible;
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])

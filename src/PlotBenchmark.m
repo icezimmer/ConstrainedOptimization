@@ -23,7 +23,7 @@ hold off
 set(gca, 'YScale', 'log');
 title('Comparison')
 xlabel('step')
-ylabel('error')
+ylabel('relative error')
 legend('Location','northeast')
 fontsize(gcf,scale=1.4)
 saveas(gcf, fullfile('results', date, 'comparison.png'))

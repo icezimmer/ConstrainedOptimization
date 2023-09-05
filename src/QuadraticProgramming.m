@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = OffTheShelf(Q, q, P, algorithm, max_steps, eps_RE, varargin)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = QuadraticProgramming(Q, q, P, algorithm, max_steps, eps_RT, eps_RE, varargin)
 %{
 Quadratic programming using the built-in function "quadprog" by the optimization-toolbox of MATLAB
 Input:
@@ -35,47 +35,39 @@ end
 variant = "--";
 duality_gap = NaN;
 
-fun = @(x) x'*Q*x + q'*x;
 x0 = StartingPoint(P);
+H = 2 * Q;
+vec = q;
 Aeq = P;
 beq = ones(size(Aeq,1),1);
 lb = zeros(size(Aeq,2),1);
-ub = inf(size(Aeq,2),1);
 
-history = [];
-function stop = outfun(x,optimValues,state)
-    stop = false;
-    %disp([optimValues.fval,eps_R * max(1,abs(f_star)),optimValues.fval - f_star]);
-    %CheckDomain(x,P)
-    % Check conditions to see whether optimization should quit
-    if isequal(state,'iter')
-        history = [history; optimValues.fval];
-    end
-    if((StoppingCriteria(optimValues.fval, f_star, eps_RE) && CheckDomain(x,P)) || optimValues.iteration>=max_steps)
-        stop = true;
-    end
-end
+start_options = optimoptions(@quadprog, 'Algorithm', algorithm, ...
+    'MaxIteration', max_steps-1, ...
+    'OptimalityTolerance', eps_RT, ...
+    'ConstraintTolerance', eps_RT, ...
+    'StepTolerance', eps_RT, ...
+    'Display', 'iter-detailed');
 
-%CheckDomain(x0,P)
-
-void_options = optimoptions(@fmincon,'OutputFcn',@outfun, 'Algorithm', algorithm, ...
-    'MaxFunctionEvaluation', inf, ...
-    'MaxIterations', inf, ...
-    'StepTolerance', 0, ...
-    'ConstraintTolerance', 0, ...
-    'OptimalityTolerance', 0, ...
-    'ObjectiveLimit', -inf, 'Display', 'off');
+f = @(x) x'*Q*x + q'*x;
 
 disp(strcat('Off-the-shelf constrained optimization: ', algorithm))
 
 tic
-[x_min, f_min, ~, output] = fmincon(fun, x0, [], [], Aeq, beq, lb, ub, [], void_options);
+[x_min, f_min, ~, output] = quadprog(H, vec, [], [], Aeq, beq, lb, [], x0, start_options);
 elapsed_time = toc;
+num_steps = output.iterations;
+history = zeros(1,num_steps+1);
+history(1) = f(x0);
+history(end) = f_min;
+
+for step = 0:num_steps-2
+    options = optimoptions(start_options, 'MaxIteration', step, 'Display', 'off');
+    [~, f_x] = quadprog(H, vec, [], [], Aeq, beq, lb, [], x0, options);
+    history(step+2) = f_x;
+end
 
 method = algorithm;
-num_steps = output.iterations;
-%converging = (exitflag == -1);
-%feasible = (exitflag ~= -2);
 feasible = CheckDomain(x_min,P);
 converging = ConvergingError(f_min, f_star, eps_RE) && feasible;
 

@@ -1,10 +1,10 @@
-function condition = StoppingCriteriaFW(f_x, duality_gap, eps_R, varargin)
+function condition = ConvergingError(f_x, f_star, eps_RE, varargin)
 %{
 Stopping Criteria for the numerical optimization
 Input:
-    fx     : (float) function value at point x
-    f_star : (float) optimal value of the function in the domain
-    eps_R  : (float) maximum relative error for stop condition
+    f_x     : (float) function value at point x
+    f_star  : (float) optimal value of the function in the domain
+    eps_RE  : (float) maximum relative error for stop condition
 Output:
     condition : (logical) true if the stop condition is verified
 %}
@@ -21,9 +21,9 @@ optargs(1:numvarargs) = varargin;
 [type] = optargs{:};
 
 if isequal(type,'Relative')
-    condition = duality_gap < eps_R * max(1,abs(f_x));
+    condition = (f_x - f_star) < eps_RE * max(1,abs(f_star));
 elseif isequal(type,'Absolute')
-    condition = duality_gap < eps_R;
+    condition = (f_x - f_star) < eps_RE;
 else
     error("Wrong stopping criteria")
 end
