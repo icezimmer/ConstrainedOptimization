@@ -1,4 +1,4 @@
-function condition = StoppingCriteria(f_x, duality_gap, eps_RDG, varargin)
+function condition = StoppingCriteria(f_x, duality_gap, eps_DG, varargin)
 %{
 Stopping Criteria for the numerical optimization
 Input:
@@ -21,9 +21,9 @@ optargs(1:numvarargs) = varargin;
 [type] = optargs{:};
 
 if isequal(type,'Relative')
-    condition = duality_gap < eps_RDG * max(1,abs(f_x));
+    condition = duality_gap < eps_DG * max(1,abs(f_x));
 elseif isequal(type,'Absolute')
-    condition = duality_gap < eps_RDG;
+    condition = duality_gap < eps_DG;
 else
     error("Wrong stopping criteria")
 end

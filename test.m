@@ -5,7 +5,7 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain (M
 addpath src
 
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
-n = 100; K = 30; force_non_point_simplices = true; actv = 0;
+n = 1000; K = 30; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
 dim_ker = 0; spectral_radius = 30; lambda_min = 30;
 % Density of the matrix Q
@@ -23,7 +23,10 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative duality gap and max number of steps for Frank Wolfe
-eps_RDG = 1e-1; eps_RE = 1e-2; max_steps = 1e5;
+eps_RDG = 1e-1; max_steps = 1e5;
+% Max relative error to convergence
+eps_RE = 1e-3;
+
 % Define the step size selection method: "Away-step" or "Standard"
 variant = "Away-step";
 
@@ -32,8 +35,8 @@ tomography = false;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm
-[x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date);
+[x_min, f_min, elapsed_time, num_steps, method, variant, err, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date);
 
 % Save the results
-SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history, date)
+SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, err, converging, feasible, duality_gap, history, date)
 %HoffmanConstant([Q;q';P;eye(length(q))])

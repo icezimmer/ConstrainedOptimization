@@ -35,6 +35,7 @@ Minima = zeros(0,1);
 Time = zeros(0,1);
 Variants = zeros(0,1);
 Steps = zeros(0,1);
+Error = zeros(0,1);
 Converging = zeros(0,1);
 Feasible = zeros(0,1);
 Duality_Gap = zeros(0,1);
@@ -44,12 +45,13 @@ Histories = cell(1, 0);
 
 % Away-step Frank-Wolfe type algorithm
 for i = 1:length(frank_wolfe_variants)
-    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
+    [x_min, f_min, elapsed_time, num_steps, type, variant, err, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
     Method = cat(1, Method, type);
     Variants = cat(1, Variants, variant);
     Minima = cat(1, Minima, f_min);
     Time = cat(1, Time, elapsed_time);
     Steps = cat(1, Steps, num_steps);
+    Error = cat(1, Error, err);
     Converging = cat(1, Converging, converging);
     Feasible = cat(1, Feasible, feasible);
     Duality_Gap = cat(1, Duality_Gap, duality_gap);
@@ -59,12 +61,13 @@ end
 
 % Quadratic Programming algorithms
 for i = 1:length(off_the_shelves)
-    [x_min, f_min, elapsed_time, num_steps, type, variant, converging, feasible, duality_gap, history] = QuadraticProgramming(Q, q, P, off_the_shelves(i), max_steps, eps_RT, eps_RE, f_star);
+    [x_min, f_min, elapsed_time, num_steps, type, variant, err, converging, feasible, duality_gap, history] = QuadraticProgramming(Q, q, P, off_the_shelves(i), max_steps, eps_RT, eps_RE, f_star);
     Method = cat(1, Method, type);
     Variants = cat(1, Variants, variant);
     Minima = cat(1, Minima, f_min);
     Time = cat(1, Time, elapsed_time);
     Steps = cat(1, Steps, num_steps);
+    Error = cat(1, Error, err);
     Converging = cat(1, Converging, converging);
     Feasible = cat(1, Feasible, feasible);
     Duality_Gap = cat(1, Duality_Gap, duality_gap);
@@ -72,8 +75,8 @@ for i = 1:length(off_the_shelves)
     Histories = cat(2, Histories, history);
 end
 
-table_results = table(Method, Variants, Minima, Time, Steps, Converging, Feasible, Duality_Gap);
-table_results = sortrows(table_results, {'Minima', 'Duality_Gap', 'Time', 'Steps'});
+table_results = table(Method, Variants, Minima, Time, Steps, Error, Converging, Feasible, Duality_Gap);
+table_results = sortrows(table_results, {'Error', 'Time', 'Steps'});
 
 label_column = string(frank_wolfe_variants);
 label_column = cat(2,label_column,string(off_the_shelves));

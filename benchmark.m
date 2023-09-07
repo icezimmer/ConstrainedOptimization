@@ -28,8 +28,11 @@ frank_wolfe_variants = ["Away-step"];
 % List of off-the-shelves algorithms by Quadratic Programming to compare with the FW algorithm: "interior-point-convex", "active-set"
 off_the_shelves = ["interior-point-convex"];
 
-% Stoping criteria for the algorithms: max error and max number of steps
-eps_RDG = 1e-5; eps_RT = 1e-7; eps_RE = 1e-6; max_steps = 700;
+% Stoping criteria for the algorithms: relative duality gap for the FW,
+% relative tollerance for the QP and max number of steps for both
+eps_RDG = 1e-5; eps_RT = 1e-7; max_steps = 700;
+% Max relative error to convergence
+eps_RE = 1e-7;
 
 % Comparing the methods
 [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, eps_RDG, eps_RT, eps_RE, max_steps);

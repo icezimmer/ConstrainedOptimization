@@ -1,4 +1,4 @@
-function SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, converging, feasible, duality_gap, history, date)
+function SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, err, converging, feasible, duality_gap, history, date)
 %{
 Print the results
 Input:
@@ -16,6 +16,7 @@ test_results.elapsed_time = elapsed_time;
 test_results.num_steps = num_steps;
 test_results.method = method;
 test_results.variant = variant;
+test_results.error = err;
 test_results.converging = converging;
 test_results.feasible = feasible;
 test_results.duality_gap = duality_gap;

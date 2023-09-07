@@ -1,4 +1,4 @@
-function [x_min_original_dim, f_min, elapsed_time, num_steps, method,  variant, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
+function [x_min_original_dim, f_min, elapsed_time, num_steps, method,  variant, err, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -137,7 +137,8 @@ num_steps = i;
 feasible = CheckDomain(x_min, P);
 
 % Convergence of the algorithm
-converging = ConvergingError(f_min, f_star, eps_RE) && feasible;
+[converging, err] = ConvergingError(f_min, f_star, eps_RE);
+converging = converging & feasible;
 
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
