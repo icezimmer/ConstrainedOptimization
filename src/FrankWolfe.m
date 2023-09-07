@@ -38,7 +38,7 @@ elseif numvarargs < 8
 end
 
 % set defaults for optional inputs
-optargs = {"Away-step",1e-6,1e-10,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'))};
+optargs = {"Away-step",1e-6,1e-10,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH-mm-ss'))};
 optargs(1:numvarargs-1) = varargin(1:numvarargs-1);
 [variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date] = optargs{:};
 

@@ -108,7 +108,7 @@ end
 % Compute the number of vertices of the domain
 num_vertex = prod(sum(P,2));
 
-date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH:mm:ss'));
+date = string(datetime('now','TimeZone','local','Format','d-MMM-y_HH-mm-ss'));
 if ~exist(fullfile('results',date), 'dir')
     mkdir(fullfile('results',date));
 end
