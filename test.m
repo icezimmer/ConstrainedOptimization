@@ -12,7 +12,7 @@ dim_ker = 0; spectral_radius = 30; lambda_min = 30;
 density = 1;
 
 % Seed for the random generator
-seed = 1;
+seed = 2;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, num_vertex, norm_q, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
 
@@ -23,7 +23,7 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative duality gap and max number of steps for Frank Wolfe
-eps_RDG = 1e-1; max_steps = 1e5;
+eps_RDG = 1e-3; max_steps = 1e5;
 % Max relative error to convergence
 eps_RE = 1e-3;
 

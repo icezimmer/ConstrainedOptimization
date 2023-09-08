@@ -43,7 +43,7 @@ Duality_Gap = zeros(0,1);
 Solutions = zeros(n, 0);
 Histories = cell(1, 0);
 
-% Away-step Frank-Wolfe type algorithm
+% Frank-Wolfe type algorithms
 for i = 1:length(frank_wolfe_variants)
     [x_min, f_min, elapsed_time, num_steps, type, variant, err, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
     Method = cat(1, Method, type);

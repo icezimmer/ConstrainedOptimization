@@ -5,14 +5,14 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain (M
 addpath src
 
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
-n = 1000; K = 10; force_non_point_simplices = true; actv = 0.5;
+n = 100; K = 10; force_non_point_simplices = true; actv = 0.5;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
-dim_ker = 10; spectral_radius = 2; lambda_min = 1;
+dim_ker = 1; spectral_radius = 20; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
 % Seed for the random generator
-seed = 2;
+seed = 8;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, num_vertex, norm_q, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
 
@@ -30,9 +30,9 @@ off_the_shelves = ["interior-point-convex"];
 
 % Stoping criteria for the algorithms: relative duality gap for the FW,
 % relative tollerance for the QP and max number of steps for both
-eps_RDG = 1e-5; eps_RT = 1e-7; max_steps = 700;
+eps_RDG = 1e-7; eps_RT = 1e-9; max_steps = 100;
 % Max relative error to convergence
-eps_RE = 1e-7;
+eps_RE = 1e-11;
 
 % Comparing the methods
 [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, eps_RDG, eps_RT, eps_RE, max_steps);

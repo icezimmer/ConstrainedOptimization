@@ -80,7 +80,7 @@ tic
 i = 0;
 history = f(x);
 duality_gap = NaN;
-E = zeros(0,1);
+DG = zeros(0,1);
 % Iterate until convergence
 while (~StoppingCriteria(history(end), duality_gap, eps_RDG) && i < max_steps)
 
@@ -107,7 +107,7 @@ while (~StoppingCriteria(history(end), duality_gap, eps_RDG) && i < max_steps)
     
     % Append new value of the duality_gap for the error plot
     if error_plot
-        E(i+1) = duality_gap;
+        DG(i+1) = duality_gap;
     end
 
     % Upgrade the point
@@ -146,7 +146,7 @@ end
 
 % Plot the error
 if error_plot
-    PlotErrorCurve(history, f_star, E, variant, date)
+    PlotErrorCurve(history, f_star, DG, variant, date)
 end  
 
 end
