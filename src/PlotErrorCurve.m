@@ -1,4 +1,4 @@
-function PlotErrorCurve(f_x, f_star, DG, variant, date)
+function PlotErrorCurve(history, f_star, variant, date)
 %{
 Plot the error curve
 Input:
@@ -8,6 +8,9 @@ Input:
     variant : (string) variant of the FW algorithm
     date    : (string) date for saving figures
 %}
+
+f_x = history.f;
+DG = history.dg;
 
 gap_RE = abs(f_x - f_star) / max(1,abs(f_star));
 gap_RDG = DG ./ max(1,abs(f_x(1:end-1)));
@@ -22,8 +25,9 @@ title('Primal and Dual Error')
 xlabel('step')
 ylabel('error')
 legend([relative_duality_gap, relative_error], 'Location','northeast')
-fontsize(gcf,scale=1.4)
+grid on
 
+fontsize(gcf,scale=1.4)
 saveas(gcf, fullfile('results', date, strcat('error_FW_', variant, '.png')))
 
 end

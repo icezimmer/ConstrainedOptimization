@@ -23,7 +23,7 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % Stopping criteria for the Frank Wolfe method: max relative duality gap and max number of steps for Frank Wolfe
-eps_RDG = 1e-3; max_steps = 1e5;
+eps_RDG = 1e-5; max_steps = 1e5;
 % Max relative error to convergence
 eps_RE = 1e-3;
 

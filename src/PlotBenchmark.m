@@ -9,21 +9,40 @@ Input:
     date        : (string) date for saving figures
 %}
 
-gcf = figure('Name', 'Comparison');
+gcf1 = figure('Name', 'Comparison');
 hold on
 for i = 1:length(iterative_algorithms)
-    gap = abs(Histories{i} - f_star) / max(1,abs(f_star));
-%     if isequal(iterative_algorithms(i), 'FW-Away-step')
-%         r = 1 / sqrt(2); % max rate of linear convergence for AFW
-%         semilogy(0:length(gap)-1, gap(1) * r.^(0:length(gap)-1), 'Color', 'm', 'DisplayName', "Max-Rate-AFW");
-%     end
-    semilogy(0:length(gap)-1, gap, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+    history = Histories{i};
+    history_f = history.f;
+    gap_RE = abs(history_f - f_star) / max(1,abs(f_star));
+    semilogy(0:length(gap_RE)-1, gap_RE, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
 end
 hold off
 set(gca, 'YScale', 'log');
-title('Comparison')
+title('Primal Comparison')
 xlabel('step')
 ylabel('relative error')
 legend('Location','northeast')
-fontsize(gcf,scale=1.4)
-saveas(gcf, fullfile('results', date, 'comparison.png'))
+grid on
+fontsize(gcf1,scale=1.4)
+saveas(gcf1, fullfile('results', date, 'primal_comparison.png'))
+
+gcf2 = figure('Name', 'Comparison');
+hold on
+for i = 1:length(iterative_algorithms)
+    disp(iterative_algorithms(i))
+    history = Histories{i};
+    history_f = history.f;
+    history_dg = history.dg;
+    gap_RDG = history_dg ./ max(1,abs(history_f(1:end-1)));
+    semilogy(0:length(gap_RDG)-1, gap_RDG, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+end
+hold off
+set(gca, 'YScale', 'log');
+title('Dual Comparison')
+xlabel('step')
+ylabel('relative error')
+legend('Location','northeast')
+grid on
+fontsize(gcf2,scale=1.4)
+saveas(gcf2, fullfile('results', date, 'dual_comparison.png'))

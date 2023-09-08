@@ -78,11 +78,11 @@ x = x_start(:);
 
 tic
 i = 0;
-history = f(x);
+history_f = f(x);
 duality_gap = NaN;
-DG = zeros(0,1);
+history_dg = zeros(0,1);
 % Iterate until convergence
-while (~StoppingCriteria(history(end), duality_gap, eps_RDG) && i < max_steps)
+while (~StoppingCriteria(history_f(end), duality_gap, eps_RDG) && i < max_steps)
 
     [d, ~, duality_gap] = LinearizationMinimizer(Q, q, x, partition);
     alpha_max = 1;
@@ -105,16 +105,14 @@ while (~StoppingCriteria(history(end), duality_gap, eps_RDG) && i < max_steps)
         Tomography(Q, q, x, d, alpha, alpha_max, i, duality_gap)
     end
     
-    % Append new value of the duality_gap for the error plot
-    if error_plot
-        DG(i+1) = duality_gap;
-    end
+    % Append new value of the duality_gap
+    history_dg(i+1) = duality_gap;
 
     % Upgrade the point
     x = NewPoint(x, d, alpha);
 
     % Append new value of the funtion
-    history = cat(2, history, f(x));
+    history_f = cat(2, history_f, f(x));
     
     i = i + 1;
 end
@@ -128,7 +126,7 @@ x_min = x;
 x_min_original_dim = ones(original_dim,1);
 x_min_original_dim(~fixed) = x_min;
 % Minimum value of the function
-f_min = history(end);
+f_min = history_f(end);
 
 % Number of steps
 num_steps = i;
@@ -140,13 +138,16 @@ feasible = CheckDomain(x_min, P);
 [converging, err] = ConvergingError(f_min, f_star, eps_RE);
 converging = converging & feasible;
 
+history.f = history_f;
+history.dg = history_dg;
+
 if tomography
     disp(['it. ', num2str(i), ', f(x) = ', num2str(f_min)])
 end
 
 % Plot the error
 if error_plot
-    PlotErrorCurve(history, f_star, DG, variant, date)
+    PlotErrorCurve(history, f_star, variant, date)
 end  
 
 end

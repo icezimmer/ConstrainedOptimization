@@ -57,19 +57,21 @@ tic
 [x_min, f_min, ~, output] = quadprog(H, vec, [], [], Aeq, beq, lb, [], x0, start_options);
 elapsed_time = toc;
 num_steps = output.iterations;
-history = zeros(1,num_steps+1);
-history(1) = f(x0);
-history(end) = f_min;
+history_f = zeros(1,num_steps+1);
+history_f(1) = f(x0);
+history_f(end) = f_min;
 
 for step = 0:num_steps-2
     options = optimoptions(start_options, 'MaxIteration', step, 'Display', 'off');
     [~, f_x] = quadprog(H, vec, [], [], Aeq, beq, lb, [], x0, options);
-    history(step+2) = f_x;
+    history_f(step+2) = f_x;
 end
 
 method = algorithm;
 feasible = CheckDomain(x_min,P);
 [converging, err] = ConvergingError(f_min, f_star, eps_RE);
 converging = converging & feasible;
+history.f = history_f;
+history.dg = NaN(1,length(history_f)-1);
 
 end

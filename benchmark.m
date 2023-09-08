@@ -23,7 +23,7 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % List of Frank Wolfe algorithm variants to compare: "Standard", "Away-step"
-frank_wolfe_variants = ["Away-step"];
+frank_wolfe_variants = ["Away-step", "Standard"];
 
 % List of off-the-shelves algorithms by Quadratic Programming to compare with the FW algorithm: "interior-point-convex", "active-set"
 off_the_shelves = ["interior-point-convex"];
