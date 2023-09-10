@@ -5,14 +5,14 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain (M
 addpath src
 
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
-n = 100; K = 10; force_non_point_simplices = true; actv = 0.5;
+n = 100; K = 20; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
-dim_ker = 1; spectral_radius = 20; lambda_min = 1;
+dim_ker = 0; spectral_radius = 2; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
 % Seed for the random generator
-seed = 8;
+seed = 1;
 % Generate randomly the matrix Q, the vector q and the starting point x_start
 [Q, q, P, K_plus, K_avg, num_vertex, norm_q, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
 
@@ -23,16 +23,16 @@ SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lam
 SaveMatrices(Q, q, P, date)
 
 % List of Frank Wolfe algorithm variants to compare: "Standard", "Away-step"
-frank_wolfe_variants = ["Away-step", "Standard"];
+frank_wolfe_variants = ["Standard", "Away-step"];
 
 % List of off-the-shelves algorithms by Quadratic Programming to compare with the FW algorithm: "interior-point-convex", "active-set"
-off_the_shelves = ["interior-point-convex"];
+off_the_shelves = [];
 
 % Stoping criteria for the algorithms: relative duality gap for the FW,
 % relative tollerance for the QP and max number of steps for both
-eps_RDG = 1e-7; eps_RT = 1e-9; max_steps = 100;
+eps_RDG = 1e-7; eps_RT = 1e-9; max_steps = 1e6;
 % Max relative error to convergence
-eps_RE = 1e-11;
+eps_RE = 1e-10;
 
 % Comparing the methods
 [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, eps_RDG, eps_RT, eps_RE, max_steps);

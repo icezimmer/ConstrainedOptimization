@@ -22,17 +22,20 @@ while(t < stop)
 end
 
 gcf = figure('Name','Tomography');
-plot(linspace(0,stop,length(y)),y, 'k')
+plot(linspace(0,stop,length(y)),y, 'k', 'LineWidth',2)
 title(['From ', 'f(x_{', num2str(i), '})', '  to  ', 'f(x_{', num2str(i+1), '}) with \alpha_{max} = ', num2str(alpha_max)])
 xlabel('alpha')
 ylabel('f(x)')
 hold on
-plot(alpha, f(alpha), '*', 'Color', 'red', 'MarkerSize',12)
+plot(alpha, f(alpha), '*', 'Color', 'red', 'MarkerSize',12, 'LineWidth',2)
 if alpha_max < stop
     y_lim = ylim;
-    plot([alpha_max alpha_max], [y_lim(1) y_lim(2)], '--', 'Color', 'black')
+    plot([alpha_max alpha_max], [y_lim(1) y_lim(2)], '--', 'Color', 'black', 'LineWidth',2)
 end
 hold off
 fontsize(gcf,scale=1.4)
+grid on
+
+
 
 end

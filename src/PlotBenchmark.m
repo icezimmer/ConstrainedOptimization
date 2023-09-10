@@ -9,13 +9,14 @@ Input:
     date        : (string) date for saving figures
 %}
 
-gcf1 = figure('Name', 'Comparison');
+gcf1 = figure('Name', 'Primal Comparison');
+
 hold on
 for i = 1:length(iterative_algorithms)
     history = Histories{i};
     history_f = history.f;
     gap_RE = abs(history_f - f_star) / max(1,abs(f_star));
-    semilogy(0:length(gap_RE)-1, gap_RE, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+    semilogy(0:length(gap_RE)-1, gap_RE, 'Color', colors(i),'DisplayName', iterative_algorithms(i), 'LineWidth',2);
 end
 hold off
 set(gca, 'YScale', 'log');
@@ -23,26 +24,42 @@ title('Primal Comparison')
 xlabel('step')
 ylabel('relative error')
 legend('Location','northeast')
-grid on
 fontsize(gcf1,scale=1.4)
-saveas(gcf1, fullfile('results', date, 'primal_comparison.png'))
+grid on
+% Get the figure's position to calculate the width and height
+figPosition = get(gcf1, 'Position');
+width = figPosition(3);
+height = figPosition(4);
+% Set the paper size to match the figure size
+set(gcf1, 'PaperUnits', 'points');
+set(gcf1, 'PaperSize', [width, height]);
+set(gcf1, 'PaperPosition', [0, 0, width, height]);
+print(gcf1, fullfile('results', date, 'primal_comparison.pdf'), '-dpdf');
 
-gcf2 = figure('Name', 'Comparison');
+gcf2 = figure('Name', 'Dual Comparison');
 hold on
 for i = 1:length(iterative_algorithms)
     disp(iterative_algorithms(i))
     history = Histories{i};
     history_f = history.f;
     history_dg = history.dg;
-    gap_RDG = history_dg ./ max(1,abs(history_f(1:end-1)));
-    semilogy(0:length(gap_RDG)-1, gap_RDG, 'Color', colors(i),'DisplayName', iterative_algorithms(i));
+    gap_RDG = cummin(history_dg ./ max(1,abs(history_f(1:end-1))));
+    semilogy(0:length(gap_RDG)-1, gap_RDG, 'Color', colors(i),'DisplayName', iterative_algorithms(i), 'LineWidth',2);
 end
 hold off
 set(gca, 'YScale', 'log');
 title('Dual Comparison')
 xlabel('step')
-ylabel('relative error')
+ylabel('rel. duality gap')
 legend('Location','northeast')
-grid on
 fontsize(gcf2,scale=1.4)
-saveas(gcf2, fullfile('results', date, 'dual_comparison.png'))
+grid on
+% Get the figure's position to calculate the width and height
+figPosition = get(gcf2, 'Position');
+width = figPosition(3);
+height = figPosition(4);
+% Set the paper size to match the figure size
+set(gcf2, 'PaperUnits', 'points');
+set(gcf2, 'PaperSize', [width, height]);
+set(gcf2, 'PaperPosition', [0, 0, width, height]);
+print(gcf2, fullfile('results', date, 'dual_comparison.pdf'), '-dpdf');

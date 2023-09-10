@@ -82,7 +82,7 @@ label_column = string(frank_wolfe_variants);
 label_column = cat(2,label_column,string(off_the_shelves));
 table_solutions = array2table(Solutions, 'VariableNames', label_column);
 
-colors = ['k','b','r','g','y'];
+colors = ["#0072BD","#D95319","#77AC30","#EDB120","#7E2F8E"];
 iterative_algorithms = cat(2,append('FW-',string(frank_wolfe_variants)),off_the_shelves);
 PlotBenchmark(Histories, f_star, iterative_algorithms, colors, date)
 
