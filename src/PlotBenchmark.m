@@ -34,7 +34,7 @@ height = figPosition(4);
 set(gcf1, 'PaperUnits', 'points');
 set(gcf1, 'PaperSize', [width, height]);
 set(gcf1, 'PaperPosition', [0, 0, width, height]);
-print(gcf1, fullfile('results', date, 'primal_comparison.pdf'), '-dpdf');
+exportgraphics(gcf1, fullfile('results', date, 'primal_comparison.pdf'), 'Resolution', 300);
 
 gcf2 = figure('Name', 'Dual Comparison');
 hold on
@@ -62,4 +62,4 @@ height = figPosition(4);
 set(gcf2, 'PaperUnits', 'points');
 set(gcf2, 'PaperSize', [width, height]);
 set(gcf2, 'PaperPosition', [0, 0, width, height]);
-print(gcf2, fullfile('results', date, 'dual_comparison.pdf'), '-dpdf');
+exportgraphics(gcf2, fullfile('results', date, 'dual_comparison.pdf'), 'Resolution', 300);

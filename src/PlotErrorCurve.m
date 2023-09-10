@@ -38,6 +38,6 @@ set(gcf, 'PaperSize', [width, height]);
 set(gcf, 'PaperPosition', [0, 0, width, height]);
 
 % Save the figure
-print(gcf, fullfile('results', date, strcat('error_FW_', variant, '.pdf')), '-dpdf');
+exportgraphics(gcf, fullfile('results', date, strcat('error_FW_', variant, '.pdf')), 'Resolution', 300);
 
 end
