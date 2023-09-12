@@ -15,15 +15,15 @@ Output:
 %}
 
 numvarargs = length(varargin);
-if numvarargs > 4
+if numvarargs > 5
     error('myfuns:ComparingMethods:TooManyInputs', ...
-        'requires at most 4 optional inputs');
+        'requires at most 5 optional inputs');
 end
 
 % set defaults for optional inputs
-optargs = {1e-6,1e-8,1e-10,1000};
+optargs = {false,1e-6,1e-8,1e-10,1000};
 optargs(1:numvarargs) = varargin;
-[eps_RDG, eps_RT, eps_RE, max_steps] = optargs{:};
+[dual_comparison, eps_RDG, eps_RT, eps_RE, max_steps] = optargs{:};
 
 % Pre-compute the optimum by the oracle
 [~, f_star] = Oracle(Q, q, P);
@@ -84,6 +84,6 @@ table_solutions = array2table(Solutions, 'VariableNames', label_column);
 
 colors = ["#0072BD","#D95319","#77AC30","#EDB120","#7E2F8E"];
 iterative_algorithms = cat(2,append('FW-',string(frank_wolfe_variants)),off_the_shelves);
-PlotBenchmark(Histories, f_star, iterative_algorithms, colors, date)
+PlotBenchmark(Histories, f_star, iterative_algorithms, dual_comparison, colors, date)
 
 end

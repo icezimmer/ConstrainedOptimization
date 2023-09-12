@@ -5,9 +5,9 @@ Compute the minimum of a funtion f = x'*Q*x + q'*x in a convex compact domain (M
 addpath src
 
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
-n = 100; K = 20; force_non_point_simplices = true; actv = 0;
+n = 100; K = 20; force_non_point_simplices = true; actv = 0.5;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
-dim_ker = 0; spectral_radius = 2; lambda_min = 1;
+dim_ker = 10; spectral_radius = 2; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
@@ -28,10 +28,10 @@ eps_RDG = 1e-7; max_steps = 1e6;
 eps_RE = 1e-10;
 
 % Define the step size selection method: "Away-step" or "Standard"
-variant = "Standard";
+variant = "Away-step";
 
 % Plot or not the tomography for each iteration
-tomography = false;
+tomography = true;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm

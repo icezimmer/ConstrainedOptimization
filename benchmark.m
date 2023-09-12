@@ -7,7 +7,7 @@ addpath src
 % Space dimension, number of simplices, force or not non-point-simplices, and the fraction of active constraints respect the solution
 n = 100; K = 20; force_non_point_simplices = true; actv = 0;
 % Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue (considered only if dim_ker=0)
-dim_ker = 0; spectral_radius = 2; lambda_min = 1;
+dim_ker = 10; spectral_radius = 2; lambda_min = 1;
 % Density of the matrix Q
 density = 1;
 
@@ -28,14 +28,17 @@ frank_wolfe_variants = ["Standard", "Away-step"];
 % List of off-the-shelves algorithms by Quadratic Programming to compare with the FW algorithm: "interior-point-convex", "active-set"
 off_the_shelves = [];
 
+% Plot or not the dual comparison of the algorithms
+dual_comparison = true;
+
 % Stoping criteria for the algorithms: relative duality gap for the FW,
 % relative tollerance for the QP and max number of steps for both
-eps_RDG = 1e-7; eps_RT = 1e-9; max_steps = 1e6;
+eps_RDG = 1e-6; eps_RT = 1e-9; max_steps = 1e4;
 % Max relative error to convergence
 eps_RE = 1e-10;
 
 % Comparing the methods
-[table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, eps_RDG, eps_RT, eps_RE, max_steps);
+[table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, dual_comparison, eps_RDG, eps_RT, eps_RE, max_steps);
 
 % Save the results
 SaveBenchmarkResults(table_results, table_solutions, date)
