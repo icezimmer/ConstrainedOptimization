@@ -19,7 +19,7 @@ lambda_min_list = {1};
 density_list = {1};
 
 num_trials=length(n_list)*length(K_list)*length(actv_list)*length(dim_ker_list)*length(spectral_radius_list)*length(lambda_min_list)*length(density_list);
-trial=1;
+trial=0;
 for i_=1:length(n_list)
     n = n_list{i_};
     for j_=1:length(K_list)
@@ -36,6 +36,7 @@ for i_=1:length(n_list)
                         lambda_min=lambda_min_list{n_};
                         for o_=1:length(density_list)
                             density=density_list{o_};
+                            pause(2)
                             disp(trial*100/num_trials)
                             [Q, q, P, K_plus, K_avg, num_vertex, norm_q, date] = GenerateInstance(n, K, force_non_point_simplices, actv, dim_ker, spectral_radius, lambda_min, density, seed);
                             SaveParameters(n, K_plus, K_avg, num_vertex, actv, dim_ker, spectral_radius, lambda_min, density, norm_q, seed, date)
@@ -43,6 +44,7 @@ for i_=1:length(n_list)
                             [table_results, table_solutions] = ComparingMethods(Q, q, P, date, frank_wolfe_variants, off_the_shelves, dual_comparison, eps_RDG, eps_RT, eps_RE, max_steps);
                             SaveBenchmarkResults(table_results, table_solutions, date)
                             trial = trial+1;
+                            disp([num2str(trial*100/num_trials),'%'])
                         end
                     end
                 end
