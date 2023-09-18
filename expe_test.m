@@ -8,11 +8,11 @@ seed = 1;
 eps_RDG = 1e-6; max_steps = 1e6;
 eps_RE = 1e-10;
 
-n_list = {10,100,1000};
-K_list = {@(n)0.2*n};
-actv_list = {0.5};
-dim_ker_list = {@(n)0,@(n)0.1*n};
-spectral_radius_list = {10,100};
+n_list = {100};
+K_list = {@(n)1,@(n)10,@(n)36,@(n)50};
+actv_list = {0,0.5,1};
+dim_ker_list = {@(n)10};
+spectral_radius_list = {10};
 lambda_min_list = {1};
 density_list = {1};
 

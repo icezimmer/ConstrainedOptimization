@@ -1,4 +1,4 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, err, converging, feasible, duality_gap, history] = QuadraticProgramming(Q, q, P, algorithm, max_steps, eps_RT, eps_RE, varargin)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, primal_error, dual_error, converging, feasible, history] = QuadraticProgramming(Q, q, P, algorithm, max_steps, eps_RT, eps_RE, varargin)
 %{
 Quadratic programming using the built-in function "quadprog" by the optimization-toolbox of MATLAB
 Input:
@@ -33,7 +33,7 @@ elseif numvarargs < 1
 end
 
 variant = "--";
-duality_gap = NaN;
+dual_error = NaN;
 
 x0 = StartingPoint(P);
 H = 2 * Q;
@@ -69,7 +69,7 @@ end
 
 method = algorithm;
 feasible = CheckDomain(x_min,P);
-[converging, err] = ConvergingError(f_min, f_star, eps_RE);
+[converging, primal_error] = ConvergingError(f_min, f_star, eps_RE);
 converging = converging & feasible;
 history.f = history_f;
 history.dg = NaN(1,length(history_f)-1);

@@ -31,7 +31,7 @@ eps_RE = 1e-10;
 variant = "Away-step";
 
 % Plot or not the tomography for each iteration
-tomography = true;
+tomography = false;
 % Plot or not the error curve
 error_plot = true;
 % Perform the Frank-Wolfe algorithm

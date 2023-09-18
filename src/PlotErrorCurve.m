@@ -16,9 +16,9 @@ gap_RE = abs(f_x - f_star) / max(1,abs(f_star));
 gap_RDG = cummin(DG ./ max(1,abs(f_x(1:end-1))));
 
 gcf = figure('Name', strcat('curve_FW_', variant));
-relative_duality_gap = semilogy(0:length(DG)-1, gap_RDG, 'Color',"#0072BD", 'DisplayName','Relative Duality Gap', 'LineWidth',2);
+relative_duality_gap = semilogy(0:length(DG)-1, gap_RDG, 'Color',"#0072BD", 'DisplayName','Dual Error', 'LineWidth',2);
 hold on
-relative_error = semilogy(0:length(f_x)-1, gap_RE, 'Color', "#D95319",'DisplayName','Relative Error', 'LineWidth',2);
+relative_error = semilogy(0:length(f_x)-1, gap_RE, 'Color', "#D95319",'DisplayName','Primal Error', 'LineWidth',2);
 hold off
 
 title('Primal and Dual Error')

@@ -1,4 +1,4 @@
-function [x_min_original_dim, f_min, elapsed_time, num_steps, method,  variant, err, converging, feasible, duality_gap, history] = FrankWolfe(Q, q, P, varargin)
+function [x_min_original_dim, f_min, elapsed_time, num_steps, method,  variant, primal_error, dual_error, converging, feasible, history] = FrankWolfe(Q, q, P, varargin)
 %{
 FrankWolfe computes the minimum of a quadratic function in a constrained convex domain. 
 Input:
@@ -135,8 +135,11 @@ num_steps = i;
 feasible = CheckDomain(x_min, P);
 
 % Convergence of the algorithm
-[converging, err] = ConvergingError(f_min, f_star, eps_RE);
+[converging, primal_error] = ConvergingError(f_min, f_star, eps_RE);
 converging = converging & feasible;
+
+% Compute the relative duality gap (dual error)
+dual_error = duality_gap / max(1,abs(f_min));
 
 history.f = history_f;
 history.dg = history_dg;

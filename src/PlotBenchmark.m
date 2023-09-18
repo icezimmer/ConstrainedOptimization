@@ -22,7 +22,7 @@ hold off
 set(gca, 'YScale', 'log');
 title('Primal Comparison')
 xlabel('step')
-ylabel('relative error')
+ylabel('primal error')
 legend('Location','northeast')
 fontsize(gcf1,scale=1.4)
 grid on
@@ -40,7 +40,6 @@ if dual_comparison
     gcf2 = figure('Name', 'Dual Comparison');
     hold on
     for i = 1:length(iterative_algorithms)
-        disp(iterative_algorithms(i))
         history = Histories{i};
         history_f = history.f;
         history_dg = history.dg;
@@ -51,7 +50,7 @@ if dual_comparison
     set(gca, 'YScale', 'log');
     title('Dual Comparison')
     xlabel('step')
-    ylabel('rel. duality gap')
+    ylabel('dual error')
     legend('Location','northeast')
     fontsize(gcf2,scale=1.4)
     grid on
