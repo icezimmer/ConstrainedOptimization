@@ -15,7 +15,7 @@ hold on
 for i = 1:length(iterative_algorithms)
     history = Histories{i};
     history_f = history.f;
-    gap_RE = abs(history_f - f_star) / max(1,abs(f_star));
+    gap_RE = cummin(abs(history_f - f_star) / max(1,abs(f_star)));
     semilogy(0:length(gap_RE)-1, gap_RE, 'Color', colors(i),'DisplayName', iterative_algorithms(i), 'LineWidth',2);
 end
 hold off

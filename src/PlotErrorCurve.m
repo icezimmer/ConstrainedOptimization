@@ -12,7 +12,7 @@ Input:
 f_x = history.f;
 DG = history.dg;
 
-gap_RE = abs(f_x - f_star) / max(1,abs(f_star));
+gap_RE = cummin(abs(f_x - f_star) / max(1,abs(f_star)));
 gap_RDG = cummin(DG ./ max(1,abs(f_x(1:end-1))));
 
 gcf = figure('Name', strcat('curve_FW_', variant));
