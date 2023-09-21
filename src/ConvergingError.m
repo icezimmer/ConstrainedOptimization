@@ -21,9 +21,9 @@ optargs(1:numvarargs) = varargin;
 [type] = optargs{:};
 
 if isequal(type,'Relative')
-    err = (f_x - f_star) / max(1,abs(f_star));
+    err = abs(f_x - f_star) / max(1,abs(f_star));
 elseif isequal(type,'Absolute')
-    err = (f_x - f_star) / max(1,abs(f_star));
+    err = abs(f_x - f_star) / max(1,abs(f_star));
 else
     error("Wrong stopping criteria")
 end
