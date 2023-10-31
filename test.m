@@ -1,5 +1,5 @@
 %{
-    Compute the minimum of a quadratic function f = x'*Q*x + q'*x in a convex compact domain
+    Compute the minimum of a quadratic function f(x) = x'*Q*x + q'*x in a convex compact domain
     (Minkowski sum of unitary simplices).
 %}
 
@@ -9,7 +9,8 @@ addpath src
 force_non_point_simplices = true;
 % Space dimension, number of simplices, and the fraction of active constraints respect the solution
 n = 100; K = 20; actv = 0;
-% Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and minimum eigenvalue of Q
+% Kernel dimension, spectral radius of the matrix Q (considered only if dim_ker<n), and min strictly positive eigenvalue 
+% of Q
 dim_ker = 0; spectral_radius = 2; lambda_min = 1;
 % Density of the matrix Q
 density = 1;

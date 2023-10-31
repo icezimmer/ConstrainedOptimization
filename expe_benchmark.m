@@ -1,5 +1,5 @@
 %{
-    Compare Frank-Wolfe with off-the-shelf for several instances of the task
+    Compare Frank-Wolfe type algorithms with off-the-shelf methods for several instances of the task
 %}
 
 addpath src
