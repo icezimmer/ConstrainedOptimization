@@ -73,7 +73,7 @@ function [x_min, f_min, elapsed_time, num_steps, method,  variant, primal_error,
 
     method = algorithm;
     feasible = CheckDomain(x_min,P);
-    [converging, primal_error] = ConvergingError(f_min, f_star, eps_RE);
+    [converging, primal_error] = PrimalPrecision(f_min, f_star, eps_RE);
     converging = converging & feasible;
     history.f = history_f;
     history.dg = NaN(1,length(history_f)-1);

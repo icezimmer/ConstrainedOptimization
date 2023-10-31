@@ -9,7 +9,7 @@ function [x_star, f_star] = Oracle(Q, q, P)
             x_star : (vector) of length n (solution of task)
             f_star : (float) f(x_star)
     %}
-    disp('Pre-compute the optimum for the stop condition')
+    disp('Pre-compute the optimum to compute the primal error (relative error)')
 
     H = 2 * Q;
     vec = q;

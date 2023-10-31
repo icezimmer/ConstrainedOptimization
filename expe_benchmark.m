@@ -14,7 +14,7 @@ eps_RDG = 1e-6; eps_RT = 1e-9; max_steps = 1e6;
 eps_RE = 1e-10;
 
 % Lists of values for the parameters
-n_list = {3600};
+n_list = {100};
 K_list = {@(n)1,@(n)floor(0.1*n),@(n)floor(n*exp(-1)),@(n)floor(0.5*n)};
 actv_list = {0,0.5,1};
 dim_ker_list = {@(n)0.1*n};

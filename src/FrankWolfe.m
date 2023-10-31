@@ -39,7 +39,7 @@ function [x_min_original_dim, f_min, elapsed_time, num_steps, method, variant, p
         [~, f_star] = Oracle(Q, q(:), P);
     end
 
-    % set defaults for optional inputs
+    % Set defaults for optional inputs
     optargs = {"Away-step",1e-6,1e-10,10000,false,false,string(datetime('now','TimeZone','local','Format','d-MMM-y_HH-mm-ss'))};
     optargs(1:numvarargs-1) = varargin(1:numvarargs-1);
     [variant, eps_RDG, eps_RE, max_steps, tomography, error_plot, date] = optargs{:};
@@ -53,7 +53,7 @@ function [x_min_original_dim, f_min, elapsed_time, num_steps, method, variant, p
     if isequal(variant,'Away-step')
         disp('Away-step Frank-Wolfe algorithm')
     elseif isequal(variant,'Standard')
-        disp('Frank-Wolfe algorithm with Exact Line Search')
+        disp('Standard Frank-Wolfe algorithm')
     else
         error('Wrong variant name')
     end
@@ -137,7 +137,7 @@ function [x_min_original_dim, f_min, elapsed_time, num_steps, method, variant, p
     feasible = CheckDomain(x_min, P);
 
     % Primal precision of the approximation
-    [precise, primal_error] = PrimalQuality(f_min, f_star, eps_RE);
+    [precise, primal_error] = PrimalPrecision(f_min, f_star, eps_RE);
 
     % Primal convergence
     converging = precise & feasible;
