@@ -9,14 +9,14 @@ seed = 1;
 eps_RDG = 1e-6; eps_RT = 1e-9; max_steps = 1e6;
 eps_RE = 1e-10;
 
-
-n_list = {2000};
-K_list = {@(n)1,@(n)floor(100*exp(-1)),@(n)50};
+n_list = {3600};
+K_list = {@(n)1,@(n)0.1*n,@(n)floor(n*exp(-1)),@(n)n*0.5};
 actv_list = {0,0.5,1};
-dim_ker_list = {@(n)1000};
+dim_ker_list = {@(n)0.1*n};
 spectral_radius_list = {10};
 lambda_min_list = {1};
 density_list = {1};
+
 
 num_trials=length(n_list)*length(K_list)*length(actv_list)*length(dim_ker_list)*length(spectral_radius_list)*length(lambda_min_list)*length(density_list);
 trial=0;
