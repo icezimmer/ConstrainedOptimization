@@ -1,3 +1,7 @@
+%{
+    Perform Frank-Wolfe to several instances of the task
+%}
+
 addpath src
 
 force_non_point_simplices = true;
@@ -8,10 +12,11 @@ seed = 1;
 eps_RDG = 1e-6; max_steps = 1e6;
 eps_RE = 1e-10;
 
+% Lists of values for the parameters
 n_list = {100};
-K_list = {@(n)1,@(n)10,@(n)36,@(n)50};
+K_list = {@(n)1,@(n)floor(0.1*n),@(n)floor(n*exp(-1)),@(n)floor(0.5*n)};
 actv_list = {0,0.5,1};
-dim_ker_list = {@(n)10};
+dim_ker_list = {@(n)0.1*n};
 spectral_radius_list = {10};
 lambda_min_list = {1};
 density_list = {1};

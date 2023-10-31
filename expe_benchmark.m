@@ -1,3 +1,7 @@
+%{
+    Compare Frank-Wolfe with off-the-shelf for several instances of the task
+%}
+
 addpath src
 
 frank_wolfe_variants = ["Away-step"];
@@ -9,8 +13,9 @@ seed = 1;
 eps_RDG = 1e-6; eps_RT = 1e-9; max_steps = 1e6;
 eps_RE = 1e-10;
 
+% Lists of values for the parameters
 n_list = {3600};
-K_list = {@(n)1,@(n)0.1*n,@(n)floor(n*exp(-1)),@(n)n*0.5};
+K_list = {@(n)1,@(n)floor(0.1*n),@(n)floor(n*exp(-1)),@(n)floor(0.5*n)};
 actv_list = {0,0.5,1};
 dim_ker_list = {@(n)0.1*n};
 spectral_radius_list = {10};
