@@ -32,7 +32,7 @@ frank_wolfe_variants = ["Standard", "Away-step"];
 
 % List of off-the-shelves algorithms by Quadratic Programming to compare with the FW algorithm
 % Possible choices: "interior-point-convex", "active-set"
-off_the_shelves = [];
+off_the_shelves = ["interior-point-convex"];
 
 % Plot or not the dual comparison of the algorithms
 dual_comparison = true;

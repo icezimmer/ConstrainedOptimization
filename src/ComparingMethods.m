@@ -51,7 +51,8 @@ function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, fran
 
     % Frank-Wolfe type algorithms
     for i = 1:length(frank_wolfe_variants)
-        [x_min, f_min, elapsed_time, num_steps, type, variant, primal_error, dual_error, converging, feasible, history] = FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
+        [x_min, f_min, elapsed_time, num_steps, type, variant, primal_error, dual_error, converging, feasible, history] = ...
+            FrankWolfe(Q, q, P, frank_wolfe_variants(i), eps_RDG, eps_RE, max_steps, false, false, date, f_star);
         Method = cat(1, Method, type);
         Variants = cat(1, Variants, variant);
         Minima = cat(1, Minima, f_min);
@@ -67,7 +68,8 @@ function [table_results, table_solutions] = ComparingMethods(Q, q, P, date, fran
 
     % Quadratic Programming algorithms
     for i = 1:length(off_the_shelves)
-        [x_min, f_min, elapsed_time, num_steps, type, variant, primal_error, dual_error, converging, feasible, history] = QuadraticProgramming(Q, q, P, off_the_shelves(i), max_steps, eps_RT, eps_RE, f_star);
+        [x_min, f_min, elapsed_time, num_steps, type, variant, primal_error, dual_error, converging, feasible, history] = ...
+            QuadraticProgramming(Q, q, P, off_the_shelves(i), max_steps, eps_RT, eps_RE, f_star);
         Method = cat(1, Method, type);
         Variants = cat(1, Variants, variant);
         Minima = cat(1, Minima, f_min);

@@ -1,4 +1,5 @@
-function SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, primal_error, dual_error, converging, feasible, history, date)
+function SaveTestResults(x_min, f_min, elapsed_time, num_steps, method, variant, primal_error, dual_error, converging, ...
+    feasible, history, date)
     %{
         Save the results obtained by the test in a .mat file
         Input:

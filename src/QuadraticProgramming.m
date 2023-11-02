@@ -1,4 +1,5 @@
-function [x_min, f_min, elapsed_time, num_steps, method,  variant, primal_error, dual_error, converging, feasible, history] = QuadraticProgramming(Q, q, P, algorithm, max_steps, eps_RT, eps_RE, varargin)
+function [x_min, f_min, elapsed_time, num_steps, method,  variant, primal_error, dual_error, converging, feasible, history] = ...
+    QuadraticProgramming(Q, q, P, algorithm, max_steps, eps_RT, eps_RE, varargin)
     %{
         Quadratic programming using the built-in function "quadprog" by the optimization-toolbox of MATLAB
         Input:
